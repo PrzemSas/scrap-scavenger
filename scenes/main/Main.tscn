@@ -1,5 +1,13 @@
 [gd_scene format=3 uid="uid://cayb1hm8jtr1"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vyk5b"]
+albedo_color = Color(0.1764706, 0.09411765, 0.0627451, 1)
+roughness = 0.9
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vyk5b"]
+material = SubResource("StandardMaterial3D_vyk5b")
+size = Vector2(20, 20)
+
 [node name="Main" type="Node3D" unique_id=1822404140]
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1926405538]
@@ -7,3 +15,7 @@ transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2093847068]
 transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=1448442382]
+transform = Transform3D(1, 0, 0, 0, 0.641704, 0.7669524, 0, -0.7669524, 0.641704, 0, 0, -1.9863281)
+mesh = SubResource("PlaneMesh_vyk5b")

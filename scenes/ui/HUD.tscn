@@ -1,6 +1,15 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="PanelStyle_1"]
+bg_color = Color(0.03, 0.03, 0.05, 0.92)
+border_color = Color(1, 0.42, 0, 0.15)
+set_border_width_all = 1
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -11,32 +20,110 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1")
 
-[node name="CoinLabel" type="Label" parent="."]
+[node name="TopBar" type="HBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = 10
 anchor_right = 1.0
-offset_left = -250.0
-offset_top = 16.0
-offset_right = -16.0
-offset_bottom = 50.0
-grow_horizontal = 0
-theme_override_colors/font_color = Color(1, 0.84, 0, 1)
-theme_override_font_sizes/font_size = 28
-text = "0 COINS"
-horizontal_alignment = 2
+offset_top = 10.0
+offset_bottom = 60.0
+grow_horizontal = 2
 
-[node name="InvLabel" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -250.0
-offset_top = 52.0
-offset_right = -16.0
-offset_bottom = 78.0
-grow_horizontal = 0
+[node name="ToggleInvBtn" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "📦 INV"
+theme_override_font_sizes/font_size = 12
+
+[node name="ToggleShopBtn" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "🛒 SHOP"
+theme_override_font_sizes/font_size = 12
+
+[node name="Spacer" type="Control" parent="TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InvLabel" type="Label" parent="TopBar"]
+layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 14
 text = "INV 0/8"
-horizontal_alignment = 2
+
+[node name="CoinLabel" type="Label" parent="TopBar"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84, 0, 1)
+theme_override_font_sizes/font_size = 22
+text = "0 COINS"
+
+[node name="InventoryPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 10.0
+offset_top = 70.0
+offset_right = 310.0
+offset_bottom = 400.0
+theme_override_styles/panel = SubResource("PanelStyle_1")
+
+[node name="VBox" type="VBoxContainer" parent="InventoryPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="InventoryPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.42, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "INVENTORY"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="InventoryPanel"]
+layout_mode = 2
+offset_left = 8.0
+offset_top = 30.0
+offset_right = 292.0
+offset_bottom = 290.0
+
+[node name="InvGrid" type="GridContainer" parent="InventoryPanel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 4
+
+[node name="SellAllBtn" type="Button" parent="InventoryPanel"]
+layout_mode = 2
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -40.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "SELL ALL"
+theme_override_font_sizes/font_size = 14
+
+[node name="ShopPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 10.0
+offset_top = 70.0
+offset_right = 340.0
+offset_bottom = 350.0
+theme_override_styles/panel = SubResource("PanelStyle_1")
+
+[node name="VBox" type="VBoxContainer" parent="ShopPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ShopPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.42, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "UPGRADES"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="ShopPanel"]
+layout_mode = 2
+offset_left = 8.0
+offset_top = 30.0
+offset_right = 322.0
+offset_bottom = 272.0
+
+[node name="ShopList" type="VBoxContainer" parent="ShopPanel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3

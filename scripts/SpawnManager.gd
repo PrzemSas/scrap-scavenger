@@ -40,8 +40,16 @@ func _roll_scrap() -> Dictionary:
 		total += s.weight
 	var roll = randf() * total
 	var cum = 0.0
+	var picked = scrap_types[0]
 	for s in scrap_types:
 		cum += s.weight
 		if roll <= cum:
-			return s.duplicate()
-	return scrap_types[0].duplicate()
+			picked = s
+			break
+	# Luck bonus: chance to upgrade rarity
+	if randf() < GameManager.luck_bonus and picked.rarity < 3:
+		for s in scrap_types:
+			if s.rarity == picked.rarity + 1:
+				picked = s
+				break
+	return picked.duplicate()

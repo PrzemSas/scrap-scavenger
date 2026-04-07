@@ -1,32 +1,20 @@
 ; Engine configuration file.
-; It's best edited using the editor UI and not directly,
-; since the parameters that go here are not all obvious.
-;
-; Format:
-;   [section] ; section goes between []
-;   param=value ; assign values to parameters
-
 config_version=5
 
 [application]
+config/name="Scrap Scavenger"
+run/main_scene="res://scenes/main/Main.tscn"
+config/features=PackedStringArray("4.4", "GL Compatibility")
 
-config/name="ScrapScavenger"
-run/main_scene="uid://cayb1hm8jtr1"
-config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+[autoload]
+GameManager="*res://scripts/autoload/GameManager.gd"
 
 [display]
-
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
-[physics]
-
-3d/physics_engine="Jolt Physics"
-
 [rendering]
-
-rendering_device/driver.windows="d3d12"
 renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"

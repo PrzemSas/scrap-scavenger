@@ -1,0 +1,99 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/SortingTable.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="PanelStyle_1"]
+bg_color = Color(0.03, 0.03, 0.05, 0.92)
+border_color = Color(1, 0.42, 0, 0.15)
+set_border_width_all = 1
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="SortingTable" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1")
+
+[node name="StatsBar" type="Label" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 500.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 12
+text = "STREAK: 0 | ACC: 0% | SORTED: 0"
+
+[node name="HSplit" type="HSplitContainer" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 40.0
+offset_right = 600.0
+offset_bottom = 350.0
+
+[node name="LeftPanel" type="PanelContainer" parent="HSplit"]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+theme_override_styles/panel = SubResource("PanelStyle_1")
+
+[node name="VBox" type="VBoxContainer" parent="HSplit/LeftPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="HSplit/LeftPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.42, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "UNSORTED ITEMS"
+
+[node name="Scroll" type="ScrollContainer" parent="HSplit/LeftPanel"]
+layout_mode = 2
+offset_top = 24.0
+
+[node name="UnsortedList" type="VBoxContainer" parent="HSplit/LeftPanel/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RightPanel" type="PanelContainer" parent="HSplit"]
+layout_mode = 2
+custom_minimum_size = Vector2(250, 0)
+theme_override_styles/panel = SubResource("PanelStyle_1")
+
+[node name="VBox" type="VBoxContainer" parent="HSplit/RightPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="HSplit/RightPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "SORT BINS — Select item then click bin"
+
+[node name="BinGrid" type="GridContainer" parent="HSplit/RightPanel"]
+layout_mode = 2
+offset_top = 24.0
+columns = 2
+
+[node name="SortedPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 360.0
+offset_right = 400.0
+offset_bottom = 500.0
+theme_override_styles/panel = SubResource("PanelStyle_1")
+
+[node name="Title" type="Label" parent="SortedPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.22, 1, 0.08, 1)
+theme_override_font_sizes/font_size = 12
+text = "SORTED — Go to Furnace to smelt"
+
+[node name="Scroll" type="ScrollContainer" parent="SortedPanel"]
+layout_mode = 2
+offset_top = 24.0
+
+[node name="SortedList" type="VBoxContainer" parent="SortedPanel/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3

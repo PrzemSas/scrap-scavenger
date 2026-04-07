@@ -1,6 +1,8 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/ui/SortingTable.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Furnace.tscn" id="3"]
 
 [sub_resource type="StyleBoxFlat" id="PanelStyle_1"]
 bg_color = Color(0.03, 0.03, 0.05, 0.92)
@@ -24,13 +26,24 @@ script = ExtResource("1")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
+offset_left = 10.0
 offset_top = 10.0
-offset_bottom = 60.0
-grow_horizontal = 2
+offset_right = -10.0
+offset_bottom = 50.0
 
 [node name="ToggleInvBtn" type="Button" parent="TopBar"]
 layout_mode = 2
 text = "📦 INV"
+theme_override_font_sizes/font_size = 12
+
+[node name="ToggleSortBtn" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "♻ SORT"
+theme_override_font_sizes/font_size = 12
+
+[node name="ToggleFurnaceBtn" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "🔥 FORGE"
 theme_override_font_sizes/font_size = 12
 
 [node name="ToggleShopBtn" type="Button" parent="TopBar"]
@@ -56,17 +69,13 @@ text = "0 COINS"
 
 [node name="InventoryPanel" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 0
 offset_left = 10.0
-offset_top = 70.0
+offset_top = 60.0
 offset_right = 310.0
 offset_bottom = 400.0
 theme_override_styles/panel = SubResource("PanelStyle_1")
 
-[node name="VBox" type="VBoxContainer" parent="InventoryPanel"]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="InventoryPanel/VBox"]
+[node name="Title" type="Label" parent="InventoryPanel"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.42, 0, 1)
 theme_override_font_sizes/font_size = 14
@@ -74,10 +83,8 @@ text = "INVENTORY"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="InventoryPanel"]
 layout_mode = 2
-offset_left = 8.0
-offset_top = 30.0
-offset_right = 292.0
-offset_bottom = 290.0
+offset_top = 28.0
+offset_bottom = -44.0
 
 [node name="InvGrid" type="GridContainer" parent="InventoryPanel/ScrollContainer"]
 layout_mode = 2
@@ -97,21 +104,16 @@ offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "SELL ALL"
-theme_override_font_sizes/font_size = 14
 
 [node name="ShopPanel" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 0
 offset_left = 10.0
-offset_top = 70.0
-offset_right = 340.0
-offset_bottom = 350.0
+offset_top = 60.0
+offset_right = 360.0
+offset_bottom = 400.0
 theme_override_styles/panel = SubResource("PanelStyle_1")
 
-[node name="VBox" type="VBoxContainer" parent="ShopPanel"]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="ShopPanel/VBox"]
+[node name="Title" type="Label" parent="ShopPanel"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.42, 0, 1)
 theme_override_font_sizes/font_size = 14
@@ -119,11 +121,33 @@ text = "UPGRADES"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ShopPanel"]
 layout_mode = 2
-offset_left = 8.0
-offset_top = 30.0
-offset_right = 322.0
-offset_bottom = 272.0
+offset_top = 28.0
 
 [node name="ShopList" type="VBoxContainer" parent="ShopPanel/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="SortingTable" parent="." instance=ExtResource("2")]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 60.0
+
+[node name="Furnace" parent="." instance=ExtResource("3")]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 60.0
+
+[node name="NotifLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 60.0
+offset_right = 200.0
+offset_bottom = 90.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.2, 0, 1)
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+text = ""

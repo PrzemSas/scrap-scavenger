@@ -6,6 +6,8 @@ signal upgrade_purchased(upgrade_id: String)
 signal sorted_changed()
 signal ingots_changed()
 signal notification(msg: String)
+signal achievement_unlocked(id: String)
+signal prestige_done(tokens: int)
 
 var coins: int = 0
 var inventory: Array = []
@@ -16,16 +18,42 @@ var click_power: int = 1
 var luck_bonus: float = 0.0
 var smelt_speed_bonus: float = 0.0
 var streak: int = 0
+var best_streak: int = 0
 var total_sorted: int = 0
 var correct_sorted: int = 0
 var lifetime_coins: int = 0
+var total_collected: int = 0
+var total_smelted: int = 0
+var forge_tokens: int = 0
+var prestige_count: int = 0
+var play_time: float = 0.0
+
+var achievements_unlocked: Array = []
+var achievements_config: Array = [
+	{"id": "first_scrap", "name": "First Scrap", "desc": "Collect your first scrap", "check": "total_collected >= 1"},
+	{"id": "hundred_coins", "name": "Pocket Change", "desc": "Earn 100 coins", "check": "lifetime_coins >= 100"},
+	{"id": "thousand_coins", "name": "Scrap Dealer", "desc": "Earn 1,000 coins", "check": "lifetime_coins >= 1000"},
+	{"id": "ten_k", "name": "Junk Mogul", "desc": "Earn 10,000 coins", "check": "lifetime_coins >= 10000"},
+	{"id": "fifty_k", "name": "Forge Master", "desc": "Earn 50,000 coins", "check": "lifetime_coins >= 50000"},
+	{"id": "first_sort", "name": "Sorted!", "desc": "Sort your first item correctly", "check": "correct_sorted >= 1"},
+	{"id": "sort_streak_5", "name": "On a Roll", "desc": "Get a 5x sort streak", "check": "best_streak >= 5"},
+	{"id": "sort_streak_10", "name": "Sort Machine", "desc": "Get a 10x sort streak", "check": "best_streak >= 10"},
+	{"id": "first_smelt", "name": "Smelter", "desc": "Smelt your first ingot", "check": "total_smelted >= 1"},
+	{"id": "ten_ingots", "name": "Ingot Factory", "desc": "Smelt 10 ingots", "check": "total_smelted >= 10"},
+	{"id": "gold_find", "name": "Gold Rush", "desc": "Collect a Gold Part", "check": "has_found_gold == true"},
+	{"id": "first_prestige", "name": "Meltdown!", "desc": "Prestige for the first time", "check": "prestige_count >= 1"},
+	{"id": "full_inv", "name": "Hoarder", "desc": "Fill your inventory completely", "check": "inventory_full == true"},
+	{"id": "collect_100", "name": "Scrap Pile", "desc": "Collect 100 items total", "check": "total_collected >= 100"},
+	{"id": "play_30min", "name": "Dedicated", "desc": "Play for 30 minutes", "check": "play_time >= 1800"},
+]
+
+var has_found_gold: bool = false
+var inventory_full: bool = false
 
 var upgrades: Dictionary = {
-	"bigger_bag": 0,
-	"click_power": 0,
-	"lucky_find": 0,
-	"fast_furnace": 0,
-	"sort_mastery": 0,
+	"bigger_bag": 0, "click_power": 0, "lucky_find": 0,
+	"fast_furnace": 0, "sort_mastery": 0,
+	"auto_sort": 0, "second_furnace": 0, "night_shift": 0,
 }
 
 var upgrade_config: Dictionary = {
@@ -34,9 +62,11 @@ var upgrade_config: Dictionary = {
 	"lucky_find": {"base": 100, "mult": 2.2, "max": 6, "desc": "+3% rare chance"},
 	"fast_furnace": {"base": 120, "mult": 1.9, "max": 8, "desc": "-15% smelt time"},
 	"sort_mastery": {"base": 80, "mult": 2.0, "max": 8, "desc": "+10% sort value"},
+	"auto_sort": {"base": 5000, "mult": 1.0, "max": 1, "desc": "Auto-sort 85% accuracy"},
+	"second_furnace": {"base": 2500, "mult": 1.0, "max": 1, "desc": "Second furnace slot"},
+	"night_shift": {"base": 3000, "mult": 1.0, "max": 1, "desc": "Offline earnings 50%→75%"},
 }
 
-# Sorting bins: which materials go where
 var sort_bins: Dictionary = {
 	"ferrous": ["bolt", "pipe"],
 	"electronics": ["battery", "motor"],
@@ -44,7 +74,6 @@ var sort_bins: Dictionary = {
 	"precious": ["gold"],
 }
 
-# Smelt configs
 var smelt_config: Dictionary = {
 	"can": {"time": 5.0, "mult": 2.0, "ingot": "Aluminum Ingot"},
 	"bolt": {"time": 10.0, "mult": 2.5, "ingot": "Steel Ingot"},
@@ -55,9 +84,42 @@ var smelt_config: Dictionary = {
 	"gold": {"time": 20.0, "mult": 5.0, "ingot": "Gold Ingot"},
 }
 
+func _process(delta: float) -> void:
+	play_time += delta
+	_check_achievements()
+	# Auto-sort
+	if upgrades.get("auto_sort", 0) > 0 and inventory.size() > 0:
+		_auto_sort_tick(delta)
+
+var _auto_sort_timer: float = 0.0
+func _auto_sort_tick(delta: float) -> void:
+	_auto_sort_timer += delta
+	if _auto_sort_timer >= 3.0:
+		_auto_sort_timer = 0.0
+		if inventory.size() > 0:
+			var item = inventory[0]
+			var item_id = item.get("id", "")
+			# Find correct bin
+			var correct_bin = ""
+			for bin_id in sort_bins:
+				if item_id in sort_bins[bin_id]:
+					correct_bin = bin_id
+					break
+			if correct_bin != "":
+				# 85% accuracy
+				if randf() < 0.85:
+					try_sort(0, correct_bin)
+				else:
+					# Wrong sort
+					var bins_list = sort_bins.keys()
+					var wrong = bins_list[randi() % bins_list.size()]
+					try_sort(0, wrong)
+
 func add_coins(amount: int) -> void:
-	coins += amount
-	lifetime_coins += amount
+	var prestige_bonus = 1.0 + forge_tokens * 0.10
+	var actual = int(amount * prestige_bonus)
+	coins += actual
+	lifetime_coins += actual
 	coins_changed.emit(coins)
 
 func spend_coins(amount: int) -> bool:
@@ -69,8 +131,14 @@ func spend_coins(amount: int) -> bool:
 
 func add_to_inventory(item_data: Dictionary) -> bool:
 	if inventory.size() >= max_slots:
+		inventory_full = true
 		return false
 	inventory.append(item_data)
+	total_collected += 1
+	if item_data.get("id", "") == "gold":
+		has_found_gold = true
+	if inventory.size() >= max_slots:
+		inventory_full = true
 	inventory_changed.emit()
 	return true
 
@@ -105,6 +173,8 @@ func try_sort(item_index: int, bin_id: String) -> bool:
 	if correct:
 		correct_sorted += 1
 		streak += 1
+		if streak > best_streak:
+			best_streak = streak
 		var sort_bonus = 1.0 + upgrades.get("sort_mastery", 0) * 0.10
 		var streak_bonus = 1.0 + min(streak * 0.05, 0.50)
 		var sorted_value = int(item.get("value", 1) * 1.8 * sort_bonus * streak_bonus)
@@ -122,6 +192,7 @@ func try_sort(item_index: int, bin_id: String) -> bool:
 
 func add_ingot(ingot_data: Dictionary) -> void:
 	ingots.append(ingot_data)
+	total_smelted += 1
 	ingots_changed.emit()
 
 func sell_ingot(index: int) -> void:
@@ -173,3 +244,78 @@ func _apply_upgrade(upgrade_id: String) -> void:
 			smelt_speed_bonus += 0.15
 		"sort_mastery":
 			pass
+		"auto_sort":
+			notification.emit("Auto-Sorter activated! 85% accuracy")
+		"second_furnace":
+			notification.emit("Second furnace slot unlocked!")
+		"night_shift":
+			notification.emit("Night Shift active! 75% offline earnings")
+
+# ---- PRESTIGE ----
+func can_prestige() -> bool:
+	return lifetime_coins >= 50000
+
+func get_prestige_tokens() -> int:
+	if lifetime_coins < 10000:
+		return 0
+	return int(log(lifetime_coins) / log(10) - 3)
+
+func do_prestige() -> void:
+	if not can_prestige():
+		return
+	var tokens = get_prestige_tokens()
+	forge_tokens += tokens
+	prestige_count += 1
+	# Reset
+	coins = 0
+	inventory.clear()
+	sorted_materials.clear()
+	ingots.clear()
+	max_slots = 8
+	click_power = 1
+	luck_bonus = 0.0
+	smelt_speed_bonus = 0.0
+	streak = 0
+	# Reset upgrades but keep prestige-specific ones
+	for key in upgrades:
+		upgrades[key] = 0
+	# Emit all signals
+	coins_changed.emit(coins)
+	inventory_changed.emit()
+	sorted_changed.emit()
+	ingots_changed.emit()
+	prestige_done.emit(tokens)
+	notification.emit("MELTDOWN! +%d Forge Tokens! (Total: %d)" % [tokens, forge_tokens])
+
+# ---- ACHIEVEMENTS ----
+func _check_achievements() -> void:
+	for ach in achievements_config:
+		if ach.id in achievements_unlocked:
+			continue
+		var expr = Expression.new()
+		var err = expr.parse(ach.check, ["total_collected", "lifetime_coins", "correct_sorted",
+			"best_streak", "total_smelted", "has_found_gold", "prestige_count",
+			"inventory_full", "play_time"])
+		if err != OK:
+			continue
+		var result = expr.execute([total_collected, lifetime_coins, correct_sorted,
+			best_streak, total_smelted, has_found_gold, prestige_count,
+			inventory_full, play_time])
+		if result == true:
+			achievements_unlocked.append(ach.id)
+			achievement_unlocked.emit(ach.id)
+			notification.emit("🏆 ACHIEVEMENT: %s" % ach.name)
+
+func get_accuracy() -> int:
+	if total_sorted == 0:
+		return 0
+	return int(float(correct_sorted) / total_sorted * 100.0)
+
+func get_idle_rate() -> float:
+	var rate = 0.0
+	if upgrades.get("click_power", 0) >= 2:
+		rate += 0.1
+	if upgrades.get("auto_sort", 0) > 0:
+		rate += 0.2
+	var prestige_bonus = 1.0 + forge_tokens * 0.10
+	return rate * prestige_bonus

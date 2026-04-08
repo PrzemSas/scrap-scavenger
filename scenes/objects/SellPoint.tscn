@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3]
+[ext_resource type="Script" path="res://scripts/SellPoint.gd" id="1"]
+[sub_resource type="BoxMesh" id="ContainerMesh"]
+size = Vector3(2, 1, 1.5)
+[sub_resource type="StandardMaterial3D" id="ContainerMat"]
+albedo_color = Color(0.2, 0.35, 0.15, 1)
+metallic = 0.2
+roughness = 0.85
+[sub_resource type="BoxMesh" id="SignMesh"]
+size = Vector3(1, 0.4, 0.05)
+[sub_resource type="StandardMaterial3D" id="SignMat"]
+albedo_color = Color(0.05, 0.05, 0.05, 1)
+emission_enabled = true
+emission = Color(0.22, 1, 0.08, 1)
+emission_energy_multiplier = 0.8
+[node name="SellPoint" type="Node3D"]
+script = ExtResource("1")
+[node name="Container" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("ContainerMesh")
+surface_material_override/0 = SubResource("ContainerMat")
+[node name="Sign" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0.78)
+mesh = SubResource("SignMesh")
+surface_material_override/0 = SubResource("SignMat")
+[node name="SignText" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0.81)
+text = "SELL"
+font_size = 48
+modulate = Color(0.22, 1, 0.08, 1)
+[node name="Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 1)
+light_color = Color(0.22, 1, 0.08, 1)
+light_energy = 0.4
+omni_range = 3.0

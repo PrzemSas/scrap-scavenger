@@ -16,6 +16,6 @@ func _on_ground_changed(skin_id: String) -> void:
 
 func _apply_skin(skin_id: String) -> void:
 	var color = skins.get(skin_id, skins["default"])
-	var mat = surface_material_override[0] as StandardMaterial3D
+	var mat = get_surface_override_material(0) as StandardMaterial3D
 	if mat:
 		mat.albedo_color = color

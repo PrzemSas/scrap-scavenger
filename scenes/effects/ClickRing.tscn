@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ClickRing.gd" id="1"]
+
+[sub_resource type="TorusMesh" id="RingMesh"]
+inner_radius = 0.3
+outer_radius = 0.35
+rings = 12
+ring_segments = 24
+
+[node name="ClickRing" type="MeshInstance3D"]
+mesh = SubResource("RingMesh")
+script = ExtResource("1")

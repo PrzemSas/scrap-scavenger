@@ -1,0 +1,56 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ConveyorBelt.gd" id="1"]
+
+[sub_resource type="BoxMesh" id="BeltMesh"]
+size = Vector3(8, 0.05, 1.2)
+
+[sub_resource type="StandardMaterial3D" id="BeltMat"]
+albedo_color = Color(0.15, 0.15, 0.18, 1)
+metallic = 0.4
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="LegMesh"]
+size = Vector3(0.15, 0.4, 0.15)
+
+[node name="ConveyorBelt" type="Node3D"]
+script = ExtResource("1")
+
+[node name="Belt" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+mesh = SubResource("BeltMesh")
+surface_material_override/0 = SubResource("BeltMat")
+
+[node name="Roller1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.4, 0)
+mesh = SubResource("LegMesh")
+
+[node name="Roller2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+mesh = SubResource("LegMesh")
+
+[node name="Roller3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.4, 0)
+mesh = SubResource("LegMesh")
+
+[node name="Leg1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 0.2, 0.5)
+mesh = SubResource("LegMesh")
+
+[node name="Leg2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8, 0.2, -0.5)
+mesh = SubResource("LegMesh")
+
+[node name="Leg3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.2, 0.5)
+mesh = SubResource("LegMesh")
+
+[node name="Leg4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0.2, -0.5)
+mesh = SubResource("LegMesh")
+
+[node name="Indicator" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+light_color = Color(1, 0.42, 0, 1)
+light_energy = 0.3
+omni_range = 2.0

@@ -82,11 +82,13 @@ var forge_shop_config: Dictionary = {
 	"ground_gold": {"cost": 3, "max": 1, "desc": "Golden Scrapyard ground skin", "type": "cosmetic"},
 	"third_furnace": {"cost": 3, "max": 1, "desc": "Third furnace queue slot", "type": "permanent"},
 	"auto_collect_2": {"cost": 2, "max": 1, "desc": "Auto-collect every 5s (was 10s)", "type": "permanent"},
+	"hire_worker": {"cost": 2, "max": 3, "desc": "Hire a scrap worker NPC", "type": "permanent"},
 }
 var forge_purchases: Dictionary = {
 	"income_boost": 0, "rare_boost": 0, "start_coins": 0,
 	"ground_rust": 0, "ground_ash": 0, "ground_gold": 0,
 	"third_furnace": 0, "auto_collect_2": 0,
+	"hire_worker": 0,
 }
 
 var sort_bins: Dictionary = {

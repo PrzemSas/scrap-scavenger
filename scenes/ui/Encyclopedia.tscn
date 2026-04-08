@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/Encyclopedia.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="PS1"]
+bg_color = Color(0.03, 0.03, 0.05, 0.92)
+border_color = Color(1, 0.42, 0, 0.15)
+set_border_width_all = 1
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="Encyclopedia" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 400.0
+offset_bottom = 480.0
+theme_override_styles/panel = SubResource("PS1")
+
+[node name="Scroll" type="ScrollContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="Content" type="RichTextLabel" parent="Panel/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+theme_override_colors/default_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/normal_font_size = 11

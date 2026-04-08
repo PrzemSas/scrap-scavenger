@@ -2,7 +2,7 @@ extends Node3D
 
 const SCRAP_SCENE = preload("res://scenes/objects/ScrapItem.tscn")
 const MAX_ITEMS: int = 6
-const RESPAWN_DELAY: float = 1.5
+var base_respawn: float = 1.5
 
 var scrap_types: Array = [
 	{"id": "can", "name": "Aluminum Can", "value": 1, "rarity": 0, "weight": 35},
@@ -23,7 +23,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if get_child_count() < MAX_ITEMS:
 		_respawn_timer += delta
-		if _respawn_timer >= RESPAWN_DELAY:
+		var ws = get_node_or_null("/root/WeatherSystem")
+		var spawn_mult = ws.get_spawn_mult() if ws else 1.0
+		var delay = base_respawn / spawn_mult
+		if _respawn_timer >= delay:
 			_respawn_timer = 0.0
 			spawn_random()
 

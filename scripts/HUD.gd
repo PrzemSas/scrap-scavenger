@@ -13,6 +13,7 @@ extends Control
 @onready var stats_panel: PanelContainer = $StatsPanel
 @onready var stats_text: RichTextLabel = $StatsPanel/StatsText
 @onready var prestige_btn: Button = $StatsPanel/PrestigeBtn
+@onready var encyclopedia: Control = $Encyclopedia
 @onready var forge_panel: PanelContainer = $ForgeShopPanel
 @onready var forge_list: VBoxContainer = $ForgeShopPanel/ScrollContainer/ForgeList
 @onready var tutorial_label: Label = $TutorialLabel
@@ -34,6 +35,7 @@ func _ready() -> void:
 	$TopBar/ToggleSortBtn.pressed.connect(func(): _show_panel("sort"))
 	$TopBar/ToggleFurnaceBtn.pressed.connect(func(): _show_panel("furnace"))
 	$TopBar/ToggleStatsBtn.pressed.connect(func(): _show_panel("stats"))
+	$TopBar/ToggleEncBtn.pressed.connect(func(): _show_panel("enc"))
 	$TopBar/ToggleForgeBtn.pressed.connect(func(): _show_panel("forge"))
 	_refresh_all()
 	_hide_all_panels()
@@ -70,6 +72,7 @@ func _hide_all_panels() -> void:
 	furnace.visible = false
 	stats_panel.visible = false
 	forge_panel.visible = false
+	encyclopedia.visible = false
 
 func _show_panel(p: String) -> void:
 	var was = false
@@ -80,6 +83,7 @@ func _show_panel(p: String) -> void:
 		"furnace": was = furnace.visible
 		"stats": was = stats_panel.visible
 		"forge": was = forge_panel.visible
+		"enc": was = encyclopedia.visible
 	_hide_all_panels()
 	if not was:
 		match p:
@@ -89,6 +93,7 @@ func _show_panel(p: String) -> void:
 			"furnace": furnace.visible = true
 			"stats": stats_panel.visible = true; _refresh_stats()
 			"forge": forge_panel.visible = true; _build_forge_shop()
+			"enc": encyclopedia.visible = true; encyclopedia.show_encyclopedia()
 
 func _on_coins_changed(amount: int) -> void:
 	coin_label.text = "%d COINS" % amount

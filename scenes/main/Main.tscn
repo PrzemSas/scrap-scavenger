@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=24 format=3]
 
 [ext_resource type="Script" path="res://scripts/SpawnManager.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2"]
@@ -99,6 +99,14 @@ script = ExtResource("3")
 
 [node name="ScrapMagnet" type="Node3D" parent="."]
 script = ExtResource("13")
+
+[ext_resource type="PackedScene" path="res://scenes/effects/WeatherEffects.tscn" id="21"]
+[ext_resource type="Script" path="res://scripts/WorkerManager.gd" id="22"]
+
+[node name="WeatherEffects" parent="." instance=ExtResource("21")]
+
+[node name="WorkerManager" type="Node3D" parent="."]
+script = ExtResource("22")
 
 [node name="ComboSystem" type="Node" parent="."]
 script = ExtResource("12")

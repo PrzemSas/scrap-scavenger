@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/SortingTable.tscn" id="2"]
@@ -52,6 +52,11 @@ theme_override_font_sizes/font_size = 14
 [node name="ToggleForgeBtn" type="Button" parent="TopBar"]
 layout_mode = 2
 text = "⚒"
+theme_override_font_sizes/font_size = 14
+
+[node name="ToggleEncBtn" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "📖"
 theme_override_font_sizes/font_size = 14
 
 [node name="ToggleStatsBtn" type="Button" parent="TopBar"]
@@ -199,6 +204,14 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "MELTDOWN"
 theme_override_font_sizes/font_size = 12
+
+[ext_resource type="PackedScene" path="res://scenes/ui/Encyclopedia.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DailyReward.tscn" id="7"]
+
+[node name="Encyclopedia" parent="." instance=ExtResource("6")]
+layout_mode = 1
+
+[node name="DailyReward" parent="." instance=ExtResource("7")]
 
 [node name="NotifLabel" type="Label" parent="."]
 layout_mode = 1

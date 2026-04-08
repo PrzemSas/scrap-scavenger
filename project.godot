@@ -12,6 +12,7 @@ SaveManager="*res://scripts/autoload/SaveManager.gd"
 AudioManager="*res://scripts/autoload/AudioManager.gd"
 SoundHooks="*res://scripts/autoload/SoundHooks.gd"
 ChallengeManager="*res://scripts/autoload/ChallengeManager.gd"
+WeatherSystem="*res://scripts/WeatherSystem.gd"
 
 [display]
 window/size/viewport_width=1920

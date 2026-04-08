@@ -1,124 +1,67 @@
 extends Area3D
-
 const SPARKS_SCENE = preload("res://scenes/effects/CollectSparks.tscn")
 const POPUP_SCENE = preload("res://scenes/effects/CoinPopup.tscn")
-const AURA_SCENE = preload("res://scenes/effects/RarityAura.tscn")
-const RING_SCENE = preload("res://scenes/effects/ClickRing.tscn")
-
 var scrap_data: Dictionary = {}
 var _bob_time: float = 0.0
 var _initial_y: float = 0.0
 var _hovered: bool = false
 var _base_emission: float = 0.5
-
 func setup(data: Dictionary) -> void:
-	scrap_data = data
-	_initial_y = position.y
-	var mesh_inst = $MeshInstance3D
-	var col_shape = $CollisionShape3D
-	var rarity = data.get("rarity", 0)
+	scrap_data = data; _initial_y = position.y
+	var mi = $MeshInstance3D; var cs = $CollisionShape3D
+	var r = data.get("rarity", 0)
 	var colors = [Color("#888888"), Color("#ff6a00"), Color("#00e5ff"), Color("#FFD700")]
-	var item_id = data.get("id", "can")
-	match item_id:
-		"can":
-			var m = CylinderMesh.new(); m.top_radius = 0.12; m.bottom_radius = 0.12; m.height = 0.3; mesh_inst.mesh = m
-			var s = CylinderShape3D.new(); s.radius = 0.15; s.height = 0.35; col_shape.shape = s
-		"bolt":
-			var m = CylinderMesh.new(); m.top_radius = 0.08; m.bottom_radius = 0.08; m.height = 0.25; mesh_inst.mesh = m
-			var s = CylinderShape3D.new(); s.radius = 0.1; s.height = 0.3; col_shape.shape = s
-		"pipe":
-			var m = CylinderMesh.new(); m.top_radius = 0.06; m.bottom_radius = 0.06; m.height = 0.6; mesh_inst.mesh = m; mesh_inst.rotation.z = PI / 2
-			var s = BoxShape3D.new(); s.size = Vector3(0.6, 0.15, 0.15); col_shape.shape = s
-		"cable":
-			var m = TorusMesh.new(); m.inner_radius = 0.06; m.outer_radius = 0.18; mesh_inst.mesh = m
-			var s = SphereShape3D.new(); s.radius = 0.2; col_shape.shape = s
-		"battery":
-			var m = BoxMesh.new(); m.size = Vector3(0.25, 0.35, 0.15); mesh_inst.mesh = m
-			var s = BoxShape3D.new(); s.size = Vector3(0.3, 0.4, 0.2); col_shape.shape = s
-		"motor":
-			var m = CylinderMesh.new(); m.top_radius = 0.2; m.bottom_radius = 0.2; m.height = 0.3; mesh_inst.mesh = m
-			var s = CylinderShape3D.new(); s.radius = 0.22; s.height = 0.35; col_shape.shape = s
-		"gold":
-			var m = PrismMesh.new(); m.size = Vector3(0.3, 0.3, 0.3); mesh_inst.mesh = m
-			var s = BoxShape3D.new(); s.size = Vector3(0.35, 0.35, 0.35); col_shape.shape = s
-		_:
-			var m = BoxMesh.new(); m.size = Vector3(0.3, 0.3, 0.3); mesh_inst.mesh = m
-	_base_emission = 0.5 + rarity * 0.4
+	var id = data.get("id", "can")
+	match id:
+		"can": var m=CylinderMesh.new(); m.top_radius=.12; m.bottom_radius=.12; m.height=.3; mi.mesh=m; var s=CylinderShape3D.new(); s.radius=.15; s.height=.35; cs.shape=s
+		"bolt": var m=CylinderMesh.new(); m.top_radius=.08; m.bottom_radius=.08; m.height=.25; mi.mesh=m; var s=CylinderShape3D.new(); s.radius=.1; s.height=.3; cs.shape=s
+		"pipe": var m=CylinderMesh.new(); m.top_radius=.06; m.bottom_radius=.06; m.height=.6; mi.mesh=m; mi.rotation.z=PI/2; var s=BoxShape3D.new(); s.size=Vector3(.6,.15,.15); cs.shape=s
+		"cable": var m=TorusMesh.new(); m.inner_radius=.06; m.outer_radius=.18; mi.mesh=m; var s=SphereShape3D.new(); s.radius=.2; cs.shape=s
+		"battery": var m=BoxMesh.new(); m.size=Vector3(.25,.35,.15); mi.mesh=m; var s=BoxShape3D.new(); s.size=Vector3(.3,.4,.2); cs.shape=s
+		"motor": var m=CylinderMesh.new(); m.top_radius=.2; m.bottom_radius=.2; m.height=.3; mi.mesh=m; var s=CylinderShape3D.new(); s.radius=.22; s.height=.35; cs.shape=s
+		"gold": var m=PrismMesh.new(); m.size=Vector3(.3,.3,.3); mi.mesh=m; var s=BoxShape3D.new(); s.size=Vector3(.35,.35,.35); cs.shape=s
+		_: var m=BoxMesh.new(); m.size=Vector3(.3,.3,.3); mi.mesh=m
+	_base_emission = .5 + r * .4
 	var mat = StandardMaterial3D.new()
-	mat.albedo_color = colors[rarity]; mat.emission_enabled = true; mat.emission = colors[rarity]
-	mat.emission_energy_multiplier = _base_emission; mat.metallic = 0.3 + rarity * 0.15; mat.roughness = 0.7 - rarity * 0.1
-	mesh_inst.material_override = mat
-	if rarity >= 2: mesh_inst.scale = Vector3(1.4, 1.4, 1.4)
-	if rarity >= 3: mesh_inst.scale = Vector3(1.8, 1.8, 1.8)
-	var nl = get_node_or_null("NameLabel")
-	if nl: nl.text = data.get("name", ""); nl.modulate = colors[rarity]
-	var vl = get_node_or_null("ValueLabel")
-	if vl: vl.text = "+%dc" % (data.get("value", 1) * GameManager.click_power); vl.modulate = Color(1, 0.84, 0, 0.0)
-	if rarity >= 2:
-		var aura = AURA_SCENE.instantiate()
-		aura.color = colors[rarity]; aura.color.a = 0.4
-		if rarity >= 3: aura.amount = 12
-		add_child(aura)
-
+	mat.albedo_color=colors[r]; mat.emission_enabled=true; mat.emission=colors[r]
+	mat.emission_energy_multiplier=_base_emission; mat.metallic=.3+r*.15; mat.roughness=.7-r*.1
+	mi.material_override = mat
+	if r >= 2: mi.scale = Vector3(1.4,1.4,1.4)
+	if r >= 3: mi.scale = Vector3(1.8,1.8,1.8)
+	if $NameLabel: $NameLabel.text=data.get("name",""); $NameLabel.modulate=colors[r]
+	if $ValueLabel: $ValueLabel.text="+%dc" % (data.get("value",1)*GameManager.click_power); $ValueLabel.modulate=Color(1,.84,0,0)
 func _process(delta: float) -> void:
 	_bob_time += delta
-	position.y = _initial_y + 0.5 + sin(_bob_time * 2.0) * 0.1
-	if scrap_data.get("rarity", 0) >= 3: rotation.y += delta * 1.5
-	elif scrap_data.get("rarity", 0) >= 2: rotation.y += delta * 0.5
+	position.y = _initial_y + .5 + sin(_bob_time*2)*.1
+	if scrap_data.get("rarity",0) >= 3: rotation.y += delta*1.5
+	elif scrap_data.get("rarity",0) >= 2: rotation.y += delta*.5
 	var mat = $MeshInstance3D.material_override
-	if mat:
-		if _hovered: mat.emission_energy_multiplier = _base_emission + sin(_bob_time * 6.0) * 0.3 + 0.5
-		else: mat.emission_energy_multiplier = _base_emission
-
-func _on_input_event(_cam: Node, event: InputEvent, _pos: Vector3, _norm: Vector3, _idx: int) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		collect()
-
+	if mat: mat.emission_energy_multiplier = _base_emission + (sin(_bob_time*6)*.3+.5 if _hovered else 0)
+func _on_input_event(_c,event,_p,_n,_i) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index==MOUSE_BUTTON_LEFT: collect()
 func _on_mouse_entered() -> void:
-	_hovered = true
-	var vl = get_node_or_null("ValueLabel")
-	if vl: vl.modulate.a = 0.9
-
+	_hovered=true; if $ValueLabel: $ValueLabel.modulate.a=.9
 func _on_mouse_exited() -> void:
-	_hovered = false
-	var vl = get_node_or_null("ValueLabel")
-	if vl: vl.modulate.a = 0.0
-
+	_hovered=false; if $ValueLabel: $ValueLabel.modulate.a=0
 func collect() -> void:
-	var base_value = scrap_data.get("value", 1) * GameManager.click_power
+	var base = scrap_data.get("value",1)*GameManager.click_power
 	var combo = get_tree().current_scene.get_node_or_null("ComboSystem")
-	var combo_mult = 1.0
-	if combo and combo.has_method("get_multiplier"):
-		combo_mult = combo.get_multiplier()
-	var value = int(base_value * combo_mult)
+	var cm = 1.0
+	if combo and combo.has_method("get_multiplier"): cm = combo.get_multiplier()
+	var value = int(base*cm)
 	for i in GameManager.click_power:
-		if GameManager.inventory.size() < GameManager.max_slots:
-			GameManager.add_to_inventory(scrap_data.duplicate())
-	GameManager.add_coins(value)
-	AudioManager.play_collect()
-	var rarity = scrap_data.get("rarity", 0)
-	var colors = [Color("#888888"), Color("#ff6a00"), Color("#00e5ff"), Color("#FFD700")]
-	# Screen shake
-	if rarity >= 2:
+		if GameManager.inventory.size() < GameManager.max_slots: GameManager.add_to_inventory(scrap_data.duplicate())
+	GameManager.add_coins(value); AudioManager.play_collect()
+	var r = scrap_data.get("rarity",0)
+	var colors = [Color("#888888"),Color("#ff6a00"),Color("#00e5ff"),Color("#FFD700")]
+	if r >= 2:
 		var cam = get_tree().current_scene.get_node_or_null("Camera3D")
-		if cam and cam.has_method("shake"):
-			if rarity >= 3: cam.shake(0.5, 4.0); AudioManager.play_achievement()
-			else: cam.shake(0.15, 6.0)
-	# Click ring
-	var ring = RING_SCENE.instantiate()
-	ring.position = global_position
-	ring.setup(colors[rarity])
-	get_tree().current_scene.add_child(ring)
-	# Sparks
+		if cam and cam.has_method("shake"): cam.shake(1.0 + r * 1.5)
 	var sparks = SPARKS_SCENE.instantiate()
-	sparks.position = global_position
-	sparks.color = colors[rarity]; sparks.amount = 16 + rarity * 10
-	sparks.emitting = true
+	sparks.position=global_position; sparks.color=colors[r]; sparks.amount=16+r*8; sparks.emitting=true
 	get_tree().current_scene.add_child(sparks)
 	get_tree().create_timer(1.0).timeout.connect(sparks.queue_free)
-	# Popup
 	var popup = POPUP_SCENE.instantiate()
-	popup.position = global_position + Vector3(0, 1, 0)
-	popup.setup(value, Color("#FFD700") if combo_mult > 1.0 else colors[rarity])
-	get_tree().current_scene.add_child(popup)
-	queue_free()
+	popup.position=global_position+Vector3(0,1,0)
+	popup.setup(value, Color("#FFD700") if cm>1 else colors[r])
+	get_tree().current_scene.add_child(popup); queue_free()

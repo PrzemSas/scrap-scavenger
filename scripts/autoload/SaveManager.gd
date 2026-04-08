@@ -15,27 +15,21 @@ func _process(delta: float) -> void:
 
 func save_game() -> void:
 	var data = {
-		"coins": GameManager.coins,
-		"lifetime_coins": GameManager.lifetime_coins,
-		"inventory": GameManager.inventory,
-		"sorted_materials": GameManager.sorted_materials,
-		"ingots": GameManager.ingots,
-		"max_slots": GameManager.max_slots,
-		"click_power": GameManager.click_power,
-		"luck_bonus": GameManager.luck_bonus,
-		"smelt_speed_bonus": GameManager.smelt_speed_bonus,
-		"upgrades": GameManager.upgrades,
-		"streak": GameManager.streak,
-		"best_streak": GameManager.best_streak,
-		"total_sorted": GameManager.total_sorted,
-		"correct_sorted": GameManager.correct_sorted,
-		"total_collected": GameManager.total_collected,
-		"total_smelted": GameManager.total_smelted,
-		"has_found_gold": GameManager.has_found_gold,
-		"forge_tokens": GameManager.forge_tokens,
-		"prestige_count": GameManager.prestige_count,
-		"play_time": GameManager.play_time,
+		"coins": GameManager.coins, "lifetime_coins": GameManager.lifetime_coins,
+		"inventory": GameManager.inventory, "sorted_materials": GameManager.sorted_materials,
+		"ingots": GameManager.ingots, "max_slots": GameManager.max_slots,
+		"click_power": GameManager.click_power, "luck_bonus": GameManager.luck_bonus,
+		"smelt_speed_bonus": GameManager.smelt_speed_bonus, "upgrades": GameManager.upgrades,
+		"streak": GameManager.streak, "best_streak": GameManager.best_streak,
+		"total_sorted": GameManager.total_sorted, "correct_sorted": GameManager.correct_sorted,
+		"total_collected": GameManager.total_collected, "total_smelted": GameManager.total_smelted,
+		"has_found_gold": GameManager.has_found_gold, "forge_tokens": GameManager.forge_tokens,
+		"prestige_count": GameManager.prestige_count, "play_time": GameManager.play_time,
 		"achievements": GameManager.achievements_unlocked,
+		"forge_purchases": GameManager.forge_purchases,
+		"current_ground": GameManager.current_ground,
+		"tutorial_done": GameManager.tutorial_done,
+		"tutorial_current": GameManager.tutorial_current,
 		"timestamp": Time.get_unix_time_from_system(),
 	}
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -47,11 +41,9 @@ func load_game() -> void:
 	if not FileAccess.file_exists(SAVE_PATH):
 		return
 	var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
-	if not file:
-		return
+	if not file: return
 	var json = JSON.new()
-	if json.parse(file.get_as_text()) != OK:
-		return
+	if json.parse(file.get_as_text()) != OK: return
 	var d = json.data
 	GameManager.coins = d.get("coins", 0)
 	GameManager.lifetime_coins = d.get("lifetime_coins", 0)
@@ -74,20 +66,23 @@ func load_game() -> void:
 	GameManager.prestige_count = d.get("prestige_count", 0)
 	GameManager.play_time = d.get("play_time", 0.0)
 	GameManager.achievements_unlocked = d.get("achievements", [])
-	# Emit signals
+	GameManager.forge_purchases = d.get("forge_purchases", GameManager.forge_purchases)
+	GameManager.current_ground = d.get("current_ground", "default")
+	GameManager.tutorial_done = d.get("tutorial_done", false)
+	GameManager.tutorial_current = d.get("tutorial_current", 0)
 	GameManager.coins_changed.emit(GameManager.coins)
 	GameManager.inventory_changed.emit()
 	GameManager.sorted_changed.emit()
 	GameManager.ingots_changed.emit()
-	# Offline earnings
+	if GameManager.current_ground != "default":
+		GameManager.ground_changed.emit(GameManager.current_ground)
+	# Offline
 	var saved_time = d.get("timestamp", 0.0)
 	if saved_time > 0:
 		var offline_sec = clamp(Time.get_unix_time_from_system() - saved_time, 0, 86400)
 		if offline_sec > 60:
-			var idle_rate = GameManager.get_idle_rate()
 			var efficiency = 0.75 if GameManager.upgrades.get("night_shift", 0) > 0 else 0.50
-			var offline_coins = int(idle_rate * offline_sec * efficiency)
+			var offline_coins = int(GameManager.get_idle_rate() * offline_sec * efficiency)
 			if offline_coins > 0:
 				GameManager.add_coins(offline_coins)
-				var mins = int(offline_sec / 60)
-				GameManager.notification.emit("Welcome back! +%d coins (%d min)" % [offline_coins, mins])
+				GameManager.notification.emit("Welcome back! +%d coins (%dm)" % [offline_coins, int(offline_sec / 60)])

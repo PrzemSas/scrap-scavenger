@@ -18,10 +18,18 @@ const MAX_QUEUE: int = 3
 func _ready() -> void:
 	GameManager.sorted_changed.connect(_refresh_load)
 	GameManager.ingots_changed.connect(_refresh_ingots)
-	sell_all_btn.pressed.connect(func(): GameManager.sell_all_ingots())
+	GameManager.upgrade_purchased.connect(_on_upgrade)
+	sell_all_btn.pressed.connect(func():
+		GameManager.sell_all_ingots()
+		AudioManager.play_sell()
+	)
 	progress_bar.value = 0
 	_refresh_load()
 	_refresh_ingots()
+
+func _on_upgrade(id: String) -> void:
+	if id == "second_furnace":
+		pass  # Could add second furnace logic here
 
 func _process(delta: float) -> void:
 	if not _is_smelting:
@@ -55,13 +63,14 @@ func _complete() -> void:
 		"value": value,
 		"source": _smelting.get("name", "?"),
 	})
+	AudioManager.play_smelt_done()
 	_smelting = {}
 	progress_bar.value = 0
 	status_label.text = "DONE! Ingot ready."
 	_update_queue_label()
 
 func load_material(sorted_index: int) -> void:
-	if _queue.size() >= MAX_QUEUE:
+	if _queue.size() >= _get_max_queue():
 		GameManager.notification.emit("Furnace queue full!")
 		return
 	if sorted_index < 0 or sorted_index >= GameManager.sorted_materials.size():
@@ -70,21 +79,28 @@ func load_material(sorted_index: int) -> void:
 	_queue.append(item)
 	GameManager.sorted_materials.remove_at(sorted_index)
 	GameManager.sorted_changed.emit()
+	AudioManager.play_click()
 	_update_queue_label()
 
+func _get_max_queue() -> int:
+	var bonus = GameManager.upgrades.get("second_furnace", 0) * 2
+	return MAX_QUEUE + bonus
+
 func _update_queue_label() -> void:
-	queue_label.text = "QUEUE: %d/%d" % [_queue.size(), MAX_QUEUE]
+	queue_label.text = "QUEUE: %d/%d" % [_queue.size(), _get_max_queue()]
 
 func _refresh_load() -> void:
 	for c in load_list.get_children():
 		c.queue_free()
 	for i in GameManager.sorted_materials.size():
 		var item = GameManager.sorted_materials[i]
+		var config = GameManager.smelt_config.get(item.get("id", ""), {"mult": 2.0, "ingot": "?"})
+		var est_value = int(item.get("sorted_value", item.get("value", 1)) * config.mult)
 		var btn = Button.new()
-		btn.text = "%s — %dc → LOAD" % [item.get("name", "?"), item.get("sorted_value", 0)]
+		btn.text = "%s — %dc → %s (%dc)" % [item.get("name", "?"), item.get("sorted_value", 0), config.ingot, est_value]
 		btn.add_theme_color_override("font_color", Color("#ff6a00"))
-		btn.add_theme_font_size_override("font_size", 11)
-		btn.custom_minimum_size = Vector2(0, 28)
+		btn.add_theme_font_size_override("font_size", 10)
+		btn.custom_minimum_size = Vector2(0, 26)
 		var idx = i
 		btn.pressed.connect(func(): load_material(idx))
 		load_list.add_child(btn)
@@ -98,11 +114,14 @@ func _refresh_ingots() -> void:
 		var ingot = GameManager.ingots[i]
 		total += ingot.get("value", 0)
 		var btn = Button.new()
-		btn.text = "%s — %dc" % [ingot.get("name", "?"), ingot.get("value", 0)]
+		btn.text = "%s — %dc (from %s)" % [ingot.get("name", "?"), ingot.get("value", 0), ingot.get("source", "?")]
 		btn.add_theme_color_override("font_color", Color("#FFD700"))
-		btn.add_theme_font_size_override("font_size", 11)
-		btn.custom_minimum_size = Vector2(0, 28)
+		btn.add_theme_font_size_override("font_size", 10)
+		btn.custom_minimum_size = Vector2(0, 26)
 		var idx = i
-		btn.pressed.connect(func(): GameManager.sell_ingot(idx))
+		btn.pressed.connect(func():
+			GameManager.sell_ingot(idx)
+			AudioManager.play_sell()
+		)
 		ingot_list.add_child(btn)
 	sell_all_btn.text = "SELL ALL (%dc)" % total

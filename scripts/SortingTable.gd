@@ -1,7 +1,5 @@
 extends Control
 
-signal sorting_done()
-
 @onready var unsorted_list: VBoxContainer = $HSplit/LeftPanel/Scroll/UnsortedList
 @onready var bin_grid: GridContainer = $HSplit/RightPanel/BinGrid
 @onready var stats_label: Label = $StatsBar
@@ -25,10 +23,11 @@ func _refresh() -> void:
 		var btn = Button.new()
 		var rarity = item.get("rarity", 0)
 		var colors = [Color("#888888"), Color("#ff6a00"), Color("#00e5ff"), Color("#FFD700")]
-		btn.text = "%s (%dc)" % [item.get("name", "?"), item.get("value", 0)]
+		var sort_val = int(item.get("value", 1) * 1.8)
+		btn.text = "%s (%dc → ~%dc sorted)" % [item.get("name", "?"), item.get("value", 0), sort_val]
 		btn.add_theme_color_override("font_color", colors[rarity])
-		btn.add_theme_font_size_override("font_size", 12)
-		btn.custom_minimum_size = Vector2(0, 32)
+		btn.add_theme_font_size_override("font_size", 11)
+		btn.custom_minimum_size = Vector2(0, 30)
 		var idx = i
 		btn.pressed.connect(func(): _select_item(idx))
 		if _selected_index == i:
@@ -38,21 +37,22 @@ func _refresh() -> void:
 
 func _select_item(index: int) -> void:
 	_selected_index = index
+	AudioManager.play_click()
 	_refresh()
 
 func _build_bins() -> void:
 	var bin_data = [
-		{"id": "ferrous", "name": "FERROUS", "color": Color("#8899aa")},
-		{"id": "electronics", "name": "ELECTRO", "color": Color("#00e5ff")},
-		{"id": "non_ferrous", "name": "NON-FE", "color": Color("#FF8A65")},
-		{"id": "precious", "name": "PRECIOUS", "color": Color("#FFD700")},
+		{"id": "ferrous", "name": "FERROUS\n(Bolt, Pipe)", "color": Color("#8899aa")},
+		{"id": "electronics", "name": "ELECTRO\n(Battery, Motor)", "color": Color("#00e5ff")},
+		{"id": "non_ferrous", "name": "NON-FE\n(Can, Cable)", "color": Color("#FF8A65")},
+		{"id": "precious", "name": "PRECIOUS\n(Gold)", "color": Color("#FFD700")},
 	]
 	for b in bin_data:
 		var btn = Button.new()
 		btn.text = b.name
-		btn.custom_minimum_size = Vector2(100, 80)
+		btn.custom_minimum_size = Vector2(110, 80)
 		btn.add_theme_color_override("font_color", b.color)
-		btn.add_theme_font_size_override("font_size", 14)
+		btn.add_theme_font_size_override("font_size", 12)
 		var bid = b.id
 		btn.pressed.connect(func(): _sort_to_bin(bid))
 		bin_grid.add_child(btn)
@@ -60,8 +60,13 @@ func _build_bins() -> void:
 func _sort_to_bin(bin_id: String) -> void:
 	if _selected_index < 0 or _selected_index >= GameManager.inventory.size():
 		GameManager.notification.emit("Select an item first!")
+		AudioManager.play_error()
 		return
 	var result = GameManager.try_sort(_selected_index, bin_id)
+	if result:
+		AudioManager.play_sort_correct()
+	else:
+		AudioManager.play_sort_wrong()
 	_selected_index = -1
 	_refresh()
 
@@ -71,17 +76,15 @@ func _refresh_sorted() -> void:
 	sorted_panel.visible = GameManager.sorted_materials.size() > 0
 	for i in GameManager.sorted_materials.size():
 		var item = GameManager.sorted_materials[i]
+		var config = GameManager.smelt_config.get(item.get("id", ""), {"mult": 2.0, "ingot": "?"})
+		var est_ingot = int(item.get("sorted_value", 1) * config.mult)
 		var btn = Button.new()
-		btn.text = "%s — %dc" % [item.get("name", "?"), item.get("sorted_value", 0)]
-		btn.add_theme_color_override("font_color", Color("#ff6a00"))
-		btn.add_theme_font_size_override("font_size", 11)
-		btn.custom_minimum_size = Vector2(0, 28)
-		btn.tooltip_text = "Click to load into furnace"
-		unsorted_list.add_child(btn) # will be handled by furnace
+		btn.text = "%s — %dc (→ %s ~%dc)" % [item.get("name", "?"), item.get("sorted_value", 0), config.ingot, est_ingot]
+		btn.add_theme_color_override("font_color", Color("#39FF14"))
+		btn.add_theme_font_size_override("font_size", 10)
+		btn.custom_minimum_size = Vector2(0, 26)
 		sorted_list.add_child(btn)
 
 func _update_stats() -> void:
-	var acc = 0
-	if GameManager.total_sorted > 0:
-		acc = int(float(GameManager.correct_sorted) / GameManager.total_sorted * 100)
+	var acc = GameManager.get_accuracy()
 	stats_label.text = "STREAK: %d | ACC: %d%% | SORTED: %d" % [GameManager.streak, acc, GameManager.total_sorted]

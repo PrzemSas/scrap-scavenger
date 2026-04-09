@@ -1,31 +1,22 @@
 [gd_scene load_steps=3 format=3]
-
-[sub_resource type="BoxMesh" id="WallMesh"]
-size = Vector3(24, 2, 0.2)
-
-[sub_resource type="StandardMaterial3D" id="WallMat"]
-albedo_color = Color(0.08, 0.06, 0.04, 1)
-roughness = 0.95
-metallic = 0.1
-
+[sub_resource type="BoxMesh" id="WM"]
+size = Vector3(24,2,0.2)
+[sub_resource type="StandardMaterial3D" id="WMat"]
+albedo_color = Color(0.08,0.06,0.04,1)
 [node name="WorldBorder" type="Node3D"]
-
-[node name="WallNorth" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -12)
-mesh = SubResource("WallMesh")
-surface_material_override/0 = SubResource("WallMat")
-
-[node name="WallSouth" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 12)
-mesh = SubResource("WallMesh")
-surface_material_override/0 = SubResource("WallMat")
-
-[node name="WallEast" type="MeshInstance3D" parent="."]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 12, 1, 0)
-mesh = SubResource("WallMesh")
-surface_material_override/0 = SubResource("WallMat")
-
-[node name="WallWest" type="MeshInstance3D" parent="."]
-transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -12, 1, 0)
-mesh = SubResource("WallMesh")
-surface_material_override/0 = SubResource("WallMat")
+[node name="N" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1,-12)
+mesh = SubResource("WM")
+surface_material_override/0 = SubResource("WMat")
+[node name="S" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1,12)
+mesh = SubResource("WM")
+surface_material_override/0 = SubResource("WMat")
+[node name="E" type="MeshInstance3D" parent="."]
+transform = Transform3D(0,0,1,0,1,0,-1,0,0,12,1,0)
+mesh = SubResource("WM")
+surface_material_override/0 = SubResource("WMat")
+[node name="W" type="MeshInstance3D" parent="."]
+transform = Transform3D(0,0,1,0,1,0,-1,0,0,-12,1,0)
+mesh = SubResource("WM")
+surface_material_override/0 = SubResource("WMat")

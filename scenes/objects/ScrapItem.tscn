@@ -1,39 +1,30 @@
 [gd_scene load_steps=4 format=3]
-
 [ext_resource type="Script" path="res://scripts/ScrapItem.gd" id="1"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_1"]
+[sub_resource type="BoxMesh" id="BM1"]
 size = Vector3(0.3, 0.3, 0.3)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+[sub_resource type="BoxShape3D" id="BS1"]
 size = Vector3(0.3, 0.3, 0.3)
-
 [node name="ScrapItem" type="Area3D"]
 input_ray_pickable = true
 script = ExtResource("1")
-
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_1")
-
+mesh = SubResource("BM1")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("BoxShape3D_1")
-
+shape = SubResource("BS1")
 [node name="NameLabel" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.9,0)
 billboard = 1
 text = ""
 font_size = 14
 outline_size = 3
-modulate = Color(1, 0.42, 0, 0.8)
-
+modulate = Color(1,0.42,0,0.8)
 [node name="ValueLabel" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0)
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.15,0)
 billboard = 1
 text = ""
 font_size = 18
 outline_size = 4
-modulate = Color(1, 0.84, 0, 0)
-
+modulate = Color(1,0.84,0,0)
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

@@ -1,16 +1,13 @@
 [gd_scene load_steps=3 format=3]
-
 [ext_resource type="Script" path="res://scripts/PauseMenu.gd" id="1"]
-
-[sub_resource type="StyleBoxFlat" id="PanelStyle"]
-bg_color = Color(0.02, 0.02, 0.03, 0.95)
-border_color = Color(1, 0.42, 0, 0.3)
+[sub_resource type="StyleBoxFlat" id="PS1"]
+bg_color = Color(0.02,0.02,0.03,0.95)
+border_color = Color(1,0.42,0,0.3)
 set_border_width_all = 2
 corner_radius_top_left = 12
 corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
-
 [node name="PauseMenu" type="Control"]
 process_mode = 3
 layout_mode = 3
@@ -18,14 +15,12 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1")
-
 [node name="Dimmer" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0, 0, 0, 0.6)
-
+color = Color(0,0,0,0.6)
 [node name="Panel" type="PanelContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -34,42 +29,30 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -160.0
-offset_top = -140.0
+offset_top = -120.0
 offset_right = 160.0
-offset_bottom = 140.0
+offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("PanelStyle")
-
+theme_override_styles/panel = SubResource("PS1")
 [node name="VBox" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
 alignment = 1
-
 [node name="Title" type="Label" parent="Panel/VBox"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.42, 0, 1)
+theme_override_colors/font_color = Color(1,0.42,0,1)
 theme_override_font_sizes/font_size = 24
 text = "PAUSED"
 horizontal_alignment = 1
-
-[node name="Spacer1" type="Control" parent="Panel/VBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 20)
-
 [node name="ResumeBtn" type="Button" parent="Panel/VBox"]
 layout_mode = 2
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0,40)
 text = "▶ RESUME"
-theme_override_font_sizes/font_size = 14
-
 [node name="SaveBtn" type="Button" parent="Panel/VBox"]
 layout_mode = 2
-custom_minimum_size = Vector2(0, 40)
-text = "💾 SAVE GAME"
-theme_override_font_sizes/font_size = 14
-
+custom_minimum_size = Vector2(0,40)
+text = "💾 SAVE"
 [node name="MenuBtn" type="Button" parent="Panel/VBox"]
 layout_mode = 2
-custom_minimum_size = Vector2(0, 40)
-text = "🏠 MAIN MENU"
-theme_override_font_sizes/font_size = 14
+custom_minimum_size = Vector2(0,40)
+text = "🏠 MENU"

@@ -1,60 +1,18 @@
-[gd_scene load_steps=5 format=3]
-
-[sub_resource type="BoxMesh" id="FenceMesh"]
-size = Vector3(0.15, 1.5, 0.15)
-
-[sub_resource type="StandardMaterial3D" id="FenceMat"]
-albedo_color = Color(0.3, 0.2, 0.1, 1)
-roughness = 0.95
-
-[sub_resource type="CylinderMesh" id="BarrelMesh"]
-top_radius = 0.4
-bottom_radius = 0.45
-height = 0.9
-radial_segments = 12
-
-[sub_resource type="StandardMaterial3D" id="BarrelMat"]
-albedo_color = Color(0.35, 0.15, 0.05, 1)
-roughness = 0.9
-
+[gd_scene load_steps=3 format=3]
+[sub_resource type="BoxMesh" id="FM"]
+size = Vector3(0.15,1.5,0.15)
+[sub_resource type="StandardMaterial3D" id="FMat"]
+albedo_color = Color(0.3,0.2,0.1,1)
 [node name="EnvironmentProps" type="Node3D"]
-
-[node name="FencePost1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.75, -10)
-mesh = SubResource("FenceMesh")
-surface_material_override/0 = SubResource("FenceMat")
-
-[node name="FencePost2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.75, -7)
-mesh = SubResource("FenceMesh")
-surface_material_override/0 = SubResource("FenceMat")
-
-[node name="FencePost3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.75, -4)
-mesh = SubResource("FenceMesh")
-surface_material_override/0 = SubResource("FenceMat")
-
-[node name="FencePost4" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.75, -1)
-mesh = SubResource("FenceMesh")
-surface_material_override/0 = SubResource("FenceMat")
-
-[node name="FencePost5" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.75, 2)
-mesh = SubResource("FenceMesh")
-surface_material_override/0 = SubResource("FenceMat")
-
-[node name="Barrel1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.45, 8)
-mesh = SubResource("BarrelMesh")
-surface_material_override/0 = SubResource("BarrelMat")
-
-[node name="Barrel2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.96, 0.26, 0, -0.26, 0.96, 8, 0.4, 7.5)
-mesh = SubResource("BarrelMesh")
-surface_material_override/0 = SubResource("BarrelMat")
-
-[node name="Barrel3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.45, 7)
-mesh = SubResource("BarrelMesh")
-surface_material_override/0 = SubResource("BarrelMat")
+[node name="F1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-10,0.75,-10)
+mesh = SubResource("FM")
+surface_material_override/0 = SubResource("FMat")
+[node name="F2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-10,0.75,-7)
+mesh = SubResource("FM")
+surface_material_override/0 = SubResource("FMat")
+[node name="F3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-10,0.75,-4)
+mesh = SubResource("FM")
+surface_material_override/0 = SubResource("FMat")

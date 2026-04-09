@@ -1,4 +1,4 @@
 [gd_scene load_steps=2 format=3]
 
-[node name="Encyclopedia" type="Control"]
+[node name="Inventory" type="Control"]
 visible = false

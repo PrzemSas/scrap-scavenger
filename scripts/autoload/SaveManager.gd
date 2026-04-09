@@ -1,7 +1,6 @@
 extends Node
 
 const SAVE_PATH = "user://savegame.json"
-const AUTOSAVE_INTERVAL = 60.0
 var _timer: float = 0.0
 
 func _ready() -> void:
@@ -9,12 +8,12 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_timer += delta
-	if _timer >= AUTOSAVE_INTERVAL:
+	if _timer >= 60.0:
 		_timer = 0.0
 		save_game()
 
 func save_game() -> void:
-	var data = {
+	var d = {
 		"coins": GameManager.coins, "lifetime_coins": GameManager.lifetime_coins,
 		"inventory": GameManager.inventory, "sorted_materials": GameManager.sorted_materials,
 		"ingots": GameManager.ingots, "max_slots": GameManager.max_slots,
@@ -28,22 +27,21 @@ func save_game() -> void:
 		"achievements": GameManager.achievements_unlocked,
 		"forge_purchases": GameManager.forge_purchases,
 		"current_ground": GameManager.current_ground,
-		"tutorial_done": GameManager.tutorial_done,
-		"tutorial_current": GameManager.tutorial_current,
 		"timestamp": Time.get_unix_time_from_system(),
 	}
-	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-	if file:
-		file.store_string(JSON.stringify(data, "\t"))
-		file.close()
+	var f = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(d, "\t"))
 
 func load_game() -> void:
 	if not FileAccess.file_exists(SAVE_PATH):
 		return
-	var file = FileAccess.open(SAVE_PATH, FileAccess.READ)
-	if not file: return
+	var f = FileAccess.open(SAVE_PATH, FileAccess.READ)
+	if not f:
+		return
 	var json = JSON.new()
-	if json.parse(file.get_as_text()) != OK: return
+	if json.parse(f.get_as_text()) != OK:
+		return
 	var d = json.data
 	GameManager.coins = d.get("coins", 0)
 	GameManager.lifetime_coins = d.get("lifetime_coins", 0)
@@ -68,21 +66,16 @@ func load_game() -> void:
 	GameManager.achievements_unlocked = d.get("achievements", [])
 	GameManager.forge_purchases = d.get("forge_purchases", GameManager.forge_purchases)
 	GameManager.current_ground = d.get("current_ground", "default")
-	GameManager.tutorial_done = d.get("tutorial_done", false)
-	GameManager.tutorial_current = d.get("tutorial_current", 0)
 	GameManager.coins_changed.emit(GameManager.coins)
 	GameManager.inventory_changed.emit()
 	GameManager.sorted_changed.emit()
 	GameManager.ingots_changed.emit()
-	if GameManager.current_ground != "default":
-		GameManager.ground_changed.emit(GameManager.current_ground)
-	# Offline
-	var saved_time = d.get("timestamp", 0.0)
-	if saved_time > 0:
-		var offline_sec = clamp(Time.get_unix_time_from_system() - saved_time, 0, 86400)
-		if offline_sec > 60:
-			var efficiency = 0.75 if GameManager.upgrades.get("night_shift", 0) > 0 else 0.50
-			var offline_coins = int(GameManager.get_idle_rate() * offline_sec * efficiency)
-			if offline_coins > 0:
-				GameManager.add_coins(offline_coins)
-				GameManager.notification.emit("Welcome back! +%d coins (%dm)" % [offline_coins, int(offline_sec / 60)])
+	var ts = d.get("timestamp", 0.0)
+	if ts > 0:
+		var off = clamp(Time.get_unix_time_from_system() - ts, 0, 86400)
+		if off > 60:
+			var eff: float = 0.75 if GameManager.upgrades.get("night_shift", 0) > 0 else 0.5
+			var oc: int = int(GameManager.get_idle_rate() * off * eff)
+			if oc > 0:
+				GameManager.add_coins(oc)
+				GameManager.notification.emit("Welcome back! +%dc" % oc)

@@ -85,8 +85,8 @@ var forge_purchases: Dictionary = {
 	"third_furnace": 0, "auto_collect_2": 0,
 }
 var sort_bins: Dictionary = {
-	"ferrous": ["bolt", "pipe"], "electronics": ["battery", "motor"],
-	"non_ferrous": ["can", "cable"], "precious": ["gold"],
+	"ferrous": ["bolt", "pipe"], "electronics": ["battery", "motor", "chip"],
+	"non_ferrous": ["can", "cable", "coil"], "precious": ["gold", "crystal"], "mechanical": ["gear"],
 }
 var smelt_config: Dictionary = {
 	"can": {"time": 5.0, "mult": 2.0, "ingot": "Aluminum Ingot"},
@@ -96,6 +96,10 @@ var smelt_config: Dictionary = {
 	"battery": {"time": 12.0, "mult": 2.0, "ingot": "Lead Ingot"},
 	"motor": {"time": 15.0, "mult": 3.5, "ingot": "Circuit Board"},
 	"gold": {"time": 20.0, "mult": 5.0, "ingot": "Gold Ingot"},
+	"chip": {"time": 10.0, "mult": 2.5, "ingot": "Silicon Wafer"},
+	"coil": {"time": 7.0, "mult": 2.8, "ingot": "Copper Wire"},
+	"gear": {"time": 14.0, "mult": 3.5, "ingot": "Titanium Rod"},
+	"crystal": {"time": 25.0, "mult": 6.0, "ingot": "Forge Shard"},
 }
 
 var _auto_sort_timer: float = 0.0

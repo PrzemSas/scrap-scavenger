@@ -20,7 +20,7 @@ func _ref()->void:
 		ulist.add_child(b)
 	stats_l.text="STREAK: %d | ACC: %d%%"%[GameManager.streak,GameManager.get_accuracy()]
 func _build_bins()->void:
-	for bd in [{"id":"ferrous","name":"FERROUS\n(Bolt,Pipe)","c":Color("#8899aa")},{"id":"electronics","name":"ELECTRO\n(Battery,Motor)","c":Color("#00e5ff")},{"id":"non_ferrous","name":"NON-FE\n(Can,Cable)","c":Color("#FF8A65")},{"id":"precious","name":"PRECIOUS\n(Gold)","c":Color("#FFD700")}]:
+	for bd in [{"id":"ferrous","name":"FERROUS\n(Bolt,Pipe)","c":Color("#8899aa")},{"id":"electronics","name":"ELECTRO\n(Bat,Mot,Chip)\n(Battery,Motor)","c":Color("#00e5ff")},{"id":"non_ferrous","name":"NON-FE\n(Can,Cab,Coil)\n(Can,Cable)","c":Color("#FF8A65")},{"id":"precious","name":"PRECIOUS\n(Gold,Crystal)\n(Gold)","c":Color("#FFD700")}]:
 		var b=Button.new(); b.text=bd.name; b.custom_minimum_size=Vector2(110,70)
 		b.add_theme_color_override("font_color",bd.c); b.add_theme_font_size_override("font_size",11)
 		var bid=bd.id; b.pressed.connect(func(): _sort(bid)); bins.add_child(b)

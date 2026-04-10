@@ -67,8 +67,9 @@ var forge_shop_config:Dictionary={
 	"ground_gold":{"cost":3,"max":1,"desc":"Gold ground"},
 	"third_furnace":{"cost":3,"max":1,"desc":"3rd furnace"},
 	"auto_collect_2":{"cost":2,"max":1,"desc":"Collect 5s"},
+	"hire_worker":{"cost":2,"max":3,"desc":"Hire worker NPC"},
 }
-var forge_purchases:Dictionary={"income_boost":0,"rare_boost":0,"start_coins":0,"ground_rust":0,"ground_ash":0,"ground_gold":0,"third_furnace":0,"auto_collect_2":0}
+var forge_purchases:Dictionary={"income_boost":0,"rare_boost":0,"start_coins":0,"ground_rust":0,"ground_ash":0,"ground_gold":0,"third_furnace":0,"auto_collect_2":0,"hire_worker":0}
 var sort_bins:Dictionary={"ferrous":["bolt","pipe"],"electronics":["battery","motor","chip"],"non_ferrous":["can","cable","coil"],"precious":["gold","crystal"],"mechanical":["gear"]}
 var smelt_config:Dictionary={
 	"can":{"time":5.0,"mult":2.0,"ingot":"Aluminum Ingot"},
@@ -98,20 +99,20 @@ func _process(delta:float)->void:
 				else: var ks=sort_bins.keys(); try_sort(0,ks[randi()%ks.size()])
 func add_coins(amount:int)->void:
 	var b:float=(1.0+forge_tokens*0.1)*(1.0+forge_purchases.get("income_boost",0)*0.1)
-	var actual:int=int(amount*b); coins+=actual; lifetime_coins+=actual; coins_changed.emit(coins)
+	coins+=int(amount*b); lifetime_coins+=int(amount*b); coins_changed.emit(coins)
 func spend_coins(amount:int)->bool:
 	if coins>=amount: coins-=amount; coins_changed.emit(coins); return true
 	return false
-func add_to_inventory(item_data:Dictionary)->bool:
+func add_to_inventory(d:Dictionary)->bool:
 	if inventory.size()>=max_slots: inventory_full=true; return false
-	inventory.append(item_data); total_collected+=1
-	if item_data.get("id","")=="gold": has_found_gold=true
+	inventory.append(d); total_collected+=1
+	if d.get("id","")=="gold": has_found_gold=true
 	if inventory.size()>=max_slots: inventory_full=true
 	inventory_changed.emit(); return true
-func remove_from_inventory(index:int)->void:
-	if index>=0 and index<inventory.size(): inventory.remove_at(index); inventory_changed.emit()
-func sell_item(index:int)->void:
-	if index>=0 and index<inventory.size(): add_coins(inventory[index].get("value",1)); remove_from_inventory(index)
+func remove_from_inventory(i:int)->void:
+	if i>=0 and i<inventory.size(): inventory.remove_at(i); inventory_changed.emit()
+func sell_item(i:int)->void:
+	if i>=0 and i<inventory.size(): add_coins(inventory[i].get("value",1)); remove_from_inventory(i)
 func sell_all()->void:
 	var t:int=0
 	for i in inventory: t+=i.get("value",1)
@@ -130,8 +131,8 @@ func try_sort(idx:int,bid:String)->bool:
 		remove_from_inventory(idx); sorted_changed.emit(); return true
 	else: streak=0; remove_from_inventory(idx); notification.emit("Wrong bin!"); return false
 func add_ingot(d:Dictionary)->void: ingots.append(d); total_smelted+=1; ingots_changed.emit()
-func sell_ingot(idx:int)->void:
-	if idx>=0 and idx<ingots.size(): add_coins(ingots[idx].get("value",1)); ingots.remove_at(idx); ingots_changed.emit()
+func sell_ingot(i:int)->void:
+	if i>=0 and i<ingots.size(): add_coins(ingots[i].get("value",1)); ingots.remove_at(i); ingots_changed.emit()
 func sell_all_ingots()->void:
 	var t:int=0
 	for ig in ingots: t+=ig.get("value",1)

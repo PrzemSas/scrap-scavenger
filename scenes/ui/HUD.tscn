@@ -27,28 +27,32 @@ offset_right = -10.0
 offset_bottom = 50.0
 [node name="BtnInv" type="Button" parent="TopBar"]
 layout_mode = 2
-text = "📦 INV"
-theme_override_font_sizes/font_size = 12
+text = "📦"
+theme_override_font_sizes/font_size = 14
 [node name="BtnSort" type="Button" parent="TopBar"]
 layout_mode = 2
-text = "♻ SORT"
-theme_override_font_sizes/font_size = 12
+text = "♻"
+theme_override_font_sizes/font_size = 14
 [node name="BtnForge" type="Button" parent="TopBar"]
 layout_mode = 2
-text = "🔥 FORGE"
-theme_override_font_sizes/font_size = 12
+text = "🔥"
+theme_override_font_sizes/font_size = 14
 [node name="BtnShop" type="Button" parent="TopBar"]
 layout_mode = 2
-text = "🛒 SHOP"
-theme_override_font_sizes/font_size = 12
+text = "🛒"
+theme_override_font_sizes/font_size = 14
+[node name="BtnCraft" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "⚒"
+theme_override_font_sizes/font_size = 14
 [node name="BtnTokens" type="Button" parent="TopBar"]
 layout_mode = 2
-text = "⚒ TOKENS"
-theme_override_font_sizes/font_size = 12
+text = "🪙"
+theme_override_font_sizes/font_size = 14
 [node name="BtnStats" type="Button" parent="TopBar"]
 layout_mode = 2
-text = "📊 STATS"
-theme_override_font_sizes/font_size = 12
+text = "📊"
+theme_override_font_sizes/font_size = 14
 [node name="Spacer" type="Control" parent="TopBar"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -129,6 +133,24 @@ text = "FORGE TOKEN SHOP"
 layout_mode = 2
 offset_top = 28.0
 [node name="ForgeList" type="VBoxContainer" parent="ForgeShopPanel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+[node name="CraftPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 420.0
+offset_bottom = 500.0
+theme_override_styles/panel = SubResource("PS1")
+[node name="Title" type="Label" parent="CraftPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1,0.42,0,1)
+theme_override_font_sizes/font_size = 14
+text = "CRAFTING"
+[node name="ScrollContainer" type="ScrollContainer" parent="CraftPanel"]
+layout_mode = 2
+offset_top = 28.0
+[node name="CraftList" type="VBoxContainer" parent="CraftPanel/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 [node name="SortingTable" parent="." instance=ExtResource("2")]

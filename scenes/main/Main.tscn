@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=18 format=3]
 [ext_resource type="Script" path="res://scripts/SpawnManager.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2"]
 [ext_resource type="Script" path="res://scripts/AutoCollector.gd" id="3"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/ChallengeDisplay.tscn" id="15"]
 [ext_resource type="Script" path="res://scripts/ScrapCounter.gd" id="16"]
 [ext_resource type="Script" path="res://scripts/EventSystem.gd" id="17"]
+[ext_resource type="Script" path="res://scripts/WorkerManager.gd" id="18"]
 [sub_resource type="PlaneMesh" id="PM1"]
 size = Vector2(24,24)
 [sub_resource type="StandardMaterial3D" id="GM1"]
@@ -74,6 +75,8 @@ script = ExtResource("1")
 script = ExtResource("3")
 [node name="EventSystem" type="Node" parent="."]
 script = ExtResource("17")
+[node name="WorkerManager" type="Node3D" parent="."]
+script = ExtResource("18")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 [node name="HUD" parent="CanvasLayer" instance=ExtResource("2")]
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("8")]

@@ -1,5 +1,4 @@
 extends Control
-
 @onready var coin_label:Label=$TopBar/CoinLabel
 @onready var inv_label:Label=$TopBar/InvLabel
 @onready var inv_panel:PanelContainer=$InventoryPanel
@@ -14,42 +13,41 @@ extends Control
 @onready var prestige_btn:Button=$StatsPanel/PrestigeBtn
 @onready var forge_panel:PanelContainer=$ForgeShopPanel
 @onready var forge_list:VBoxContainer=$ForgeShopPanel/ScrollContainer/ForgeList
+@onready var craft_panel:PanelContainer=$CraftPanel
+@onready var craft_list:VBoxContainer=$CraftPanel/ScrollContainer/CraftList
 @onready var notif_label:Label=$NotifLabel
-
 var _nt:float=0.0
 var _panels:Array=[]
-
 func _ready()->void:
-	_panels=[inv_panel,shop_panel,sort_panel,furnace_panel,stats_panel,forge_panel]
+	_panels=[inv_panel,shop_panel,sort_panel,furnace_panel,stats_panel,forge_panel,craft_panel]
 	GameManager.coins_changed.connect(func(c): coin_label.text="%d COINS"%c; _shop())
 	GameManager.inventory_changed.connect(func(): inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]; _inv())
 	GameManager.upgrade_purchased.connect(func(_x): _shop())
 	GameManager.notification.connect(func(m): notif_label.text=m; notif_label.visible=true; _nt=3.0)
 	GameManager.prestige_done.connect(func(_x): _shop())
+	GameManager.ingots_changed.connect(func(): _craft())
 	sell_btn.pressed.connect(func(): GameManager.sell_all(); AudioManager.play_sell())
 	prestige_btn.pressed.connect(func(): GameManager.do_prestige(); AudioManager.play_prestige(); _stats())
 	$TopBar/BtnInv.pressed.connect(func(): _toggle(inv_panel))
 	$TopBar/BtnSort.pressed.connect(func(): _toggle(sort_panel))
 	$TopBar/BtnForge.pressed.connect(func(): _toggle(furnace_panel))
 	$TopBar/BtnShop.pressed.connect(func(): _toggle(shop_panel))
-	$TopBar/BtnTokens.pressed.connect(func(): _toggle(forge_panel); _forge_shop())
+	$TopBar/BtnTokens.pressed.connect(func(): _toggle(forge_panel); _fshop())
 	$TopBar/BtnStats.pressed.connect(func(): _toggle(stats_panel); _stats())
+	$TopBar/BtnCraft.pressed.connect(func(): _toggle(craft_panel); _craft())
 	for p in _panels: p.visible=false
 	notif_label.visible=false
 	coin_label.text="%d COINS"%GameManager.coins
 	inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]
 	_shop()
-
 func _process(delta:float)->void:
 	if notif_label.visible:
 		_nt-=delta
 		if _nt<=0: notif_label.visible=false
-
 func _toggle(panel:Control)->void:
 	var was=panel.visible
 	for p in _panels: p.visible=false
 	panel.visible=not was
-
 func _inv()->void:
 	for c in inv_grid.get_children(): c.queue_free()
 	for i in GameManager.max_slots:
@@ -62,7 +60,6 @@ func _inv()->void:
 			var idx=i; b.pressed.connect(func(): GameManager.sell_item(idx); AudioManager.play_sell())
 		else: b.text=""; b.disabled=true
 		inv_grid.add_child(b)
-
 func _shop()->void:
 	for c in shop_list.get_children(): c.queue_free()
 	for uid in GameManager.upgrade_config:
@@ -79,8 +76,7 @@ func _shop()->void:
 		var btn=Button.new(); btn.text="MAX" if mx else "%dc"%cost; btn.disabled=mx or not can; btn.custom_minimum_size=Vector2(70,0)
 		if can: var id=uid; btn.pressed.connect(func(): GameManager.buy_upgrade(id))
 		h.add_child(btn); shop_list.add_child(h)
-
-func _forge_shop()->void:
+func _fshop()->void:
 	for c in forge_list.get_children(): c.queue_free()
 	var hl=Label.new(); hl.text="TOKENS: %d"%GameManager.forge_tokens; hl.add_theme_color_override("font_color",Color("#FFD700"))
 	forge_list.add_child(hl)
@@ -92,22 +88,49 @@ func _forge_shop()->void:
 		nl.add_theme_color_override("font_color",Color("#FFD700") if not mx else Color("#39FF14")); nl.add_theme_font_size_override("font_size",10)
 		nl.size_flags_horizontal=Control.SIZE_EXPAND_FILL; h.add_child(nl)
 		var btn=Button.new(); btn.text="MAX" if mx else "%d🔥"%cost; btn.disabled=mx or not can; btn.custom_minimum_size=Vector2(60,0)
-		if can: var id=fid; btn.pressed.connect(func(): GameManager.buy_forge_item(id); AudioManager.play_upgrade(); _forge_shop())
+		if can: var id=fid; btn.pressed.connect(func(): GameManager.buy_forge_item(id); AudioManager.play_upgrade(); _fshop())
 		h.add_child(btn); forge_list.add_child(h)
-
+func _craft()->void:
+	for c in craft_list.get_children(): c.queue_free()
+	var cm=get_node_or_null("/root/CraftingManager")
+	if not cm: return
+	var title=Label.new(); title.text="INGOTS: %d | CRAFTED: %d"%[GameManager.ingots.size(),cm.crafted_items.size()]
+	title.add_theme_color_override("font_color",Color("#ff6a00")); title.add_theme_font_size_override("font_size",11)
+	craft_list.add_child(title)
+	for recipe in cm.recipes:
+		var can=cm.can_craft(recipe)
+		var h=HBoxContainer.new(); h.custom_minimum_size=Vector2(0,34)
+		var info=VBoxContainer.new(); info.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+		var nl=Label.new(); nl.text=recipe.name
+		nl.add_theme_color_override("font_color",Color("#FFD700") if can else Color("#555")); nl.add_theme_font_size_override("font_size",11)
+		info.add_child(nl)
+		var dl=Label.new(); dl.text="%s → %dc"%[recipe.desc,recipe.value]
+		dl.add_theme_color_override("font_color",Color("#888") if can else Color("#333")); dl.add_theme_font_size_override("font_size",9)
+		info.add_child(dl); h.add_child(info)
+		var btn=Button.new(); btn.text="CRAFT" if can else "—"; btn.disabled=not can; btn.custom_minimum_size=Vector2(70,0)
+		if can:
+			var r=recipe; btn.pressed.connect(func(): cm.craft(r); _craft())
+		h.add_child(btn); craft_list.add_child(h)
+	if cm.crafted_items.size()>0:
+		var sep=HSeparator.new(); craft_list.add_child(sep)
+		var cl=Label.new(); cl.text="CRAFTED ITEMS:"; cl.add_theme_color_override("font_color",Color("#39FF14")); cl.add_theme_font_size_override("font_size",10)
+		craft_list.add_child(cl)
+		for i in cm.crafted_items.size():
+			var item=cm.crafted_items[i]
+			var b=Button.new(); b.text="%s — %dc (click=sell)"%[item.name,item.value]
+			b.add_theme_color_override("font_color",Color("#FFD700")); b.add_theme_font_size_override("font_size",10)
+			var idx=i; b.pressed.connect(func(): cm.sell_crafted(idx); _craft())
+			craft_list.add_child(b)
 func _stats()->void:
 	var m=int(GameManager.play_time/60); var h=m/60; m=m%60
 	var t="[color=#ff6a00]STATS[/color]\n"
-	t+="Coins: [color=#FFD700]%d[/color]\n"%GameManager.coins
-	t+="Lifetime: [color=#FFD700]%d[/color]\n"%GameManager.lifetime_coins
+	t+="Coins: [color=#FFD700]%d[/color] | Lifetime: [color=#FFD700]%d[/color]\n"%[GameManager.coins,GameManager.lifetime_coins]
 	t+="Collected: %d | Sorted: %d (Acc: %d%%)\n"%[GameManager.total_collected,GameManager.total_sorted,GameManager.get_accuracy()]
-	t+="Smelted: %d | Best streak: %d\n"%[GameManager.total_smelted,GameManager.best_streak]
-	t+="Time: %dh %dm\n\n"%[h,m]
-	t+="[color=#ff3300]PRESTIGE[/color]\nTokens: [color=#FFD700]%d[/color] | Count: %d | Bonus: +%d%%\n"%[GameManager.forge_tokens,GameManager.prestige_count,GameManager.forge_tokens*10]
-	if GameManager.can_prestige(): t+="Meltdown: [color=#39FF14]+%d tokens[/color]\n"%GameManager.get_prestige_tokens()
+	t+="Smelted: %d | Streak: %d | Time: %dh%dm\n"%[GameManager.total_smelted,GameManager.best_streak,h,m]
+	t+="\n[color=#ff3300]PRESTIGE[/color]\nTokens: [color=#FFD700]%d[/color] | Count: %d | +%d%%\n"%[GameManager.forge_tokens,GameManager.prestige_count,GameManager.forge_tokens*10]
+	if GameManager.can_prestige(): t+="[color=#39FF14]+%d tokens available[/color]\n"%GameManager.get_prestige_tokens()
 	t+="\n[color=#FFD700]ACHIEVEMENTS %d/%d[/color]\n"%[GameManager.achievements_unlocked.size(),GameManager.achievements_config.size()]
 	for a in GameManager.achievements_config:
 		t+=("[color=#39FF14]✓[/color] " if a.id in GameManager.achievements_unlocked else "[color=#333]○[/color] ")+a.name+"\n"
 	stats_text.text=t
 	prestige_btn.visible=GameManager.can_prestige()
-	prestige_btn.text="🔥 MELTDOWN +%d"%GameManager.get_prestige_tokens()

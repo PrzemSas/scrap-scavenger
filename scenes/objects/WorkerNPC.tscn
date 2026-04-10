@@ -1,45 +1,35 @@
-[gd_scene load_steps=5 format=3]
-
+[gd_scene load_steps=4 format=3]
 [ext_resource type="Script" path="res://scripts/WorkerNPC.gd" id="1"]
-
-[sub_resource type="CylinderMesh" id="BodyMesh"]
+[sub_resource type="CylinderMesh" id="BM"]
 top_radius = 0.15
 bottom_radius = 0.2
 height = 0.6
-
-[sub_resource type="StandardMaterial3D" id="BodyMat"]
+[sub_resource type="StandardMaterial3D" id="BMat"]
 albedo_color = Color(1, 0.42, 0, 1)
 emission_enabled = true
 emission = Color(1, 0.42, 0, 1)
 emission_energy_multiplier = 0.3
-
-[sub_resource type="SphereMesh" id="HeadMesh"]
+[sub_resource type="SphereMesh" id="HM"]
 radius = 0.12
 height = 0.24
-
 [node name="WorkerNPC" type="Node3D"]
 script = ExtResource("1")
-
 [node name="Body" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
-mesh = SubResource("BodyMesh")
-surface_material_override/0 = SubResource("BodyMat")
-
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.3,0)
+mesh = SubResource("BM")
+surface_material_override/0 = SubResource("BMat")
 [node name="Head" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
-mesh = SubResource("HeadMesh")
-surface_material_override/0 = SubResource("BodyMat")
-
-[node name="NameTag" type="Label3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.72,0)
+mesh = SubResource("HM")
+surface_material_override/0 = SubResource("BMat")
+[node name="Tag" type="Label3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.0,0)
 billboard = 1
 text = "WORKER"
-font_size = 12
-outline_size = 3
-modulate = Color(1, 0.42, 0, 0.6)
-
-[node name="GlowLight" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-light_color = Color(1, 0.42, 0, 1)
-light_energy = 0.2
+font_size = 10
+modulate = Color(1,0.42,0,0.6)
+[node name="Light" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.5,0)
+light_color = Color(1,0.42,0,1)
+light_energy = 0.15
 omni_range = 2.0

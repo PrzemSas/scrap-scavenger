@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=5 format=3]
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/SortingTable.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Furnace.tscn" id="3"]
@@ -196,10 +196,6 @@ offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "MELTDOWN"
-
-[ext_resource type="PackedScene" path="res://scenes/ui/ScrapRadar.tscn" id="11"]
-
-[node name="ScrapRadar" parent="." instance=ExtResource("11")]
 
 [node name="NotifLabel" type="Label" parent="."]
 layout_mode = 1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=16 format=3]
 [ext_resource type="Script" path="res://scripts/SpawnManager.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2"]
 [ext_resource type="Script" path="res://scripts/AutoCollector.gd" id="3"]
@@ -71,11 +71,6 @@ transform = Transform3D(1,0,0,0,1,0,0,0,1,7,0,-7)
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,2,0)
 [node name="SpawnManager" type="Node3D" parent="."]
 script = ExtResource("1")
-[ext_resource type="Script" path="res://scripts/EventSystem.gd" id="31"]
-
-[node name="EventSystem" type="Node" parent="."]
-script = ExtResource("31")
-
 [node name="AutoCollector" type="Node3D" parent="."]
 script = ExtResource("3")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

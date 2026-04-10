@@ -34,38 +34,6 @@ func setup(data: Dictionary) -> void:
 		"motor":
 			var m := CylinderMesh.new(); m.top_radius=0.2; m.bottom_radius=0.2; m.height=0.3; mi.mesh=m
 			var s := CylinderShape3D.new(); s.radius=0.22; s.height=0.35; cs.shape=s
-		"chip":
-			var m := BoxMesh.new()
-			m.size = Vector3(0.2, 0.05, 0.15)
-			mi.mesh = m
-			var s := BoxShape3D.new()
-			s.size = Vector3(0.25, 0.1, 0.2)
-			cs.shape = s
-		"coil":
-			var m := TorusMesh.new()
-			m.inner_radius = 0.04
-			m.outer_radius = 0.15
-			mi.mesh = m
-			var s := SphereShape3D.new()
-			s.radius = 0.18
-			cs.shape = s
-		"gear":
-			var m := CylinderMesh.new()
-			m.top_radius = 0.18
-			m.bottom_radius = 0.18
-			m.height = 0.08
-			mi.mesh = m
-			var s := CylinderShape3D.new()
-			s.radius = 0.2
-			s.height = 0.12
-			cs.shape = s
-		"crystal":
-			var m := PrismMesh.new()
-			m.size = Vector3(0.2, 0.4, 0.2)
-			mi.mesh = m
-			var s := BoxShape3D.new()
-			s.size = Vector3(0.25, 0.45, 0.25)
-			cs.shape = s
 		"gold":
 			var m := PrismMesh.new(); m.size=Vector3(0.3,0.3,0.3); mi.mesh=m
 			var s := BoxShape3D.new(); s.size=Vector3(0.35,0.35,0.35); cs.shape=s

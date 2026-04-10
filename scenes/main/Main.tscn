@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=17 format=3]
 [ext_resource type="Script" path="res://scripts/SpawnManager.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2"]
 [ext_resource type="Script" path="res://scripts/AutoCollector.gd" id="3"]
@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/Minimap.tscn" id="14"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ChallengeDisplay.tscn" id="15"]
 [ext_resource type="Script" path="res://scripts/ScrapCounter.gd" id="16"]
-
+[ext_resource type="Script" path="res://scripts/EventSystem.gd" id="17"]
 [sub_resource type="PlaneMesh" id="PM1"]
 size = Vector2(24,24)
 [sub_resource type="StandardMaterial3D" id="GM1"]
@@ -32,7 +32,6 @@ glow_intensity = 0.4
 fog_enabled = true
 fog_light_color = Color(0.1,0.06,0.02,1)
 fog_density = 0.01
-
 [node name="Main" type="Node3D"]
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1,0,0,0,0.707,0.707,0,-0.707,0.707,0,8,8)
@@ -73,6 +72,8 @@ transform = Transform3D(1,0,0,0,1,0,0,0,1,0,2,0)
 script = ExtResource("1")
 [node name="AutoCollector" type="Node3D" parent="."]
 script = ExtResource("3")
+[node name="EventSystem" type="Node" parent="."]
+script = ExtResource("17")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 [node name="HUD" parent="CanvasLayer" instance=ExtResource("2")]
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("8")]

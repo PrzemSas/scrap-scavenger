@@ -15,11 +15,14 @@ extends Control
 @onready var forge_list:VBoxContainer=$ForgeShopPanel/ScrollContainer/ForgeList
 @onready var craft_panel:PanelContainer=$CraftPanel
 @onready var craft_list:VBoxContainer=$CraftPanel/ScrollContainer/CraftList
+@onready var leaderboard_panel:PanelContainer=$LeaderboardPanel
+@onready var lb_list:VBoxContainer=$LeaderboardPanel/ScrollContainer/LBList
+@onready var daily_panel:Control=$DailyRewardPanel
 @onready var notif_label:Label=$NotifLabel
 var _nt:float=0.0
 var _panels:Array=[]
 func _ready()->void:
-	_panels=[inv_panel,shop_panel,sort_panel,furnace_panel,stats_panel,forge_panel,craft_panel]
+	_panels=[inv_panel,shop_panel,sort_panel,furnace_panel,stats_panel,forge_panel,craft_panel,leaderboard_panel]
 	GameManager.coins_changed.connect(func(c): coin_label.text="%d COINS"%c; _shop())
 	GameManager.inventory_changed.connect(func(): inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]; _inv())
 	GameManager.upgrade_purchased.connect(func(_x): _shop())
@@ -35,6 +38,8 @@ func _ready()->void:
 	$TopBar/BtnTokens.pressed.connect(func(): _toggle(forge_panel); _fshop())
 	$TopBar/BtnStats.pressed.connect(func(): _toggle(stats_panel); _stats())
 	$TopBar/BtnCraft.pressed.connect(func(): _toggle(craft_panel); _craft())
+	$TopBar/BtnDaily.pressed.connect(func(): daily_panel.show_panel())
+	$TopBar/BtnLeaderboard.pressed.connect(func(): _toggle(leaderboard_panel); _leaderboard())
 	for p in _panels: p.visible=false
 	notif_label.visible=false
 	coin_label.text="%d COINS"%GameManager.coins
@@ -121,6 +126,41 @@ func _craft()->void:
 			b.add_theme_color_override("font_color",Color("#FFD700")); b.add_theme_font_size_override("font_size",10)
 			var idx=i; b.pressed.connect(func(): cm.sell_crafted(idx); _craft())
 			craft_list.add_child(b)
+func _leaderboard()->void:
+	for c in lb_list.get_children(): c.queue_free()
+	var lm=get_node_or_null("/root/LeaderboardManager")
+	var rank_hdr=Label.new()
+	rank_hdr.text="YOUR RANK: #%d"%( lm.get_current_rank() if lm else 999)
+	rank_hdr.add_theme_color_override("font_color",Color("#FFD700")); rank_hdr.add_theme_font_size_override("font_size",12)
+	lb_list.add_child(rank_hdr)
+	if not lm or lm.entries.is_empty():
+		var nl=Label.new(); nl.text="No entries yet.\nPrestige to appear on the board!"
+		nl.add_theme_color_override("font_color",Color("#555")); nl.add_theme_font_size_override("font_size",10)
+		lb_list.add_child(nl)
+	else:
+		var medals=["🥇","🥈","🥉"]
+		for i in lm.entries.size():
+			var e=lm.entries[i]
+			var h=HBoxContainer.new(); h.custom_minimum_size=Vector2(0,22)
+			var rl=Label.new()
+			rl.text=(medals[i] if i<3 else " #%d"%[i+1])+" "
+			rl.add_theme_font_size_override("font_size",11)
+			rl.add_theme_color_override("font_color",Color("#FFD700") if i<3 else Color("#666"))
+			h.add_child(rl)
+			var il=Label.new()
+			il.text="%s — %dc  (P%d)"%[e.get("name","?"),e.get("lifetime_coins",0),e.get("prestige_count",0)]
+			il.add_theme_font_size_override("font_size",10)
+			il.add_theme_color_override("font_color",Color("#ff6a00") if i==0 else Color("#888"))
+			il.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+			h.add_child(il); lb_list.add_child(h)
+	lb_list.add_child(HSeparator.new())
+	var sub=Button.new(); sub.text="SUBMIT CURRENT SESSION"; sub.add_theme_font_size_override("font_size",10)
+	sub.pressed.connect(func():
+		if lm:
+			var r=lm.submit_score("SCRAPPER")
+			GameManager.notification.emit("Submitted! Rank #%d"%r)
+			_leaderboard())
+	lb_list.add_child(sub)
 func _stats()->void:
 	var m=int(GameManager.play_time/60); var h=m/60; m=m%60
 	var t="[color=#ff6a00]STATS[/color]\n"
@@ -130,6 +170,7 @@ func _stats()->void:
 	t+="\n[color=#ff3300]PRESTIGE[/color]\nTokens: [color=#FFD700]%d[/color] | Count: %d | +%d%%\n"%[GameManager.forge_tokens,GameManager.prestige_count,GameManager.forge_tokens*10]
 	if GameManager.can_prestige(): t+="[color=#39FF14]+%d tokens available[/color]\n"%GameManager.get_prestige_tokens()
 	t+="\n[color=#FFD700]ACHIEVEMENTS %d/%d[/color]\n"%[GameManager.achievements_unlocked.size(),GameManager.achievements_config.size()]
+	t+="[color=#888]Daily streak: %d | Best: %d[/color]\n"%[daily_panel.login_streak if daily_panel else 0,GameManager.best_daily_streak]
 	for a in GameManager.achievements_config:
 		t+=("[color=#39FF14]✓[/color] " if a.id in GameManager.achievements_unlocked else "[color=#333]○[/color] ")+a.name+"\n"
 	stats_text.text=t

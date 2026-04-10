@@ -30,6 +30,9 @@ func craft(recipe: Dictionary) -> bool:
 		var needed = ingredients[ingot_name]
 		_remove_ingots(ingot_name, needed)
 	crafted_items.append({"name": recipe.name, "value": recipe.value, "id": recipe.id})
+	GameManager.total_crafted += 1
+	if recipe.id == "scrap_crown":
+		GameManager.scrap_crown_crafted = true
 	GameManager.notification.emit("⚒ Crafted: %s (%dc)" % [recipe.name, recipe.value])
 	AudioManager.play_upgrade()
 	crafting_changed.emit()

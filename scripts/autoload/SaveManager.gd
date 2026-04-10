@@ -27,6 +27,10 @@ func save_game() -> void:
 		"achievements": GameManager.achievements_unlocked,
 		"forge_purchases": GameManager.forge_purchases,
 		"current_ground": GameManager.current_ground,
+		"total_crafted": GameManager.total_crafted,
+		"scrap_crown_crafted": GameManager.scrap_crown_crafted,
+		"best_daily_streak": GameManager.best_daily_streak,
+		"best_leaderboard_rank": GameManager.best_leaderboard_rank,
 		"timestamp": Time.get_unix_time_from_system(),
 	}
 	var f = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -66,6 +70,10 @@ func load_game() -> void:
 	GameManager.achievements_unlocked = d.get("achievements", [])
 	GameManager.forge_purchases = d.get("forge_purchases", GameManager.forge_purchases)
 	GameManager.current_ground = d.get("current_ground", "default")
+	GameManager.total_crafted = d.get("total_crafted", 0)
+	GameManager.scrap_crown_crafted = d.get("scrap_crown_crafted", false)
+	GameManager.best_daily_streak = d.get("best_daily_streak", 0)
+	GameManager.best_leaderboard_rank = d.get("best_leaderboard_rank", 999)
 	GameManager.coins_changed.emit(GameManager.coins)
 	GameManager.inventory_changed.emit()
 	GameManager.sorted_changed.emit()

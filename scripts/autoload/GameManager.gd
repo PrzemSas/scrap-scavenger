@@ -29,6 +29,10 @@ var play_time:float=0.0
 var has_found_gold:bool=false
 var inventory_full:bool=false
 var current_ground:String="default"
+var total_crafted:int=0
+var scrap_crown_crafted:bool=false
+var best_daily_streak:int=0
+var best_leaderboard_rank:int=999
 var achievements_unlocked:Array=[]
 var achievements_config:Array=[
 	{"id":"first_scrap","name":"First Scrap","check":"total_collected >= 1"},
@@ -36,16 +40,31 @@ var achievements_config:Array=[
 	{"id":"thousand_coins","name":"Scrap Dealer","check":"lifetime_coins >= 1000"},
 	{"id":"ten_k","name":"Junk Mogul","check":"lifetime_coins >= 10000"},
 	{"id":"fifty_k","name":"Forge Master","check":"lifetime_coins >= 50000"},
+	{"id":"hundred_k","name":"Scrap Baron","check":"lifetime_coins >= 100000"},
 	{"id":"first_sort","name":"Sorted!","check":"correct_sorted >= 1"},
 	{"id":"sort_streak_5","name":"On a Roll","check":"best_streak >= 5"},
 	{"id":"sort_streak_10","name":"Sort Machine","check":"best_streak >= 10"},
+	{"id":"sort_100","name":"Sorting Pro","check":"correct_sorted >= 100"},
 	{"id":"first_smelt","name":"Smelter","check":"total_smelted >= 1"},
 	{"id":"ten_ingots","name":"Ingot Factory","check":"total_smelted >= 10"},
 	{"id":"gold_find","name":"Gold Rush","check":"has_found_gold == true"},
 	{"id":"first_prestige","name":"Meltdown!","check":"prestige_count >= 1"},
+	{"id":"prestige_3","name":"Third Burn","check":"prestige_count >= 3"},
+	{"id":"prestige_5","name":"Five Flames","check":"prestige_count >= 5"},
 	{"id":"full_inv","name":"Hoarder","check":"inventory_full == true"},
 	{"id":"collect_100","name":"Scrap Pile","check":"total_collected >= 100"},
+	{"id":"collect_500","name":"Landfill","check":"total_collected >= 500"},
 	{"id":"play_30min","name":"Dedicated","check":"play_time >= 1800"},
+	{"id":"first_craft","name":"Tinker","check":"total_crafted >= 1"},
+	{"id":"craft_5","name":"Workshop","check":"total_crafted >= 5"},
+	{"id":"craft_crown","name":"Crown Collector","check":"scrap_crown_crafted == true"},
+	{"id":"daily_3","name":"Regular","check":"best_daily_streak >= 3"},
+	{"id":"daily_7","name":"Devoted","check":"best_daily_streak >= 7"},
+	{"id":"daily_30","name":"Fanatic","check":"best_daily_streak >= 30"},
+	{"id":"hire_worker","name":"Employer","check":"workers_hired >= 1"},
+	{"id":"full_crew","name":"Full Crew","check":"workers_hired >= 3"},
+	{"id":"leaderboard_10","name":"On the Board","check":"best_leaderboard_rank <= 10"},
+	{"id":"leaderboard_3","name":"Podium","check":"best_leaderboard_rank <= 3"},
 ]
 var upgrades:Dictionary={"bigger_bag":0,"click_power":0,"lucky_find":0,"fast_furnace":0,"sort_mastery":0,"auto_sort":0,"second_furnace":0,"night_shift":0}
 var upgrade_config:Dictionary={
@@ -176,11 +195,13 @@ func do_prestige()->void:
 	coins_changed.emit(coins); inventory_changed.emit(); sorted_changed.emit(); ingots_changed.emit()
 	prestige_done.emit(tokens); notification.emit("MELTDOWN! +%d tokens"%[tokens])
 func _check_achievements()->void:
+	var _names=["total_collected","lifetime_coins","correct_sorted","best_streak","total_smelted","has_found_gold","prestige_count","inventory_full","play_time","total_crafted","scrap_crown_crafted","best_daily_streak","workers_hired","best_leaderboard_rank"]
+	var _vals=[total_collected,lifetime_coins,correct_sorted,best_streak,total_smelted,has_found_gold,prestige_count,inventory_full,play_time,total_crafted,scrap_crown_crafted,best_daily_streak,forge_purchases.get("hire_worker",0),best_leaderboard_rank]
 	for ach in achievements_config:
 		if ach.id in achievements_unlocked: continue
 		var expr=Expression.new()
-		if expr.parse(ach.check,["total_collected","lifetime_coins","correct_sorted","best_streak","total_smelted","has_found_gold","prestige_count","inventory_full","play_time"])!=OK: continue
-		if expr.execute([total_collected,lifetime_coins,correct_sorted,best_streak,total_smelted,has_found_gold,prestige_count,inventory_full,play_time])==true:
+		if expr.parse(ach.check,_names)!=OK: continue
+		if expr.execute(_vals)==true:
 			achievements_unlocked.append(ach.id); achievement_unlocked.emit(ach.id); notification.emit("🏆 %s"%ach.name)
 func get_accuracy()->int:
 	if total_sorted==0: return 0

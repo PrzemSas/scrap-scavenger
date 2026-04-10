@@ -1,8 +1,11 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
+
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/SortingTable.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Furnace.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ScrapRadar.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/ui/DailyReward.tscn" id="20"]
+
 [sub_resource type="StyleBoxFlat" id="PS1"]
 bg_color = Color(0.03,0.03,0.05,0.92)
 border_color = Color(1,0.42,0,0.15)
@@ -11,12 +14,14 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+
 [node name="HUD" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1")
+
 [node name="TopBar" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 10
@@ -25,47 +30,70 @@ offset_left = 10.0
 offset_top = 10.0
 offset_right = -10.0
 offset_bottom = 50.0
+
 [node name="BtnInv" type="Button" parent="TopBar"]
 layout_mode = 2
 text = "📦"
 theme_override_font_sizes/font_size = 14
+
 [node name="BtnSort" type="Button" parent="TopBar"]
 layout_mode = 2
 text = "♻"
 theme_override_font_sizes/font_size = 14
+
 [node name="BtnForge" type="Button" parent="TopBar"]
 layout_mode = 2
 text = "🔥"
 theme_override_font_sizes/font_size = 14
+
 [node name="BtnShop" type="Button" parent="TopBar"]
 layout_mode = 2
 text = "🛒"
 theme_override_font_sizes/font_size = 14
+
 [node name="BtnCraft" type="Button" parent="TopBar"]
 layout_mode = 2
 text = "⚒"
 theme_override_font_sizes/font_size = 14
+
 [node name="BtnTokens" type="Button" parent="TopBar"]
 layout_mode = 2
 text = "🪙"
 theme_override_font_sizes/font_size = 14
+
 [node name="BtnStats" type="Button" parent="TopBar"]
 layout_mode = 2
 text = "📊"
 theme_override_font_sizes/font_size = 14
+
+[node name="BtnDaily" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "📅"
+theme_override_font_sizes/font_size = 14
+tooltip_text = "Daily Reward"
+
+[node name="BtnLeaderboard" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "🏆"
+theme_override_font_sizes/font_size = 14
+tooltip_text = "Leaderboard"
+
 [node name="Spacer" type="Control" parent="TopBar"]
 layout_mode = 2
 size_flags_horizontal = 3
+
 [node name="InvLabel" type="Label" parent="TopBar"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6,0.6,0.6,1)
 theme_override_font_sizes/font_size = 14
 text = "INV 0/8"
+
 [node name="CoinLabel" type="Label" parent="TopBar"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1,0.84,0,1)
 theme_override_font_sizes/font_size = 22
 text = "0 COINS"
+
 [node name="InventoryPanel" type="PanelContainer" parent="."]
 layout_mode = 1
 offset_left = 10.0
@@ -73,19 +101,23 @@ offset_top = 60.0
 offset_right = 310.0
 offset_bottom = 400.0
 theme_override_styles/panel = SubResource("PS1")
+
 [node name="Title" type="Label" parent="InventoryPanel"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1,0.42,0,1)
 theme_override_font_sizes/font_size = 14
 text = "INVENTORY"
+
 [node name="ScrollContainer" type="ScrollContainer" parent="InventoryPanel"]
 layout_mode = 2
 offset_top = 28.0
 offset_bottom = -44.0
+
 [node name="InvGrid" type="GridContainer" parent="InventoryPanel/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 columns = 4
+
 [node name="SellAllBtn" type="Button" parent="InventoryPanel"]
 layout_mode = 2
 anchors_preset = 12
@@ -99,6 +131,7 @@ offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "SELL ALL"
+
 [node name="ShopPanel" type="PanelContainer" parent="."]
 layout_mode = 1
 offset_left = 10.0
@@ -106,17 +139,21 @@ offset_top = 60.0
 offset_right = 380.0
 offset_bottom = 450.0
 theme_override_styles/panel = SubResource("PS1")
+
 [node name="Title" type="Label" parent="ShopPanel"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1,0.42,0,1)
 theme_override_font_sizes/font_size = 14
 text = "UPGRADES"
+
 [node name="ScrollContainer" type="ScrollContainer" parent="ShopPanel"]
 layout_mode = 2
 offset_top = 28.0
+
 [node name="ShopList" type="VBoxContainer" parent="ShopPanel/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
 [node name="ForgeShopPanel" type="PanelContainer" parent="."]
 layout_mode = 1
 offset_left = 10.0
@@ -124,17 +161,21 @@ offset_top = 60.0
 offset_right = 400.0
 offset_bottom = 480.0
 theme_override_styles/panel = SubResource("PS1")
+
 [node name="Title" type="Label" parent="ForgeShopPanel"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1,0.84,0,1)
 theme_override_font_sizes/font_size = 14
 text = "FORGE TOKEN SHOP"
+
 [node name="ScrollContainer" type="ScrollContainer" parent="ForgeShopPanel"]
 layout_mode = 2
 offset_top = 28.0
+
 [node name="ForgeList" type="VBoxContainer" parent="ForgeShopPanel/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
 [node name="CraftPanel" type="PanelContainer" parent="."]
 layout_mode = 1
 offset_left = 10.0
@@ -142,32 +183,61 @@ offset_top = 60.0
 offset_right = 420.0
 offset_bottom = 500.0
 theme_override_styles/panel = SubResource("PS1")
+
 [node name="Title" type="Label" parent="CraftPanel"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1,0.42,0,1)
 theme_override_font_sizes/font_size = 14
 text = "CRAFTING"
+
 [node name="ScrollContainer" type="ScrollContainer" parent="CraftPanel"]
 layout_mode = 2
 offset_top = 28.0
+
 [node name="CraftList" type="VBoxContainer" parent="CraftPanel/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="LeaderboardPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 440.0
+offset_bottom = 480.0
+theme_override_styles/panel = SubResource("PS1")
+
+[node name="Title" type="Label" parent="LeaderboardPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1,0.84,0,1)
+theme_override_font_sizes/font_size = 14
+text = "🏆 LEADERBOARD"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="LeaderboardPanel"]
+layout_mode = 2
+offset_top = 28.0
+
+[node name="LBList" type="VBoxContainer" parent="LeaderboardPanel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="SortingTable" parent="." instance=ExtResource("2")]
 layout_mode = 1
 offset_left = 10.0
 offset_top = 60.0
+
 [node name="Furnace" parent="." instance=ExtResource("3")]
 layout_mode = 1
 offset_left = 10.0
 offset_top = 60.0
+
 [node name="StatsPanel" type="PanelContainer" parent="."]
 layout_mode = 1
 offset_left = 10.0
 offset_top = 60.0
 offset_right = 440.0
-offset_bottom = 520.0
+offset_bottom = 560.0
 theme_override_styles/panel = SubResource("PS1")
+
 [node name="StatsText" type="RichTextLabel" parent="StatsPanel"]
 layout_mode = 2
 offset_left = 8.0
@@ -177,6 +247,7 @@ offset_bottom = -50.0
 bbcode_enabled = true
 theme_override_colors/default_color = Color(0.7,0.7,0.7,1)
 theme_override_font_sizes/normal_font_size = 11
+
 [node name="PrestigeBtn" type="Button" parent="StatsPanel"]
 layout_mode = 2
 anchors_preset = 12
@@ -190,7 +261,11 @@ offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "MELTDOWN"
+
 [node name="ScrapRadar" parent="." instance=ExtResource("10")]
+
+[node name="DailyRewardPanel" parent="." instance=ExtResource("20")]
+
 [node name="NotifLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 5

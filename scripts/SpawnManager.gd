@@ -1,5 +1,7 @@
 extends Node3D
 const SCRAP_SCENE=preload("res://scenes/objects/ScrapItem.tscn")
+const WORLD_HALF:=44.0
+const MAX_ITEMS:=20
 var scrap_types:Array=[
 	{"id":"can","name":"Aluminum Can","value":1,"rarity":0,"weight":35},
 	{"id":"bolt","name":"Bolt","value":1,"rarity":0,"weight":25},
@@ -18,20 +20,26 @@ var _ev_active:bool=false
 var _ev_timer:float=0.0
 var _ev_bonus:float=1.0
 func _ready()->void:
-	for i in 6: spawn_random()
+	for i in MAX_ITEMS: spawn_random()
 func _process(delta:float)->void:
-	if get_child_count()<6:
+	if get_child_count()<MAX_ITEMS:
 		_rt+=delta
-		if _rt>=1.5: _rt=0.0; spawn_random()
+		if _rt>=1.2: _rt=0.0; spawn_random()
 	if _ev_active:
 		_ev_timer-=delta
 		if _ev_timer<=0: _ev_active=false; _ev_bonus=1.0; GameManager.notification.emit("Event ended!")
 func start_event(bonus:float,dur:float,msg:String)->void:
 	_ev_active=true; _ev_bonus=bonus; _ev_timer=dur; GameManager.notification.emit(msg)
+func _in_forge_zone(p:Vector3)->bool:
+	return abs(p.x)<9.5 and abs(p.z)<9.5
 func spawn_random()->void:
 	var d=_roll_scrap()
 	var item=SCRAP_SCENE.instantiate()
-	item.position=Vector3(randf_range(-8,8),0,randf_range(-8,8))
+	var pos:=Vector3.ZERO
+	for _i in 30:
+		pos=Vector3(randf_range(-WORLD_HALF,WORLD_HALF),0,randf_range(-WORLD_HALF,WORLD_HALF))
+		if not _in_forge_zone(pos): break
+	item.position=pos
 	add_child(item); item.setup(d)
 func _roll_scrap()->Dictionary:
 	var total:float=0.0

@@ -1,18 +1,201 @@
-[gd_scene load_steps=3 format=3]
-[sub_resource type="BoxMesh" id="FM"]
-size = Vector3(0.15,1.5,0.15)
-[sub_resource type="StandardMaterial3D" id="FMat"]
-albedo_color = Color(0.3,0.2,0.1,1)
+[gd_scene load_steps=13 format=3]
+
+[sub_resource type="BoxMesh" id="PostMesh"]
+size = Vector3(0.15,1.8,0.15)
+
+[sub_resource type="BoxMesh" id="GatePostMesh"]
+size = Vector3(0.22,2.5,0.22)
+
+[sub_resource type="BoxMesh" id="RailX_16"]
+size = Vector3(16.0,0.07,0.07)
+
+[sub_resource type="BoxMesh" id="RailZ_16"]
+size = Vector3(0.07,0.07,16.0)
+
+[sub_resource type="BoxMesh" id="RailZ_6"]
+size = Vector3(0.07,0.07,6.0)
+
+[sub_resource type="BoxMesh" id="GateArchMesh"]
+size = Vector3(0.15,0.22,4.5)
+
+[sub_resource type="StandardMaterial3D" id="MatPost"]
+albedo_color = Color(0.28,0.18,0.1,1)
+metallic = 0.2
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="MatSteel"]
+albedo_color = Color(0.2,0.18,0.14,1)
+metallic = 0.7
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="MatGate"]
+albedo_color = Color(0.4,0.2,0.06,1)
+metallic = 0.6
+roughness = 0.6
+emission_enabled = true
+emission = Color(1,0.45,0.05,1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="BoxShape3D" id="ShapeNS"]
+size = Vector3(16.4,2.0,0.3)
+
+[sub_resource type="BoxShape3D" id="ShapeW"]
+size = Vector3(0.3,2.0,16.4)
+
+[sub_resource type="BoxShape3D" id="ShapeE6"]
+size = Vector3(0.3,2.0,6.2)
+
 [node name="EnvironmentProps" type="Node3D"]
-[node name="F1" type="MeshInstance3D" parent="."]
-transform = Transform3D(1,0,0,0,1,0,0,0,1,-10,0.75,-10)
-mesh = SubResource("FM")
-surface_material_override/0 = SubResource("FMat")
-[node name="F2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1,0,0,0,1,0,0,0,1,-10,0.75,-7)
-mesh = SubResource("FM")
-surface_material_override/0 = SubResource("FMat")
-[node name="F3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1,0,0,0,1,0,0,0,1,-10,0.75,-4)
-mesh = SubResource("FM")
-surface_material_override/0 = SubResource("FMat")
+
+[node name="Post_NW" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-8,0.9,-8)
+mesh = SubResource("PostMesh")
+surface_material_override/0 = SubResource("MatPost")
+
+[node name="Post_NC" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.9,-8)
+mesh = SubResource("PostMesh")
+surface_material_override/0 = SubResource("MatPost")
+
+[node name="Post_NE" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,0.9,-8)
+mesh = SubResource("PostMesh")
+surface_material_override/0 = SubResource("MatPost")
+
+[node name="Rail_N_Top" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.65,-8)
+mesh = SubResource("RailX_16")
+surface_material_override/0 = SubResource("MatSteel")
+
+[node name="Rail_N_Mid" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.0,-8)
+mesh = SubResource("RailX_16")
+surface_material_override/0 = SubResource("MatSteel")
+
+[node name="Post_SW" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-8,0.9,8)
+mesh = SubResource("PostMesh")
+surface_material_override/0 = SubResource("MatPost")
+
+[node name="Post_SC" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.9,8)
+mesh = SubResource("PostMesh")
+surface_material_override/0 = SubResource("MatPost")
+
+[node name="Post_SE" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,0.9,8)
+mesh = SubResource("PostMesh")
+surface_material_override/0 = SubResource("MatPost")
+
+[node name="Rail_S_Top" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.65,8)
+mesh = SubResource("RailX_16")
+surface_material_override/0 = SubResource("MatSteel")
+
+[node name="Rail_S_Mid" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.0,8)
+mesh = SubResource("RailX_16")
+surface_material_override/0 = SubResource("MatSteel")
+
+[node name="Post_WC" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-8,0.9,0)
+mesh = SubResource("PostMesh")
+surface_material_override/0 = SubResource("MatPost")
+
+[node name="Rail_W_Top" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-8,1.65,0)
+mesh = SubResource("RailZ_16")
+surface_material_override/0 = SubResource("MatSteel")
+
+[node name="Rail_W_Mid" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-8,1.0,0)
+mesh = SubResource("RailZ_16")
+surface_material_override/0 = SubResource("MatSteel")
+
+[node name="Post_E_NC" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,0.9,-5)
+mesh = SubResource("PostMesh")
+surface_material_override/0 = SubResource("MatPost")
+
+[node name="Rail_E_N_Top" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,1.65,-5)
+mesh = SubResource("RailZ_6")
+surface_material_override/0 = SubResource("MatSteel")
+
+[node name="Rail_E_N_Mid" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,1.0,-5)
+mesh = SubResource("RailZ_6")
+surface_material_override/0 = SubResource("MatSteel")
+
+[node name="GatePost_N" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,1.25,-2)
+mesh = SubResource("GatePostMesh")
+surface_material_override/0 = SubResource("MatGate")
+
+[node name="GatePost_S" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,1.25,2)
+mesh = SubResource("GatePostMesh")
+surface_material_override/0 = SubResource("MatGate")
+
+[node name="Post_E_SC" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,0.9,5)
+mesh = SubResource("PostMesh")
+surface_material_override/0 = SubResource("MatPost")
+
+[node name="Rail_E_S_Top" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,1.65,5)
+mesh = SubResource("RailZ_6")
+surface_material_override/0 = SubResource("MatSteel")
+
+[node name="Rail_E_S_Mid" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,1.0,5)
+mesh = SubResource("RailZ_6")
+surface_material_override/0 = SubResource("MatSteel")
+
+[node name="GateArch" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,2.55,0)
+mesh = SubResource("GateArchMesh")
+surface_material_override/0 = SubResource("MatGate")
+
+[node name="GateSign" type="Label3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8.2,2.95,0)
+billboard = 1
+text = "DUMPSTER_FORGE"
+font_size = 22
+modulate = Color(1,0.55,0.08,1)
+
+[node name="GateLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,2.2,0)
+light_color = Color(1,0.5,0.1,1)
+light_energy = 1.2
+omni_range = 6.0
+
+[node name="Wall_N" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.9,-8)
+
+[node name="Collision" type="CollisionShape3D" parent="Wall_N"]
+shape = SubResource("ShapeNS")
+
+[node name="Wall_S" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.9,8)
+
+[node name="Collision" type="CollisionShape3D" parent="Wall_S"]
+shape = SubResource("ShapeNS")
+
+[node name="Wall_W" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-8,0.9,0)
+
+[node name="Collision" type="CollisionShape3D" parent="Wall_W"]
+shape = SubResource("ShapeW")
+
+[node name="Wall_E_N" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,0.9,-5)
+
+[node name="Collision" type="CollisionShape3D" parent="Wall_E_N"]
+shape = SubResource("ShapeE6")
+
+[node name="Wall_E_S" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8,0.9,5)
+
+[node name="Collision" type="CollisionShape3D" parent="Wall_E_S"]
+shape = SubResource("ShapeE6")

@@ -8,6 +8,8 @@ signal notification(msg:String)
 signal achievement_unlocked(id:String)
 signal prestige_done(tokens:int)
 signal ground_changed(skin_id:String)
+@warning_ignore("unused_signal") signal proximity_entered(panel_id:String)
+@warning_ignore("unused_signal") signal proximity_exited(panel_id:String)
 var coins:int=0
 var inventory:Array=[]
 var sorted_materials:Array=[]
@@ -104,6 +106,8 @@ var smelt_config:Dictionary={
 	"crystal":{"time":25.0,"mult":6.0,"ingot":"Forge Shard"},
 }
 var _auto_sort_timer:float=0.0
+func _ready()->void:
+	get_viewport().physics_object_picking=true
 func _process(delta:float)->void:
 	play_time+=delta; _check_achievements()
 	if upgrades.get("auto_sort",0)>0 and inventory.size()>0:

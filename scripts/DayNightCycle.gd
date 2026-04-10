@@ -1,7 +1,7 @@
 extends DirectionalLight3D
 var _time:float=0.3
 func _process(delta:float)->void:
-	_time+=delta*0.02
+	_time+=delta*0.0033
 	if _time>1.0: _time-=1.0
 	light_energy=lerpf(0.15,0.8,maxf(sin(_time*PI),0.0))
 	if _time<0.25: light_color=Color(0.15,0.2,0.4).lerp(Color(1,0.4,0.15),_time/0.25)

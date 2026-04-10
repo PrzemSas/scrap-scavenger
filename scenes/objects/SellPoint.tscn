@@ -1,39 +1,56 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
+
 [ext_resource type="Script" path="res://scripts/SellPoint3D.gd" id="1"]
+
 [sub_resource type="BoxMesh" id="BM"]
 size = Vector3(2.0,1.2,1.0)
+
 [sub_resource type="StandardMaterial3D" id="BMat"]
 albedo_color = Color(0.15,0.25,0.1,1)
 metallic = 0.3
-[sub_resource type="BoxShape3D" id="CS"]
-size = Vector3(2.5,2.0,1.5)
+
+[sub_resource type="BoxShape3D" id="AreaShape"]
+size = Vector3(2.8,2.0,1.8)
+
+[sub_resource type="BoxShape3D" id="SolidShape"]
+size = Vector3(2.2,1.4,1.2)
+
 [node name="SellPoint" type="Area3D"]
-input_ray_pickable = true
 script = ExtResource("1")
+
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.6,0)
 mesh = SubResource("BM")
 surface_material_override/0 = SubResource("BMat")
+
 [node name="Sign" type="Label3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.8,0)
 billboard = 1
 text = "SELL ALL"
 font_size = 24
 modulate = Color(0.2,1,0.1,1)
+
 [node name="ValueLabel" type="Label3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.5,0)
 billboard = 1
 text = ""
 font_size = 16
 modulate = Color(1,0.84,0,0.8)
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.8,0)
-shape = SubResource("CS")
+shape = SubResource("AreaShape")
+
 [node name="GlowLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.5,0)
 light_color = Color(0.2,1,0.1,1)
-light_energy = 0.3
-omni_range = 3.0
-[connection signal="input_event" from="." to="." method="_on_input_event"]
-[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+light_energy = 0.5
+omni_range = 4.0
+
+[node name="Solid" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.7,0)
+
+[node name="Col" type="CollisionShape3D" parent="Solid"]
+shape = SubResource("SolidShape")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

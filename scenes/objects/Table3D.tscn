@@ -1,0 +1,72 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/ProximityZone.gd" id="1"]
+
+[sub_resource type="BoxMesh" id="TopMesh"]
+size = Vector3(2.0,0.1,1.1)
+
+[sub_resource type="BoxMesh" id="LegMesh"]
+size = Vector3(0.1,0.75,0.1)
+
+[sub_resource type="StandardMaterial3D" id="MatWood"]
+albedo_color = Color(0.3,0.18,0.08,1)
+roughness = 0.88
+
+[sub_resource type="StandardMaterial3D" id="MatMetal"]
+albedo_color = Color(0.2,0.16,0.12,1)
+metallic = 0.6
+roughness = 0.55
+
+[sub_resource type="BoxShape3D" id="TableSolid"]
+size = Vector3(2.1,0.9,1.2)
+
+[sub_resource type="SphereShape3D" id="TableTrigger"]
+radius = 2.8
+
+[node name="Table3D" type="Node3D"]
+
+[node name="TableTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.8,0)
+mesh = SubResource("TopMesh")
+surface_material_override/0 = SubResource("MatMetal")
+
+[node name="Leg_FL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-0.9,0.375,0.45)
+mesh = SubResource("LegMesh")
+surface_material_override/0 = SubResource("MatWood")
+
+[node name="Leg_FR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0.9,0.375,0.45)
+mesh = SubResource("LegMesh")
+surface_material_override/0 = SubResource("MatWood")
+
+[node name="Leg_BL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-0.9,0.375,-0.45)
+mesh = SubResource("LegMesh")
+surface_material_override/0 = SubResource("MatWood")
+
+[node name="Leg_BR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0.9,0.375,-0.45)
+mesh = SubResource("LegMesh")
+surface_material_override/0 = SubResource("MatWood")
+
+[node name="Label" type="Label3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.4,0)
+billboard = 1
+text = "SORTING TABLE"
+font_size = 18
+modulate = Color(0.2,0.9,1,1)
+
+[node name="Collider" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.45,0)
+
+[node name="Col" type="CollisionShape3D" parent="Collider"]
+shape = SubResource("TableSolid")
+
+[node name="ProximityZone" type="Area3D" parent="."]
+script = ExtResource("1")
+panel_id = "sort"
+
+[node name="TriggerShape" type="CollisionShape3D" parent="ProximityZone"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.8,0)
+shape = SubResource("TableTrigger")

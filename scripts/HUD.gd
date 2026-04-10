@@ -21,6 +21,7 @@ extends Control
 @onready var notif_label:Label=$NotifLabel
 var _nt:float=0.0
 var _panels:Array=[]
+var _proximity_panel:String=""
 func _ready()->void:
 	_panels=[inv_panel,shop_panel,sort_panel,furnace_panel,stats_panel,forge_panel,craft_panel,leaderboard_panel]
 	GameManager.coins_changed.connect(func(c): coin_label.text="%d COINS"%c; _shop())
@@ -29,6 +30,8 @@ func _ready()->void:
 	GameManager.notification.connect(func(m): notif_label.text=m; notif_label.visible=true; _nt=3.0)
 	GameManager.prestige_done.connect(func(_x): _shop())
 	GameManager.ingots_changed.connect(func(): _craft())
+	GameManager.proximity_entered.connect(_on_proximity_enter)
+	GameManager.proximity_exited.connect(_on_proximity_exit)
 	sell_btn.pressed.connect(func(): GameManager.sell_all(); AudioManager.play_sell())
 	prestige_btn.pressed.connect(func(): GameManager.do_prestige(); AudioManager.play_prestige(); _stats())
 	$TopBar/BtnInv.pressed.connect(func(): _toggle(inv_panel))
@@ -45,6 +48,20 @@ func _ready()->void:
 	coin_label.text="%d COINS"%GameManager.coins
 	inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]
 	_shop()
+func _on_proximity_enter(pid:String)->void:
+	_proximity_panel=pid
+	for p in _panels: p.visible=false
+	match pid:
+		"sort": sort_panel.visible=true; _sort_hint()
+		"furnace": furnace_panel.visible=true
+func _on_proximity_exit(pid:String)->void:
+	if _proximity_panel!=pid: return
+	_proximity_panel=""
+	match pid:
+		"sort": sort_panel.visible=false
+		"furnace": furnace_panel.visible=false
+func _sort_hint()->void:
+	GameManager.notification.emit("Sorting table — drag items to bins")
 func _process(delta:float)->void:
 	if notif_label.visible:
 		_nt-=delta
@@ -53,18 +70,39 @@ func _toggle(panel:Control)->void:
 	var was=panel.visible
 	for p in _panels: p.visible=false
 	panel.visible=not was
+const ICON_CHARS:Dictionary={"can":"CAN","bolt":"BOLT","pipe":"PIPE","cable":"CBL","battery":"BAT","chip":"CHIP","coil":"COIL","motor":"MOT","gear":"GEAR","gold":"GOLD","crystal":"XTAL"}
+const ICON_PATH:String="res://assets/textures/ui/icons/"
+func _get_icon(id:String)->Texture2D:
+	var p=ICON_PATH+id+".png"
+	if ResourceLoader.exists(p): return load(p)
+	return null
 func _inv()->void:
 	for c in inv_grid.get_children(): c.queue_free()
 	for i in GameManager.max_slots:
-		var b=Button.new(); b.custom_minimum_size=Vector2(50,50)
+		var b=Button.new(); b.custom_minimum_size=Vector2(56,56)
 		if i<GameManager.inventory.size():
 			var it=GameManager.inventory[i]; var r=it.get("rarity",0)
-			b.text=["□","◆","★","✦"][r]; b.tooltip_text="%s (%dc)"%[it.get("name","?"),it.get("value",0)]
-			b.add_theme_color_override("font_color",[Color("#888"),Color("#ff6a00"),Color("#00e5ff"),Color("#FFD700")][r])
-			b.add_theme_font_size_override("font_size",20)
+			var id=it.get("id",""); var cl=[Color("#888"),Color("#ff6a00"),Color("#00e5ff"),Color("#FFD700")][r]
+			var icon=_get_icon(id)
+			if icon:
+				b.icon=icon; b.text=""; b.add_theme_constant_override("icon_max_width",40)
+			else:
+				b.text=ICON_CHARS.get(id,id.substr(0,3).to_upper())
+				b.add_theme_font_size_override("font_size",10)
+			b.add_theme_color_override("font_color",cl)
+			b.add_theme_stylebox_override("normal",_slot_style(cl,0.15))
+			b.add_theme_stylebox_override("hover",_slot_style(cl,0.3))
+			b.tooltip_text="%s\n%dc | %s"%[it.get("name","?"),it.get("value",0),["common","uncommon","rare","legendary"][r]]
 			var idx=i; b.pressed.connect(func(): GameManager.sell_item(idx); AudioManager.play_sell())
-		else: b.text=""; b.disabled=true
+		else:
+			b.text=""; b.disabled=true
+			b.add_theme_stylebox_override("normal",_slot_style(Color(0.15,0.15,0.15),0.1))
 		inv_grid.add_child(b)
+func _slot_style(c:Color,a:float)->StyleBoxFlat:
+	var s=StyleBoxFlat.new(); s.bg_color=Color(c.r,c.g,c.b,a)
+	s.border_color=Color(c.r,c.g,c.b,0.5); s.set_border_width_all(1)
+	s.corner_radius_top_left=4; s.corner_radius_top_right=4
+	s.corner_radius_bottom_left=4; s.corner_radius_bottom_right=4; return s
 func _shop()->void:
 	for c in shop_list.get_children(): c.queue_free()
 	for uid in GameManager.upgrade_config:
@@ -162,7 +200,7 @@ func _leaderboard()->void:
 			_leaderboard())
 	lb_list.add_child(sub)
 func _stats()->void:
-	var m=int(GameManager.play_time/60); var h=m/60; m=m%60
+	var m=int(GameManager.play_time/60); var h=int(m/60.0); m=m%60
 	var t="[color=#ff6a00]STATS[/color]\n"
 	t+="Coins: [color=#FFD700]%d[/color] | Lifetime: [color=#FFD700]%d[/color]\n"%[GameManager.coins,GameManager.lifetime_coins]
 	t+="Collected: %d | Sorted: %d (Acc: %d%%)\n"%[GameManager.total_collected,GameManager.total_sorted,GameManager.get_accuracy()]

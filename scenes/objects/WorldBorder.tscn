@@ -1,22 +1,59 @@
-[gd_scene load_steps=3 format=3]
-[sub_resource type="BoxMesh" id="WM"]
-size = Vector3(24,2,0.2)
+[gd_scene load_steps=5 format=3]
+
+[sub_resource type="BoxMesh" id="WallMesh"]
+size = Vector3(101,3,0.8)
+
 [sub_resource type="StandardMaterial3D" id="WMat"]
-albedo_color = Color(0.08,0.06,0.04,1)
+albedo_color = Color(0.22,0.13,0.06,1)
+roughness = 0.95
+metallic = 0.05
+
+[sub_resource type="BoxShape3D" id="WallShape"]
+size = Vector3(101,3,0.8)
+
+[sub_resource type="BoxShape3D" id="WallShapeZ"]
+size = Vector3(0.8,3,101)
+
 [node name="WorldBorder" type="Node3D"]
-[node name="N" type="MeshInstance3D" parent="."]
-transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1,-12)
-mesh = SubResource("WM")
+
+[node name="Wall_N" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.5,-50)
+
+[node name="Mesh" type="MeshInstance3D" parent="Wall_N"]
+mesh = SubResource("WallMesh")
 surface_material_override/0 = SubResource("WMat")
-[node name="S" type="MeshInstance3D" parent="."]
-transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1,12)
-mesh = SubResource("WM")
+
+[node name="Col" type="CollisionShape3D" parent="Wall_N"]
+shape = SubResource("WallShape")
+
+[node name="Wall_S" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.5,50)
+
+[node name="Mesh" type="MeshInstance3D" parent="Wall_S"]
+mesh = SubResource("WallMesh")
 surface_material_override/0 = SubResource("WMat")
-[node name="E" type="MeshInstance3D" parent="."]
-transform = Transform3D(0,0,1,0,1,0,-1,0,0,12,1,0)
-mesh = SubResource("WM")
+
+[node name="Col" type="CollisionShape3D" parent="Wall_S"]
+shape = SubResource("WallShape")
+
+[node name="Wall_E" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,50,1.5,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Wall_E"]
+mesh = SubResource("WallMesh")
+rotation = Vector3(0,1.5708,0)
 surface_material_override/0 = SubResource("WMat")
-[node name="W" type="MeshInstance3D" parent="."]
-transform = Transform3D(0,0,1,0,1,0,-1,0,0,-12,1,0)
-mesh = SubResource("WM")
+
+[node name="Col" type="CollisionShape3D" parent="Wall_E"]
+shape = SubResource("WallShapeZ")
+
+[node name="Wall_W" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-50,1.5,0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Wall_W"]
+mesh = SubResource("WallMesh")
+rotation = Vector3(0,1.5708,0)
 surface_material_override/0 = SubResource("WMat")
+
+[node name="Col" type="CollisionShape3D" parent="Wall_W"]
+shape = SubResource("WallShapeZ")

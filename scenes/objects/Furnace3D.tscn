@@ -1,31 +1,54 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=11 format=3]
+
 [ext_resource type="Script" path="res://scripts/Furnace3D.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ForgeLightFlicker.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/ProximityZone.gd" id="3"]
+
 [sub_resource type="BoxMesh" id="BM"]
 size = Vector3(1.5,1.8,1.2)
+
 [sub_resource type="StandardMaterial3D" id="BMat"]
 albedo_color = Color(0.12,0.1,0.08,1)
 metallic = 0.3
+
 [sub_resource type="CylinderMesh" id="CM"]
 top_radius = 0.15
 bottom_radius = 0.2
 height = 1.0
+
 [sub_resource type="StandardMaterial3D" id="CMat"]
 albedo_color = Color(0.1,0.08,0.06,1)
+
+[sub_resource type="BoxShape3D" id="BodyShape"]
+size = Vector3(2.0,2.2,1.8)
+
+[sub_resource type="CylinderShape3D" id="ChimShape"]
+radius = 0.22
+height = 1.2
+
+[sub_resource type="SphereShape3D" id="FurnaceTrigger"]
+radius = 3.2
+
 [node name="Furnace3D" type="Node3D"]
 script = ExtResource("1")
+
 [node name="Body" type="MeshInstance3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.9,0)
 mesh = SubResource("BM")
 surface_material_override/0 = SubResource("BMat")
+
 [node name="Chimney" type="MeshInstance3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0.4,2.3,0)
 mesh = SubResource("CM")
 surface_material_override/0 = SubResource("CMat")
+
 [node name="FireLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.7,0.8)
 light_color = Color(1,0.35,0,1)
-light_energy = 0.0
-omni_range = 3.0
+light_energy = 0.6
+omni_range = 14.0
+script = ExtResource("2")
+
 [node name="SmokePuff" type="CPUParticles3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0.4,2.8,0)
 emitting = false
@@ -39,3 +62,21 @@ initial_velocity_max = 0.6
 scale_amount_min = 0.05
 scale_amount_max = 0.15
 color = Color(0.3,0.3,0.3,0.3)
+
+[node name="Collider" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.1,0)
+
+[node name="BodyCol" type="CollisionShape3D" parent="Collider"]
+shape = SubResource("BodyShape")
+
+[node name="ChimCol" type="CollisionShape3D" parent="Collider"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0.4,1.5,0)
+shape = SubResource("ChimShape")
+
+[node name="ProximityZone" type="Area3D" parent="."]
+script = ExtResource("3")
+panel_id = "furnace"
+
+[node name="TriggerShape" type="CollisionShape3D" parent="ProximityZone"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.0,0)
+shape = SubResource("FurnaceTrigger")

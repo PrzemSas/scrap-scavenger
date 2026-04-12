@@ -27,6 +27,7 @@ SoundHooks="*res://scripts/autoload/SoundHooks.gd"
 ChallengeManager="*res://scripts/autoload/ChallengeManager.gd"
 CraftingManager="*res://scripts/CraftingManager.gd"
 LeaderboardManager="*res://scripts/autoload/LeaderboardManager.gd"
+ScrapIcons="*res://scripts/autoload/ScrapIcons.gd"
 
 [display]
 

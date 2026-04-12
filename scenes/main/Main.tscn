@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3]
+[gd_scene load_steps=38 format=3]
 [ext_resource type="Script" path="res://scripts/SpawnManager.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2"]
 [ext_resource type="Script" path="res://scripts/AutoCollector.gd" id="3"]
@@ -20,8 +20,13 @@
 [ext_resource type="PackedScene" path="res://scenes/objects/PlayerCharacter.tscn" id="19"]
 [ext_resource type="PackedScene" path="res://scenes/objects/Table3D.tscn" id="20"]
 [ext_resource type="PackedScene" path="res://scenes/objects/ForgeStructure.tscn" id="21"]
+[ext_resource type="PackedScene" path="res://scenes/objects/ShopPoint.tscn" id="23"]
 [ext_resource type="Script" path="res://scripts/ZoneManager.gd" id="22"]
-[ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_aerial.jpg" id="tex_junk_aerial"]
+[ext_resource type="PackedScene" path="res://scenes/objects/ScatterProps.tscn" id="24"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_color.jpg" id="tex_junk_color"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_normal.jpg" id="tex_junk_normal"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_roughness.jpg" id="tex_junk_rough"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_ao.jpg" id="tex_junk_ao"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/forge_stone.webp" id="tex_forge_stone"]
 
 [sub_resource type="WorldBoundaryShape3D" id="FloorShape"]
@@ -31,11 +36,18 @@ subdivide_width = 4
 subdivide_depth = 4
 
 [sub_resource type="StandardMaterial3D" id="GM1"]
-albedo_color = Color(1.0,1.0,1.0,1)
-albedo_texture = ExtResource("tex_junk_aerial")
-metallic = 0.05
-roughness = 0.95
-uv1_scale = Vector3(1,1,1)
+albedo_color = Color(0.92,0.88,0.84,1)
+albedo_texture = ExtResource("tex_junk_color")
+normal_enabled = true
+normal_texture = ExtResource("tex_junk_normal")
+normal_scale = 1.2
+roughness = 0.92
+roughness_texture = ExtResource("tex_junk_rough")
+roughness_texture_channel = 0
+ao_enabled = true
+ao_texture = ExtResource("tex_junk_ao")
+metallic = 0.04
+uv1_scale = Vector3(7,7,1)
 
 [sub_resource type="PlaneMesh" id="PM_forge"]
 size = Vector2(9,9)
@@ -49,17 +61,32 @@ emission_enabled = true
 emission = Color(0.06,0.02,0.002,1)
 emission_energy_multiplier = 0.7
 uv1_scale = Vector3(3,3,3)
+[sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
+sky_top_color = Color(0.04, 0.02, 0.015, 1)
+sky_horizon_color = Color(0.30, 0.10, 0.03, 1)
+sky_curve = 0.13
+sky_energy_multiplier = 1.0
+ground_bottom_color = Color(0.02, 0.01, 0.008, 1)
+ground_horizon_color = Color(0.14, 0.06, 0.02, 1)
+ground_curve = 0.02
+ground_energy_multiplier = 1.0
+sun_angle_max = 40.0
+sun_curve = 0.12
+
+[sub_resource type="Sky" id="Sky1"]
+sky_material = SubResource("SkyMat")
+
 [sub_resource type="Environment" id="E1"]
-background_mode = 1
-background_color = Color(0.015,0.01,0.02,1)
+background_mode = 2
+sky = SubResource("Sky1")
 ambient_light_source = 2
 ambient_light_color = Color(0.12,0.08,0.04,1)
 ambient_light_energy = 0.4
 glow_enabled = true
-glow_intensity = 0.4
+glow_intensity = 0.5
 fog_enabled = true
-fog_light_color = Color(0.1,0.06,0.02,1)
-fog_density = 0.01
+fog_light_color = Color(0.18,0.07,0.02,1)
+fog_density = 0.012
 [node name="Main" type="Node3D"]
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1,0,0,0,0.707,0.707,0,-0.707,0.707,0,8,8)
@@ -111,6 +138,9 @@ transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0,0)
 transform = Transform3D(1,0,0,0,1,0,0,0,1,38,0,-36)
 [node name="Table3D" parent="." instance=ExtResource("20")]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,3,0,4)
+[node name="ScatterProps" parent="." instance=ExtResource("24")]
+[node name="ShopPoint" parent="." instance=ExtResource("23")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,35,0,18)
 [node name="AmbientDust" parent="." instance=ExtResource("12")]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,2,0)
 [node name="Player" parent="." instance=ExtResource("19")]

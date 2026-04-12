@@ -1,7 +1,7 @@
 extends Node3D
 const SCRAP_SCENE=preload("res://scenes/objects/ScrapItem.tscn")
 const WORLD_HALF:=44.0
-const MAX_ITEMS:=20
+const MAX_ITEMS:=35
 var scrap_types:Array=[
 	{"id":"can","name":"Aluminum Can","value":1,"rarity":0,"weight":35},
 	{"id":"bolt","name":"Bolt","value":1,"rarity":0,"weight":25},
@@ -24,7 +24,7 @@ func _ready()->void:
 func _process(delta:float)->void:
 	if get_child_count()<MAX_ITEMS:
 		_rt+=delta
-		if _rt>=1.2: _rt=0.0; spawn_random()
+		if _rt>=0.8: _rt=0.0; spawn_random()
 	if _ev_active:
 		_ev_timer-=delta
 		if _ev_timer<=0: _ev_active=false; _ev_bonus=1.0; GameManager.notification.emit("Event ended!")

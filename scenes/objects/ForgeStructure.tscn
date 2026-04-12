@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=26 format=3]
 
 [sub_resource type="StandardMaterial3D" id="StoneMat"]
 albedo_color = Color(0.17, 0.13, 0.10, 1)
@@ -70,6 +70,49 @@ size = Vector3(0.90, 0.90, 7.0)
 
 [sub_resource type="BoxShape3D" id="ZoneShape"]
 size = Vector3(15.0, 8.0, 16.0)
+
+[sub_resource type="StandardMaterial3D" id="ChimneyMat"]
+albedo_color = Color(0.09, 0.07, 0.06, 1)
+roughness = 0.98
+emission_enabled = true
+emission = Color(0.015, 0.005, 0.0, 1)
+emission_energy_multiplier = 0.3
+
+[sub_resource type="StandardMaterial3D" id="ChimneyCapMat"]
+albedo_color = Color(0.14, 0.10, 0.08, 1)
+metallic = 0.35
+roughness = 0.75
+
+[sub_resource type="StandardMaterial3D" id="SmokePartMat"]
+albedo_color = Color(0.52, 0.48, 0.44, 0.38)
+transparency = 1
+
+[sub_resource type="CylinderMesh" id="ChimneyMesh"]
+top_radius = 0.42
+bottom_radius = 0.52
+height = 4.0
+
+[sub_resource type="CylinderMesh" id="ChimneyCapMesh"]
+top_radius = 0.30
+bottom_radius = 0.62
+height = 0.28
+
+[sub_resource type="SphereMesh" id="SmokePartMesh"]
+radius = 0.22
+height = 0.44
+material = SubResource("SmokePartMat")
+
+[sub_resource type="ParticleProcessMaterial" id="SmokePM"]
+direction = Vector3(0.18, 1.0, 0.06)
+spread = 22.0
+gravity = Vector3(0.12, 0.0, 0.0)
+initial_velocity_min = 0.6
+initial_velocity_max = 2.0
+angular_velocity_min = -25.0
+angular_velocity_max = 25.0
+scale_min = 0.5
+scale_max = 1.4
+color = Color(0.55, 0.50, 0.44, 0.40)
 
 [node name="ForgeStructure" type="Node3D"]
 
@@ -170,6 +213,29 @@ transform = Transform3D(1,0,0,0,1,0,0,0,1,-1.3,0.6,0)
 light_color = Color(1.0, 0.35, 0.02, 1)
 light_energy = 0.8
 omni_range = 3.5
+
+[node name="Chimney" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-3.5,6.78,-3.0)
+mesh = SubResource("ChimneyMesh")
+surface_material_override/0 = SubResource("ChimneyMat")
+
+[node name="ChimneyCap" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-3.5,8.92,-3.0)
+mesh = SubResource("ChimneyCapMesh")
+surface_material_override/0 = SubResource("ChimneyCapMat")
+
+[node name="ChimneyLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-3.5,8.5,-3.0)
+light_color = Color(1.0, 0.35, 0.05, 1)
+light_energy = 0.5
+omni_range = 4.0
+
+[node name="SmokeParticles" type="GPUParticles3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-3.5,9.1,-3.0)
+amount = 22
+lifetime = 5.5
+process_material = SubResource("SmokePM")
+draw_pass_1 = SubResource("SmokePartMesh")
 
 [node name="ForgeZone" type="Area3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,-1.0,3.0,0)

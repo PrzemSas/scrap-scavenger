@@ -58,6 +58,7 @@ func _on_proximity_enter(pid:String)->void:
 		"sort": sort_panel.visible=true; _sort_hint()
 		"furnace": furnace_panel.visible=true
 		"sell": sell_panel.visible=true; _sell()
+		"shop": shop_panel.visible=true; _shop()
 func _on_proximity_exit(pid:String)->void:
 	if _proximity_panel!=pid: return
 	_proximity_panel=""
@@ -65,6 +66,7 @@ func _on_proximity_exit(pid:String)->void:
 		"sort": sort_panel.visible=false
 		"furnace": furnace_panel.visible=false
 		"sell": sell_panel.visible=false
+		"shop": shop_panel.visible=false
 func _sort_hint()->void:
 	GameManager.notification.emit("Sorting table — drag items to bins")
 func _process(delta:float)->void:
@@ -76,10 +78,9 @@ func _toggle(panel:Control)->void:
 	for p in _panels: p.visible=false
 	panel.visible=not was
 const ICON_CHARS:Dictionary={"can":"CAN","bolt":"BOLT","pipe":"PIPE","cable":"CBL","battery":"BAT","chip":"CHIP","coil":"COIL","motor":"MOT","gear":"GEAR","gold":"GOLD","crystal":"XTAL"}
-const ICON_PATH:String="res://assets/textures/ui/icons/"
 func _get_icon(id:String)->Texture2D:
-	var p=ICON_PATH+id+".png"
-	if ResourceLoader.exists(p): return load(p)
+	var si=get_node_or_null("/root/ScrapIcons")
+	if si: return si.get_icon(id)
 	return null
 func _inv()->void:
 	for c in inv_grid.get_children(): c.queue_free()

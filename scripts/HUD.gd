@@ -19,20 +19,23 @@ extends Control
 @onready var lb_list:VBoxContainer=$LeaderboardPanel/ScrollContainer/LBList
 @onready var daily_panel:Control=$DailyRewardPanel
 @onready var notif_label:Label=$NotifLabel
+@onready var sell_panel:PanelContainer=$SellPanel
+@onready var sell_list:VBoxContainer=$SellPanel/ScrollContainer/SellList
 var _nt:float=0.0
 var _panels:Array=[]
 var _proximity_panel:String=""
 func _ready()->void:
-	_panels=[inv_panel,shop_panel,sort_panel,furnace_panel,stats_panel,forge_panel,craft_panel,leaderboard_panel]
-	GameManager.coins_changed.connect(func(c): coin_label.text="%d COINS"%c; _shop())
+	_panels=[inv_panel,shop_panel,sort_panel,furnace_panel,stats_panel,forge_panel,craft_panel,leaderboard_panel,sell_panel]
+	GameManager.coins_changed.connect(func(c): coin_label.text="%d SC"%c; _shop())
 	GameManager.inventory_changed.connect(func(): inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]; _inv())
 	GameManager.upgrade_purchased.connect(func(_x): _shop())
 	GameManager.notification.connect(func(m): notif_label.text=m; notif_label.visible=true; _nt=3.0)
 	GameManager.prestige_done.connect(func(_x): _shop())
-	GameManager.ingots_changed.connect(func(): _craft())
+	GameManager.ingots_changed.connect(func(): _craft(); _sell())
+	GameManager.inventory_changed.connect(func(): _sell())
 	GameManager.proximity_entered.connect(_on_proximity_enter)
 	GameManager.proximity_exited.connect(_on_proximity_exit)
-	sell_btn.pressed.connect(func(): GameManager.sell_all(); AudioManager.play_sell())
+	sell_btn.visible=false
 	prestige_btn.pressed.connect(func(): GameManager.do_prestige(); AudioManager.play_prestige(); _stats())
 	$TopBar/BtnInv.pressed.connect(func(): _toggle(inv_panel))
 	$TopBar/BtnSort.pressed.connect(func(): _toggle(sort_panel))
@@ -45,7 +48,7 @@ func _ready()->void:
 	$TopBar/BtnLeaderboard.pressed.connect(func(): _toggle(leaderboard_panel); _leaderboard())
 	for p in _panels: p.visible=false
 	notif_label.visible=false
-	coin_label.text="%d COINS"%GameManager.coins
+	coin_label.text="%d SC"%GameManager.coins
 	inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]
 	_shop()
 func _on_proximity_enter(pid:String)->void:
@@ -54,12 +57,14 @@ func _on_proximity_enter(pid:String)->void:
 	match pid:
 		"sort": sort_panel.visible=true; _sort_hint()
 		"furnace": furnace_panel.visible=true
+		"sell": sell_panel.visible=true; _sell()
 func _on_proximity_exit(pid:String)->void:
 	if _proximity_panel!=pid: return
 	_proximity_panel=""
 	match pid:
 		"sort": sort_panel.visible=false
 		"furnace": furnace_panel.visible=false
+		"sell": sell_panel.visible=false
 func _sort_hint()->void:
 	GameManager.notification.emit("Sorting table — drag items to bins")
 func _process(delta:float)->void:
@@ -93,7 +98,6 @@ func _inv()->void:
 			b.add_theme_stylebox_override("normal",_slot_style(cl,0.15))
 			b.add_theme_stylebox_override("hover",_slot_style(cl,0.3))
 			b.tooltip_text="%s\n%dc | %s"%[it.get("name","?"),it.get("value",0),["common","uncommon","rare","legendary"][r]]
-			var idx=i; b.pressed.connect(func(): GameManager.sell_item(idx); AudioManager.play_sell())
 		else:
 			b.text=""; b.disabled=true
 			b.add_theme_stylebox_override("normal",_slot_style(Color(0.15,0.15,0.15),0.1))
@@ -213,3 +217,44 @@ func _stats()->void:
 		t+=("[color=#39FF14]✓[/color] " if a.id in GameManager.achievements_unlocked else "[color=#333]○[/color] ")+a.name+"\n"
 	stats_text.text=t
 	prestige_btn.visible=GameManager.can_prestige()
+func _sell()->void:
+	if not is_instance_valid(sell_list): return
+	for c in sell_list.get_children(): c.queue_free()
+	if GameManager.inventory.is_empty() and GameManager.ingots.is_empty():
+		var lbl=Label.new(); lbl.text="Nothing to sell"
+		lbl.add_theme_color_override("font_color",Color("#555")); lbl.add_theme_font_size_override("font_size",11)
+		sell_list.add_child(lbl); return
+	if not GameManager.inventory.is_empty():
+		var hdr=Label.new(); hdr.text="-- ZLOM --"
+		hdr.add_theme_color_override("font_color",Color("#ff6a00")); hdr.add_theme_font_size_override("font_size",11)
+		sell_list.add_child(hdr)
+		for i in GameManager.inventory.size():
+			var it=GameManager.inventory[i]
+			var h=HBoxContainer.new()
+			var lbl=Label.new(); lbl.text="%s — %dc"%[it.get("name","?"),it.get("value",1)]
+			lbl.add_theme_color_override("font_color",Color("#ccc")); lbl.add_theme_font_size_override("font_size",10)
+			lbl.size_flags_horizontal=Control.SIZE_EXPAND_FILL; h.add_child(lbl)
+			var btn=Button.new(); btn.text="SELL"; btn.custom_minimum_size=Vector2(55,0)
+			var idx=i; btn.pressed.connect(func(): GameManager.sell_item(idx); AudioManager.play_sell(); _sell())
+			h.add_child(btn); sell_list.add_child(h)
+		var sell_all=Button.new(); sell_all.text="SELL ALL (%dc)"%GameManager.inventory.reduce(func(a,b): return a+b.get("value",1),0)
+		sell_all.add_theme_color_override("font_color",Color("#39FF14"))
+		sell_all.pressed.connect(func(): GameManager.sell_all(); AudioManager.play_sell(); _sell())
+		sell_list.add_child(sell_all)
+	if not GameManager.ingots.is_empty():
+		var hdr=Label.new(); hdr.text="-- INGOTY --"
+		hdr.add_theme_color_override("font_color",Color("#FFD700")); hdr.add_theme_font_size_override("font_size",11)
+		sell_list.add_child(hdr)
+		for i in GameManager.ingots.size():
+			var ig=GameManager.ingots[i]
+			var h=HBoxContainer.new()
+			var lbl=Label.new(); lbl.text="%s — %dc"%[ig.get("name","?"),ig.get("value",1)]
+			lbl.add_theme_color_override("font_color",Color("#FFD700")); lbl.add_theme_font_size_override("font_size",10)
+			lbl.size_flags_horizontal=Control.SIZE_EXPAND_FILL; h.add_child(lbl)
+			var btn=Button.new(); btn.text="SELL"; btn.custom_minimum_size=Vector2(55,0)
+			var idx=i; btn.pressed.connect(func(): GameManager.sell_ingot(idx); AudioManager.play_sell(); _sell())
+			h.add_child(btn); sell_list.add_child(h)
+		var sell_all=Button.new(); sell_all.text="SELL ALL INGOTS (%dc)"%GameManager.ingots.reduce(func(a,b): return a+b.get("value",1),0)
+		sell_all.add_theme_color_override("font_color",Color("#FFD700"))
+		sell_all.pressed.connect(func(): GameManager.sell_all_ingots(); AudioManager.play_sell(); _sell())
+		sell_list.add_child(sell_all)

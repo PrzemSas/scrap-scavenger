@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/PlayerCharacter.gd" id="1"]
 
@@ -7,27 +7,48 @@ radius = 0.28
 height = 1.2
 
 [sub_resource type="StandardMaterial3D" id="BodyMat"]
-albedo_color = Color(0.18,0.32,0.18,1)
-metallic = 0.1
-roughness = 0.85
+albedo_color = Color(0.22, 0.15, 0.08, 1)
+metallic = 0.04
+roughness = 0.92
 
 [sub_resource type="SphereMesh" id="HeadMesh"]
-radius = 0.2
-height = 0.4
+radius = 0.19
+height = 0.38
 
 [sub_resource type="StandardMaterial3D" id="HeadMat"]
-albedo_color = Color(0.55,0.42,0.15,1)
-metallic = 0.4
-roughness = 0.55
+albedo_color = Color(0.70, 0.52, 0.36, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="HelmetTopMesh"]
+size = Vector3(0.44, 0.19, 0.42)
+
+[sub_resource type="StandardMaterial3D" id="HelmetMat"]
+albedo_color = Color(0.13, 0.13, 0.15, 1)
+metallic = 0.74
+roughness = 0.40
+
+[sub_resource type="BoxMesh" id="HelmetFrontMesh"]
+size = Vector3(0.41, 0.28, 0.09)
 
 [sub_resource type="BoxMesh" id="VisorMesh"]
-size = Vector3(0.32,0.1,0.08)
+size = Vector3(0.30, 0.14, 0.03)
 
 [sub_resource type="StandardMaterial3D" id="VisorMat"]
-albedo_color = Color(0.1,0.6,0.9,0.7)
+albedo_color = Color(1.0, 0.52, 0.0, 0.88)
 emission_enabled = true
-emission = Color(0.1,0.5,1,1)
-emission_energy_multiplier = 0.8
+emission = Color(1.0, 0.58, 0.05, 1)
+emission_energy_multiplier = 2.4
+roughness = 0.08
+
+[sub_resource type="BoxMesh" id="GloveLMesh"]
+size = Vector3(0.13, 0.16, 0.11)
+
+[sub_resource type="BoxMesh" id="GloveRMesh"]
+size = Vector3(0.13, 0.16, 0.11)
+
+[sub_resource type="StandardMaterial3D" id="GloveMat"]
+albedo_color = Color(0.78, 0.32, 0.04, 1)
+roughness = 0.85
 
 [sub_resource type="CapsuleShape3D" id="ColShape"]
 radius = 0.28
@@ -48,10 +69,30 @@ transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.42,0)
 mesh = SubResource("HeadMesh")
 surface_material_override/0 = SubResource("HeadMat")
 
+[node name="HelmetTop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.52,0.01)
+mesh = SubResource("HelmetTopMesh")
+surface_material_override/0 = SubResource("HelmetMat")
+
+[node name="HelmetFront" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.38,-0.22)
+mesh = SubResource("HelmetFrontMesh")
+surface_material_override/0 = SubResource("HelmetMat")
+
 [node name="Visor" type="MeshInstance3D" parent="."]
-transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.44,-0.18)
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.39,-0.27)
 mesh = SubResource("VisorMesh")
 surface_material_override/0 = SubResource("VisorMat")
+
+[node name="GloveL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-0.36,0.50,0)
+mesh = SubResource("GloveLMesh")
+surface_material_override/0 = SubResource("GloveMat")
+
+[node name="GloveR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0.36,0.50,0)
+mesh = SubResource("GloveRMesh")
+surface_material_override/0 = SubResource("GloveMat")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.6,0)

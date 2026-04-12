@@ -31,6 +31,7 @@ var play_time:float=0.0
 var has_found_gold:bool=false
 var inventory_full:bool=false
 var current_ground:String="default"
+var near_sell_point:bool=false
 var total_crafted:int=0
 var scrap_crown_crafted:bool=false
 var best_daily_streak:int=0

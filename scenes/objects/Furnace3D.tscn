@@ -76,6 +76,10 @@ shape = SubResource("ChimShape")
 [node name="ProximityZone" type="Area3D" parent="."]
 script = ExtResource("3")
 panel_id = "furnace"
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
 
 [node name="TriggerShape" type="CollisionShape3D" parent="ProximityZone"]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.0,0)

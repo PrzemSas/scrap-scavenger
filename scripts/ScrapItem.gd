@@ -67,7 +67,7 @@ func collect()->void:
 	var val:int=scrap_data.get("value",1)*GameManager.click_power
 	for i in GameManager.click_power:
 		if GameManager.inventory.size()<GameManager.max_slots: GameManager.add_to_inventory(scrap_data.duplicate())
-	GameManager.add_coins(val); AudioManager.play_collect()
+	AudioManager.play_collect()
 	var r:int=scrap_data.get("rarity",0)
 	var cl:Array=[Color("#888"),Color("#ff6a00"),Color("#00e5ff"),Color("#FFD700")]
 	if r>=2:

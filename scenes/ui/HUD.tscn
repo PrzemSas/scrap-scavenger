@@ -1,14 +1,15 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/SortingTable.tscn" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Furnace.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ScrapRadar.tscn" id="10"]
 [ext_resource type="PackedScene" path="res://scenes/ui/DailyReward.tscn" id="20"]
+[ext_resource type="Texture2D" path="res://assets/textures/scrapcoin.jpg" id="30"]
 
 [sub_resource type="StyleBoxFlat" id="PS1"]
-bg_color = Color(0.03,0.03,0.05,0.92)
-border_color = Color(1,0.42,0,0.15)
+bg_color = Color(0.03,0.03,0.05,0.65)
+border_color = Color(1,0.42,0,0.25)
 set_border_width_all = 1
 corner_radius_top_left = 8
 corner_radius_top_right = 8
@@ -89,11 +90,18 @@ theme_override_colors/font_color = Color(0.6,0.6,0.6,1)
 theme_override_font_sizes/font_size = 14
 text = "INV 0/8"
 
+[node name="CoinIcon" type="TextureRect" parent="TopBar"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+texture = ExtResource("30")
+expand_mode = 3
+stretch_mode = 6
+
 [node name="CoinLabel" type="Label" parent="TopBar"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1,0.84,0,1)
 theme_override_font_sizes/font_size = 22
-text = "0 COINS"
+text = "0 SC"
 
 [node name="InventoryPanel" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -262,6 +270,28 @@ offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "MELTDOWN"
+
+[node name="SellPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 380.0
+offset_bottom = 500.0
+theme_override_styles/panel = SubResource("PS1")
+
+[node name="Title" type="Label" parent="SellPanel"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2,1,0.1,1)
+theme_override_font_sizes/font_size = 14
+text = "💰 SELL POINT"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SellPanel"]
+layout_mode = 2
+offset_top = 28.0
+
+[node name="SellList" type="VBoxContainer" parent="SellPanel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="ScrapRadar" parent="." instance=ExtResource("10")]
 

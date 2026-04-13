@@ -1,0 +1,88 @@
+[gd_scene load_steps=14 format=3]
+
+[sub_resource type="BoxMesh" id="PostMesh"]
+size = Vector3(0.5, 4.0, 0.5)
+
+[sub_resource type="StandardMaterial3D" id="PostMat"]
+albedo_color = Color(0.18, 0.12, 0.08, 1)
+metallic = 0.55
+roughness = 0.65
+emission_enabled = true
+emission = Color(0.08, 0.03, 0.0, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="BoxMesh" id="LintelMesh"]
+size = Vector3(3.6, 0.5, 0.5)
+
+[sub_resource type="BoxMesh" id="SignMesh"]
+size = Vector3(2.4, 0.55, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="SignMat"]
+albedo_color = Color(0.08, 0.05, 0.02, 1)
+metallic = 0.7
+roughness = 0.5
+emission_enabled = true
+emission = Color(1.0, 0.5, 0.1, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="BoxMesh" id="ChainMeshH"]
+size = Vector3(0.08, 0.08, 1.6)
+
+[sub_resource type="StandardMaterial3D" id="ChainMat"]
+albedo_color = Color(0.25, 0.20, 0.12, 1)
+metallic = 0.85
+roughness = 0.45
+
+[sub_resource type="BoxShape3D" id="PostShapeL"]
+size = Vector3(0.5, 4.0, 0.5)
+
+[sub_resource type="BoxShape3D" id="PostShapeR"]
+size = Vector3(0.5, 4.0, 0.5)
+
+[node name="Gate" type="Node3D"]
+
+[node name="PostL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -1.6, 2.0, 0)
+mesh = SubResource("PostMesh")
+surface_material_override/0 = SubResource("PostMat")
+
+[node name="PostLBody" type="StaticBody3D" parent="PostL"]
+
+[node name="PostLShape" type="CollisionShape3D" parent="PostLBody"]
+shape = SubResource("PostShapeL")
+
+[node name="PostR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 1.6, 2.0, 0)
+mesh = SubResource("PostMesh")
+surface_material_override/0 = SubResource("PostMat")
+
+[node name="PostRBody" type="StaticBody3D" parent="PostR"]
+
+[node name="PostRShape" type="CollisionShape3D" parent="PostRBody"]
+shape = SubResource("PostShapeR")
+
+[node name="Lintel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 4.25, 0)
+mesh = SubResource("LintelMesh")
+surface_material_override/0 = SubResource("PostMat")
+
+[node name="Sign" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 3.7, -0.22)
+mesh = SubResource("SignMesh")
+surface_material_override/0 = SubResource("SignMat")
+
+[node name="ChainL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -0.9, 3.0, 0)
+mesh = SubResource("ChainMeshH")
+surface_material_override/0 = SubResource("ChainMat")
+
+[node name="ChainR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0.9, 3.0, 0)
+mesh = SubResource("ChainMeshH")
+surface_material_override/0 = SubResource("ChainMat")
+
+[node name="GlowLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 2.5, 0)
+light_color = Color(1.0, 0.5, 0.1, 1)
+light_energy = 1.2
+omni_range = 5.0

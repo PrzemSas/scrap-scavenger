@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3]
+[gd_scene load_steps=41 format=3]
 [ext_resource type="Script" path="res://scripts/SpawnManager.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2"]
 [ext_resource type="Script" path="res://scripts/AutoCollector.gd" id="3"]
@@ -24,6 +24,7 @@
 [ext_resource type="Script" path="res://scripts/ZoneManager.gd" id="22"]
 [ext_resource type="PackedScene" path="res://scenes/objects/ScatterProps.tscn" id="24"]
 [ext_resource type="Script" path="res://scripts/GateTransition.gd" id="25"]
+[ext_resource type="PackedScene" path="res://scenes/objects/Gate.tscn" id="26"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_color.jpg" id="tex_junk_color"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_normal.jpg" id="tex_junk_normal"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_roughness.jpg" id="tex_junk_rough"]
@@ -175,6 +176,9 @@ horizontal_alignment = 1
 script = ExtResource("16")
 [node name="Minimap" parent="CanvasLayer" instance=ExtResource("14")]
 [node name="ChallengeDisplay" parent="CanvasLayer" instance=ExtResource("15")]
+
+[node name="ForgeGateVisual" parent="." instance=ExtResource("26")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 0, 9)
 
 [node name="ForgeGate" type="Area3D" parent="."]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 1, 9)

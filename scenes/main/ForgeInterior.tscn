@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="1"]
 [ext_resource type="Script" path="res://scripts/CameraController.gd" id="2"]
@@ -10,51 +10,81 @@
 [ext_resource type="Script" path="res://scripts/GateTransition.gd" id="8"]
 [ext_resource type="Script" path="res://scripts/ForgeLightFlicker.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/WorkerManager.gd" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/objects/ForgeStructure.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://scenes/objects/ShopPoint.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/objects/Gate.tscn" id="13_gate"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground/forge_stone.webp" id="13"]
 
 [sub_resource type="Environment" id="ForgeEnv"]
 background_mode = 1
-background_color = Color(0.05, 0.02, 0.01, 1)
+background_color = Color(0.04, 0.015, 0.005, 1)
 ambient_light_color = Color(0.32, 0.14, 0.04, 1)
-ambient_light_energy = 1.2
+ambient_light_energy = 1.0
 fog_enabled = true
-fog_light_color = Color(0.22, 0.08, 0.01, 1)
-fog_density = 0.03
+fog_light_color = Color(0.20, 0.07, 0.01, 1)
+fog_density = 0.025
 glow_enabled = true
-glow_intensity = 1.1
+glow_intensity = 1.3
+glow_bloom = 0.15
 
 [sub_resource type="WorldBoundaryShape3D" id="FloorShape"]
 
 [sub_resource type="PlaneMesh" id="FloorMesh"]
-size = Vector2(30, 30)
+size = Vector2(20, 20)
+subdivide_width = 2
+subdivide_depth = 2
 
 [sub_resource type="StandardMaterial3D" id="FloorMat"]
-albedo_color = Color(0.14, 0.10, 0.08, 1)
-roughness = 0.97
-metallic = 0.05
+albedo_color = Color(0.55, 0.45, 0.38, 1)
+albedo_texture = ExtResource("13")
+metallic = 0.04
+roughness = 0.88
+emission_enabled = true
+emission = Color(0.06, 0.02, 0.002, 1)
+emission_energy_multiplier = 0.7
+uv1_scale = Vector3(3, 3, 3)
 
 [sub_resource type="SphereShape3D" id="GateShape"]
 radius = 2.5
+
+[sub_resource type="BoxShape3D" id="WallNShape"]
+size = Vector3(20.0, 6.0, 0.8)
+
+[sub_resource type="BoxShape3D" id="WallWShape"]
+size = Vector3(0.8, 6.0, 20.0)
+
+[sub_resource type="BoxShape3D" id="WallEShape"]
+size = Vector3(0.8, 6.0, 20.0)
+
+[sub_resource type="BoxShape3D" id="WallSShape"]
+size = Vector3(8.0, 6.0, 0.8)
 
 [node name="ForgeInterior" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("ForgeEnv")
 
-[node name="ForgeLight" type="OmniLight3D" parent="."]
-transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 2.5, 0)
-light_color = Color(1.0, 0.45, 0.1, 1)
-light_energy = 2.5
-omni_range = 14.0
+[node name="MainLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -1.5, 3.2, -1.5)
+light_color = Color(1.0, 0.45, 0.12, 1)
+light_energy = 3.0
+omni_range = 16.0
 shadow_enabled = true
+script = ExtResource("9")
 
-[node name="ForgeLight2" type="OmniLight3D" parent="."]
-transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -5, 2.0, 3)
-light_color = Color(1.0, 0.3, 0.05, 1)
-light_energy = 1.2
-omni_range = 8.0
+[node name="FillLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 5.0, 2.0, 3.0)
+light_color = Color(1.0, 0.28, 0.04, 1)
+light_energy = 1.4
+omni_range = 9.0
+
+[node name="BackLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0.0, 2.0, 7.0)
+light_color = Color(0.6, 0.3, 0.1, 1)
+light_energy = 0.8
+omni_range = 6.0
 
 [node name="Ground" type="StaticBody3D" parent="."]
-transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 0, 0)
 
 [node name="GroundMesh" type="MeshInstance3D" parent="Ground"]
 mesh = SubResource("FloorMesh")
@@ -62,6 +92,71 @@ surface_material_override/0 = SubResource("FloorMat")
 
 [node name="GroundCollision" type="CollisionShape3D" parent="Ground"]
 shape = SubResource("FloorShape")
+
+[node name="WallCollisionN" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 3, -9)
+
+[node name="WCS_N" type="CollisionShape3D" parent="WallCollisionN"]
+shape = SubResource("WallNShape")
+
+[node name="WallCollisionW" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -9, 3, 0)
+
+[node name="WCS_W" type="CollisionShape3D" parent="WallCollisionW"]
+shape = SubResource("WallWShape")
+
+[node name="WallCollisionE" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 9, 3, 0)
+
+[node name="WCS_E" type="CollisionShape3D" parent="WallCollisionE"]
+shape = SubResource("WallEShape")
+
+[node name="WallCollisionS_L" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -6, 3, 9)
+
+[node name="WCS_SL" type="CollisionShape3D" parent="WallCollisionS_L"]
+shape = SubResource("WallSShape")
+
+[node name="WallCollisionS_R" type="StaticBody3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 6, 3, 9)
+
+[node name="WCS_SR" type="CollisionShape3D" parent="WallCollisionS_R"]
+shape = SubResource("WallSShape")
+
+[node name="ForgeStructure" parent="." instance=ExtResource("11")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 0, 0)
+
+[node name="ForgeSparks" type="CPUParticles3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -1.5, 0.5, -1.5)
+emitting = true
+amount = 60
+lifetime = 2.5
+emission_shape = 1
+emission_sphere_radius = 0.6
+direction = Vector3(0.1, 1.0, 0.0)
+spread = 35.0
+gravity = Vector3(0, -1.5, 0)
+initial_velocity_min = 1.5
+initial_velocity_max = 4.0
+scale_amount_min = 0.03
+scale_amount_max = 0.09
+color = Color(1.0, 0.6, 0.1, 1.0)
+
+[node name="EmberDrift" type="CPUParticles3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 1.5, 0)
+emitting = true
+amount = 40
+lifetime = 6.0
+emission_shape = 3
+emission_box_extents = Vector3(7, 2, 7)
+direction = Vector3(0.05, 0.3, 0.02)
+spread = 18.0
+gravity = Vector3(0, 0.05, 0)
+initial_velocity_min = 0.05
+initial_velocity_max = 0.18
+scale_amount_min = 0.02
+scale_amount_max = 0.055
+color = Color(1.0, 0.4, 0.05, 0.18)
 
 [node name="Furnace3D" parent="." instance=ExtResource("5")]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -3, 0, -4)
@@ -72,8 +167,14 @@ transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 3, 0, -3)
 [node name="SellPoint" parent="." instance=ExtResource("7")]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 5, 0, 2)
 
-[node name="BackGate" type="Area3D" parent="."]
+[node name="ShopPoint" parent="." instance=ExtResource("12")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -5, 0, 2)
+
+[node name="BackGateVisual" parent="." instance=ExtResource("13_gate")]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 0, 8)
+
+[node name="BackGate" type="Area3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 1, 8)
 script = ExtResource("8")
 target_scene = "res://scenes/main/Main.tscn"
 label_text = "[E] Back to Junkyard"
@@ -85,12 +186,12 @@ shape = SubResource("GateShape")
 script = ExtResource("10")
 
 [node name="Player" parent="." instance=ExtResource("4")]
-transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 0, 6)
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 0, 5)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1,0,0, 0,0.82,-0.57, 0,0.57,0.82, 0, 14, 14)
 projection = 1
-size = 22.0
+size = 20.0
 script = ExtResource("2")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]

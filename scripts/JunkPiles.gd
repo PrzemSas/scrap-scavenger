@@ -9,7 +9,8 @@ const SCRAP_SCENE = preload("res://scenes/objects/ScrapItem.tscn")
 
 class PileData:
 	var mesh: MeshInstance3D
-	var position: Vector3
+	var position: Vector3      # local position (origin do shake reset)
+	var spawn_pos: Vector3     # global position (do spawnu itemów)
 	var cooldown: float = 0.0      # czas do następnego szukania
 	var searching: bool = false
 	var search_t: float = 0.0
@@ -35,7 +36,8 @@ func _ready() -> void:
 		var mesh := child as MeshInstance3D
 		var pd := PileData.new()
 		pd.mesh = mesh
-		pd.position = mesh.global_position
+		pd.position = mesh.position          # local
+		pd.spawn_pos = mesh.global_position  # global (ustawiamy po frame)
 		pd.mat_orig = mesh.get_surface_override_material(0)
 
 		# Area3D do detekcji gracza
@@ -63,6 +65,9 @@ func _ready() -> void:
 		_piles.append(pd)
 
 	await get_tree().process_frame
+	# Aktualizuj globalne pozycje po wyrenderowaniu
+	for pd in _piles:
+		pd.spawn_pos = pd.mesh.global_position
 	_spawn_parent = get_tree().get_root().find_child("SpawnManager", true, false)
 
 func _process(delta: float) -> void:
@@ -89,14 +94,21 @@ func _process(delta: float) -> void:
 				pd.cooldown = 0.0
 				pd.mesh.set_surface_override_material(0, pd.mat_orig)
 
-	# Update searching piles
+	# Update searching piles — shake animation
 	for pd in _piles:
 		if not pd.searching:
 			continue
 		pd.search_t += delta
 		var progress: float = pd.search_t / SEARCH_TIME
 		GameManager.pile_search_progress.emit(progress)
+		# Shake: amplituda i częstotliwość rosną z postępem
+		var shake_amp: float = 0.04 + progress * 0.10
+		var freq: float = 10.0 + progress * 22.0
+		var ox: float = sin(pd.search_t * freq * TAU) * shake_amp
+		var oz: float = cos(pd.search_t * freq * 1.3 * TAU) * shake_amp * 0.5
+		pd.mesh.position = pd.position + Vector3(ox, 0.0, oz)
 		if pd.search_t >= SEARCH_TIME:
+			pd.mesh.position = pd.position  # reset do oryginału
 			_finish_search(pd)
 			return
 
@@ -134,7 +146,7 @@ func _finish_search(pd: PileData) -> void:
 		for i in SPAWN_COUNT:
 			var scrap := SCRAP_SCENE.instantiate()
 			var offset := Vector3(randf_range(-1.5, 1.5), 0.5, randf_range(-1.5, 1.5))
-			scrap.position = pd.mesh.global_position + offset
+			scrap.position = pd.spawn_pos + offset
 			if sm:
 				sm.add_child(scrap)
 			else:

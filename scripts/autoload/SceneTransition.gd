@@ -28,6 +28,7 @@ func _fade_in() -> void:
 	tween.tween_callback(_change_scene)
 
 func _change_scene() -> void:
+	SaveManager.save_game()
 	get_tree().change_scene_to_file(_target_scene)
 	await get_tree().process_frame
 	await get_tree().process_frame

@@ -42,21 +42,21 @@ func _ready() -> void:
 			if n:
 				_hide_when_inside.append(n)
 
-	AudioManager.play_music("junkyard", -22.0)
+	AudioManager.play_zone("junkyard", -22.0)
 
 func _on_enter(body: Node3D) -> void:
 	if body.is_in_group("player"):
 		_in_forge = true
 		for n in _hide_when_inside:
 			n.visible = false
-		AudioManager.play_music("forge", -20.0)
+		AudioManager.play_zone("forge", -20.0)
 
 func _on_exit(body: Node3D) -> void:
 	if body.is_in_group("player"):
 		_in_forge = false
 		for n in _hide_when_inside:
 			n.visible = true
-		AudioManager.play_music("junkyard", -22.0)
+		AudioManager.play_zone("junkyard", -22.0)
 
 func _process(delta: float) -> void:
 	if not _env:

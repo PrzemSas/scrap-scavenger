@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3]
+[gd_scene load_steps=40 format=3]
 [ext_resource type="Script" path="res://scripts/SpawnManager.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2"]
 [ext_resource type="Script" path="res://scripts/AutoCollector.gd" id="3"]
@@ -23,11 +23,15 @@
 [ext_resource type="PackedScene" path="res://scenes/objects/ShopPoint.tscn" id="23"]
 [ext_resource type="Script" path="res://scripts/ZoneManager.gd" id="22"]
 [ext_resource type="PackedScene" path="res://scenes/objects/ScatterProps.tscn" id="24"]
+[ext_resource type="Script" path="res://scripts/GateTransition.gd" id="25"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_color.jpg" id="tex_junk_color"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_normal.jpg" id="tex_junk_normal"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_roughness.jpg" id="tex_junk_rough"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_ao.jpg" id="tex_junk_ao"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/forge_stone.webp" id="tex_forge_stone"]
+
+[sub_resource type="SphereShape3D" id="GateShape"]
+radius = 2.5
 
 [sub_resource type="WorldBoundaryShape3D" id="FloorShape"]
 [sub_resource type="PlaneMesh" id="PM1"]
@@ -171,3 +175,12 @@ horizontal_alignment = 1
 script = ExtResource("16")
 [node name="Minimap" parent="CanvasLayer" instance=ExtResource("14")]
 [node name="ChallengeDisplay" parent="CanvasLayer" instance=ExtResource("15")]
+
+[node name="ForgeGate" type="Area3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 1, 9)
+script = ExtResource("25")
+target_scene = "res://scenes/main/ForgeInterior.tscn"
+label_text = "[E] Wejdź do Kuźni"
+
+[node name="ForgeGateShape" type="CollisionShape3D" parent="ForgeGate"]
+shape = SubResource("GateShape")

@@ -1,0 +1,26 @@
+extends Area3D
+
+@export var target_scene: String = ""
+@export var label_text: String = "[E] Wejdź"
+
+var _player_inside: bool = false
+
+func _ready() -> void:
+	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
+
+func _on_body_entered(body: Node3D) -> void:
+	if body.is_in_group("player"):
+		_player_inside = true
+		GameManager.pile_hint_changed.emit(label_text)
+
+func _on_body_exited(body: Node3D) -> void:
+	if body.is_in_group("player"):
+		_player_inside = false
+		GameManager.pile_hint_changed.emit("")
+
+func _process(_delta: float) -> void:
+	if _player_inside and target_scene != "":
+		if Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_E):
+			GameManager.pile_hint_changed.emit("")
+			SceneTransition.go(target_scene)

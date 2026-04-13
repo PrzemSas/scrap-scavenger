@@ -21,6 +21,9 @@ extends Control
 @onready var notif_label:Label=$NotifLabel
 @onready var sell_panel:PanelContainer=$SellPanel
 @onready var sell_list:VBoxContainer=$SellPanel/ScrollContainer/SellList
+@onready var pile_hint:Label=$PileHintLabel
+@onready var search_bar:Control=$SearchBar
+@onready var search_progress:ProgressBar=$SearchBar/SearchProgress
 var _nt:float=0.0
 var _panels:Array=[]
 var _proximity_panel:String=""
@@ -46,8 +49,12 @@ func _ready()->void:
 	$TopBar/BtnCraft.pressed.connect(func(): _toggle(craft_panel); _craft())
 	$TopBar/BtnDaily.pressed.connect(func(): daily_panel.show_panel())
 	$TopBar/BtnLeaderboard.pressed.connect(func(): _toggle(leaderboard_panel); _leaderboard())
+	GameManager.pile_search_progress.connect(_on_search_progress)
+	GameManager.pile_hint_changed.connect(_on_pile_hint)
 	for p in _panels: p.visible=false
 	notif_label.visible=false
+	search_bar.visible=false
+	pile_hint.visible=false
 	coin_label.text="%d SC"%GameManager.coins
 	inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]
 	_shop()
@@ -259,3 +266,17 @@ func _sell()->void:
 		sell_all.add_theme_color_override("font_color",Color("#FFD700"))
 		sell_all.pressed.connect(func(): GameManager.sell_all_ingots(); AudioManager.play_sell(); _sell())
 		sell_list.add_child(sell_all)
+
+func _on_search_progress(progress:float)->void:
+	if progress < 0.0:
+		search_bar.visible=false
+		return
+	search_bar.visible=true
+	search_progress.value=progress*100.0
+
+func _on_pile_hint(text:String)->void:
+	if text.is_empty():
+		pile_hint.visible=false
+	else:
+		pile_hint.text=text
+		pile_hint.visible=true

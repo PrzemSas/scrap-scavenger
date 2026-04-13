@@ -14,6 +14,29 @@ const TRACKS := {
 	"pause":    "res://assets/audio/pause_music.mp3",
 }
 
+# Playlisty per zona — losowa kolejność
+const PLAYLISTS := {
+	"junkyard": [
+		"res://assets/audio/theme_trashinus.mp3",
+		"res://assets/audio/theme_ambient1.mp3",
+		"res://assets/audio/theme_ambient2.mp3",
+		"res://assets/audio/theme_alligator1.wav",
+		"res://assets/audio/theme_alligator2.wav",
+	],
+	"forge": [
+		"res://assets/audio/theme_chainfire.mp3",
+		"res://assets/audio/theme_chainfire2.mp3",
+		"res://assets/audio/theme_alligator1.wav",
+	],
+	"menu": [
+		"res://assets/audio/theme_gorweld.mp3",
+	],
+}
+
+var _current_zone: String = ""
+var _playlist: Array = []
+var _playlist_index: int = 0
+
 func _ready() -> void:
 	for i in 8:
 		var p := AudioStreamPlayer.new()
@@ -34,11 +57,35 @@ func _process(delta: float) -> void:
 		var cur := _music_active.volume_db
 		if not is_equal_approx(cur, _music_fade_target):
 			_music_active.volume_db = move_toward(cur, _music_fade_target, _music_fade_speed * delta)
+	# Auto-next track gdy skończy się aktualny
+	if _current_zone != "" and _music_active and not _music_active.playing and _playlist.size() > 1:
+		_playlist_index = (_playlist_index + 1) % _playlist.size()
+		_play_path(_playlist[_playlist_index])
 
 func play_music(track: String, vol_db: float = -22.0) -> void:
 	var path: String = TRACKS.get(track, "")
 	if path == "":
 		return
+	if _music_active.playing and _music_active.stream and \
+			_music_active.stream.resource_path == path:
+		_music_fade_target = vol_db
+		return
+	_play_path(path, vol_db)
+
+func play_zone(zone: String, vol_db: float = -22.0) -> void:
+	if zone == _current_zone:
+		return
+	_current_zone = zone
+	var pl: Array = PLAYLISTS.get(zone, [])
+	if pl.is_empty():
+		play_music(zone, vol_db)
+		return
+	_playlist = pl.duplicate()
+	_playlist.shuffle()
+	_playlist_index = 0
+	_play_path(_playlist[0], vol_db)
+
+func _play_path(path: String, vol_db: float = -22.0) -> void:
 	if _music_active.playing and _music_active.stream and \
 			_music_active.stream.resource_path == path:
 		_music_fade_target = vol_db

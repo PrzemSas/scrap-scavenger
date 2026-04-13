@@ -10,6 +10,8 @@ signal prestige_done(tokens:int)
 signal ground_changed(skin_id:String)
 @warning_ignore("unused_signal") signal proximity_entered(panel_id:String)
 @warning_ignore("unused_signal") signal proximity_exited(panel_id:String)
+@warning_ignore("unused_signal") signal pile_search_progress(progress:float)  # -1 = ukryj, 0..1 = postęp
+@warning_ignore("unused_signal") signal pile_hint_changed(text:String)  # "" = ukryj
 var coins:int=0
 var inventory:Array=[]
 var sorted_materials:Array=[]

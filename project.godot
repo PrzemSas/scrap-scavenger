@@ -28,6 +28,7 @@ ChallengeManager="*res://scripts/autoload/ChallengeManager.gd"
 CraftingManager="*res://scripts/CraftingManager.gd"
 LeaderboardManager="*res://scripts/autoload/LeaderboardManager.gd"
 ScrapIcons="*res://scripts/autoload/ScrapIcons.gd"
+SceneTransition="*res://scripts/autoload/SceneTransition.gd"
 
 [display]
 

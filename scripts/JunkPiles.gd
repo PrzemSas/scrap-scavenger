@@ -1,17 +1,159 @@
 extends Node3D
 
+const SEARCH_TIME := 2.0   # sekundy szukania
+const COOLDOWN    := 30.0  # cooldown po przeszukaniu
+const SPAWN_COUNT := 3     # ile itemów wypada
+const RANGE       := 4.0   # zasięg wykrycia gracza
+
+const SCRAP_SCENE = preload("res://scenes/objects/ScrapItem.tscn")
+
+class PileData:
+	var mesh: MeshInstance3D
+	var position: Vector3
+	var cooldown: float = 0.0      # czas do następnego szukania
+	var searching: bool = false
+	var search_t: float = 0.0
+	var mat_orig: Material
+	var area: Area3D
+
+var _piles: Array = []            # Array[PileData]
+var _nearest: PileData = null
+var _in_range: bool = false
+var _spawn_parent: Node3D = null  # SpawnManager lub parent
+
+# Matriały cooldown
+var _mat_depleted: StandardMaterial3D
+
 func _ready() -> void:
+	_mat_depleted = StandardMaterial3D.new()
+	_mat_depleted.albedo_color = Color(0.12, 0.12, 0.12, 1.0)
+	_mat_depleted.roughness = 1.0
+
 	for child in get_children():
 		if not (child is MeshInstance3D):
 			continue
-		var mesh = child.mesh
-		if not (mesh is BoxMesh):
-			continue
-		var body := StaticBody3D.new()
-		body.transform = child.transform
-		add_child(body)
+		var mesh := child as MeshInstance3D
+		var pd := PileData.new()
+		pd.mesh = mesh
+		pd.position = mesh.global_position
+		pd.mat_orig = mesh.get_surface_override_material(0)
+
+		# Area3D do detekcji gracza
+		var area := Area3D.new()
+		area.collision_layer = 0
+		area.collision_mask = 1  # player layer
 		var cs := CollisionShape3D.new()
-		var shape := BoxShape3D.new()
-		shape.size = (mesh as BoxMesh).size
-		cs.shape = shape
-		body.add_child(cs)
+		var sphere := SphereShape3D.new()
+		sphere.radius = RANGE
+		cs.shape = sphere
+		area.add_child(cs)
+		mesh.add_child(area)
+		pd.area = area
+
+		# StaticBody do kolizji świata
+		var body := StaticBody3D.new()
+		body.transform = mesh.transform
+		add_child(body)
+		var bcs := CollisionShape3D.new()
+		var bshape := BoxShape3D.new()
+		bshape.size = (mesh.mesh as BoxMesh).size if mesh.mesh is BoxMesh else Vector3(2,1,2)
+		bcs.shape = bshape
+		body.add_child(bcs)
+
+		_piles.append(pd)
+
+	await get_tree().process_frame
+	_spawn_parent = get_tree().get_root().find_child("SpawnManager", true, false)
+
+func _process(delta: float) -> void:
+	var player := _find_player()
+	_nearest = null
+	_in_range = false
+
+	if player:
+		var best_dist := INF
+		for pd in _piles:
+			if pd.searching:
+				continue
+			var d := (pd.mesh.global_position - player.global_position).length()
+			if d < RANGE and d < best_dist:
+				best_dist = d
+				_nearest = pd
+		_in_range = _nearest != null
+
+	# Update cooldowns
+	for pd in _piles:
+		if pd.cooldown > 0.0:
+			pd.cooldown -= delta
+			if pd.cooldown <= 0.0:
+				pd.cooldown = 0.0
+				pd.mesh.set_surface_override_material(0, pd.mat_orig)
+
+	# Update searching piles
+	for pd in _piles:
+		if not pd.searching:
+			continue
+		pd.search_t += delta
+		var progress := pd.search_t / SEARCH_TIME
+		GameManager.pile_search_progress.emit(progress)
+		if pd.search_t >= SEARCH_TIME:
+			_finish_search(pd)
+			return
+
+	# Hint UI
+	if _in_range and _nearest != null and _nearest.cooldown <= 0.0:
+		GameManager.pile_hint_changed.emit("[E] Szukaj w stercie")
+	elif _nearest != null and _nearest.cooldown > 0.0:
+		GameManager.pile_hint_changed.emit("Cooldown: %ds" % int(_nearest.cooldown + 1))
+	else:
+		GameManager.pile_hint_changed.emit("")
+
+	# E key
+	if _in_range and _nearest != null and _nearest.cooldown <= 0.0:
+		if Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_E):
+			_start_search(_nearest)
+
+func _start_search(pd: PileData) -> void:
+	pd.searching = true
+	pd.search_t = 0.0
+	GameManager.pile_search_progress.emit(0.0)
+	GameManager.notification.emit("Przeszukujesz stertę...")
+	AudioManager.play_collect()
+
+func _finish_search(pd: PileData) -> void:
+	pd.searching = false
+	pd.search_t = 0.0
+	pd.cooldown = COOLDOWN
+	pd.mesh.set_surface_override_material(0, _mat_depleted)
+	GameManager.pile_search_progress.emit(-1.0)
+	GameManager.pile_hint_changed.emit("")
+
+	# Spawn itemów
+	var sm := _spawn_parent
+	if sm and sm.has_method("_roll_scrap"):
+		for i in SPAWN_COUNT:
+			var scrap := SCRAP_SCENE.instantiate()
+			var offset := Vector3(randf_range(-1.5, 1.5), 0.5, randf_range(-1.5, 1.5))
+			scrap.position = pd.mesh.global_position + offset
+			if sm:
+				sm.add_child(scrap)
+			else:
+				add_child(scrap)
+			scrap.setup(sm._roll_scrap())
+	else:
+		# Fallback — prosty spawn
+		for i in SPAWN_COUNT:
+			var scrap := SCRAP_SCENE.instantiate()
+			var offset := Vector3(randf_range(-2.0, 2.0), 0.5, randf_range(-2.0, 2.0))
+			scrap.position = pd.mesh.global_position + offset
+			add_child(scrap)
+			if scrap.has_method("setup"):
+				scrap.setup({"id":"can","name":"Aluminum Can","value":1,"rarity":0})
+
+	GameManager.notification.emit("+%d złom ze stertu!" % SPAWN_COUNT)
+
+func _find_player() -> Node3D:
+	var players := get_tree().get_nodes_in_group("player")
+	if players.size() > 0:
+		return players[0] as Node3D
+	return null

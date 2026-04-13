@@ -1,7 +1,7 @@
 extends Area3D
 
 @export var target_scene: String = ""
-@export var label_text: String = "[E] Wejdź"
+@export var label_text: String = "[E] Enter"
 
 var _player_inside: bool = false
 

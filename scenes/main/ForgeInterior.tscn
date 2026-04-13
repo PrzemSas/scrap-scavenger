@@ -76,7 +76,7 @@ transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 5, 0, 2)
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 0, 8)
 script = ExtResource("8")
 target_scene = "res://scenes/main/Main.tscn"
-label_text = "[E] Wróć do złomowiska"
+label_text = "[E] Back to Junkyard"
 
 [node name="BackGateShape" type="CollisionShape3D" parent="BackGate"]
 shape = SubResource("GateShape")

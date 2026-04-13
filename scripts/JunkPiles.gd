@@ -102,9 +102,9 @@ func _process(delta: float) -> void:
 
 	# Hint UI
 	if _in_range and _nearest != null and _nearest.cooldown <= 0.0:
-		GameManager.pile_hint_changed.emit("[E] Szukaj w stercie")
+		GameManager.pile_hint_changed.emit("[E] Search pile")
 	elif _nearest != null and _nearest.cooldown > 0.0:
-		GameManager.pile_hint_changed.emit("Cooldown: %ds" % int(_nearest.cooldown + 1))
+		GameManager.pile_hint_changed.emit("Cooldown: %ds" % int(_nearest.cooldown + 1.0))
 	else:
 		GameManager.pile_hint_changed.emit("")
 
@@ -117,7 +117,7 @@ func _start_search(pd: PileData) -> void:
 	pd.searching = true
 	pd.search_t = 0.0
 	GameManager.pile_search_progress.emit(0.0)
-	GameManager.notification.emit("Przeszukujesz stertę...")
+	GameManager.notification.emit("Searching pile...")
 	AudioManager.play_collect()
 
 func _finish_search(pd: PileData) -> void:
@@ -150,7 +150,7 @@ func _finish_search(pd: PileData) -> void:
 			if scrap.has_method("setup"):
 				scrap.setup({"id":"can","name":"Aluminum Can","value":1,"rarity":0})
 
-	GameManager.notification.emit("+%d złom ze stertu!" % SPAWN_COUNT)
+	GameManager.notification.emit("+%d scrap found!" % SPAWN_COUNT)
 
 func _find_player() -> Node3D:
 	var players := get_tree().get_nodes_in_group("player")

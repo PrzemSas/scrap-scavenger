@@ -1,8 +1,16 @@
-[gd_scene load_steps=37 format=3]
+[gd_scene load_steps=50 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/ground/forge_stone.webp" id="TexStone"]
+[ext_resource type="Texture2D" path="res://assets/textures/furnace_bg.jpg" id="TexFurnaceBg"]
+[ext_resource type="Texture2D" path="res://assets/textures/gt_01.jpg" id="TexGt01"]
+[ext_resource type="Texture2D" path="res://assets/textures/br_01.jpg" id="TexBr01"]
+[ext_resource type="Texture2D" path="res://assets/textures/forge_interior.jpg" id="TexForgeInt"]
 
 [sub_resource type="StandardMaterial3D" id="StoneMat"]
-albedo_color = Color(0.17, 0.13, 0.10, 1)
-roughness = 0.97
+albedo_color = Color(0.75, 0.68, 0.60, 1)
+albedo_texture = ExtResource("TexStone")
+roughness = 0.95
+uv1_scale = Vector3(3, 2, 1)
 
 [sub_resource type="StandardMaterial3D" id="RoofMat"]
 albedo_color = Color(0.19, 0.12, 0.07, 1)
@@ -149,6 +157,43 @@ size = Vector3(0.68, 0.06, 0.68)
 albedo_color = Color(0.18, 0.16, 0.14, 1)
 metallic = 0.75
 roughness = 0.50
+
+[sub_resource type="StandardMaterial3D" id="MuralNMat"]
+albedo_texture = ExtResource("TexFurnaceBg")
+roughness = 0.98
+emission_enabled = true
+emission_texture = ExtResource("TexFurnaceBg")
+emission_energy_multiplier = 0.18
+
+[sub_resource type="BoxMesh" id="MuralNMesh"]
+size = Vector3(6.0, 3.8, 0.06)
+
+[sub_resource type="StandardMaterial3D" id="MuralWMat"]
+albedo_texture = ExtResource("TexGt01")
+roughness = 0.98
+emission_enabled = true
+emission_texture = ExtResource("TexGt01")
+emission_energy_multiplier = 0.14
+
+[sub_resource type="BoxMesh" id="MuralWMesh"]
+size = Vector3(0.06, 3.5, 2.8)
+
+[sub_resource type="StandardMaterial3D" id="PosterMat"]
+albedo_texture = ExtResource("TexBr01")
+roughness = 0.98
+
+[sub_resource type="BoxMesh" id="PosterMesh"]
+size = Vector3(1.8, 2.2, 0.05)
+
+[sub_resource type="StandardMaterial3D" id="PosterBMat"]
+albedo_texture = ExtResource("TexForgeInt")
+roughness = 0.98
+emission_enabled = true
+emission_texture = ExtResource("TexForgeInt")
+emission_energy_multiplier = 0.10
+
+[sub_resource type="BoxMesh" id="PosterBMesh"]
+size = Vector3(1.6, 2.0, 0.05)
 
 [sub_resource type="ParticleProcessMaterial" id="SmokePM"]
 direction = Vector3(0.18, 1.0, 0.06)
@@ -399,6 +444,26 @@ surface_material_override/0 = SubResource("IronMat")
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, -0.18, 0)
 mesh = SubResource("BarrelRingMesh")
 surface_material_override/0 = SubResource("IronMat")
+
+[node name="MuralN" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -1.0, 2.6, -7.27)
+mesh = SubResource("MuralNMesh")
+surface_material_override/0 = SubResource("MuralNMat")
+
+[node name="MuralW" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -7.27, 2.5, 0.5)
+mesh = SubResource("MuralWMesh")
+surface_material_override/0 = SubResource("MuralWMat")
+
+[node name="PosterW" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -7.27, 1.8, -4.5)
+mesh = SubResource("PosterMesh")
+surface_material_override/0 = SubResource("PosterMat")
+
+[node name="PosterN" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 4.5, 2.2, -7.27)
+mesh = SubResource("PosterBMesh")
+surface_material_override/0 = SubResource("PosterBMat")
 
 [node name="ForgeZone" type="Area3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,-1.0,3.0,0)

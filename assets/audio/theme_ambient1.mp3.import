@@ -2,13 +2,13 @@
 
 importer="mp3"
 type="AudioStreamMP3"
-uid="uid://ambient1_import"
-path="res://.godot/imported/theme_ambient1.mp3-ambient1.mp3str"
+uid="uid://bv1iei8dldjhc"
+path="res://.godot/imported/theme_ambient1.mp3-c1b951198c6b2ae04ea585d229c8dd5d.mp3str"
 
 [deps]
 
 source_file="res://assets/audio/theme_ambient1.mp3"
-dest_files=["res://.godot/imported/theme_ambient1.mp3-ambient1.mp3str"]
+dest_files=["res://.godot/imported/theme_ambient1.mp3-c1b951198c6b2ae04ea585d229c8dd5d.mp3str"]
 
 [params]
 

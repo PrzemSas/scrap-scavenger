@@ -2,13 +2,13 @@
 
 importer="mp3"
 type="AudioStreamMP3"
-uid="uid://chainfire2_import"
-path="res://.godot/imported/theme_chainfire2.mp3-chainfire2.mp3str"
+uid="uid://comerjfqi5kfk"
+path="res://.godot/imported/theme_chainfire2.mp3-cd41b02d8d5f7169e1a01de6dc540c62.mp3str"
 
 [deps]
 
 source_file="res://assets/audio/theme_chainfire2.mp3"
-dest_files=["res://.godot/imported/theme_chainfire2.mp3-chainfire2.mp3str"]
+dest_files=["res://.godot/imported/theme_chainfire2.mp3-cd41b02d8d5f7169e1a01de6dc540c62.mp3str"]
 
 [params]
 

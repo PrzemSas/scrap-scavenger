@@ -75,7 +75,7 @@ func _process(delta: float) -> void:
 		for pd in _piles:
 			if pd.searching:
 				continue
-			var d := (pd.mesh.global_position - player.global_position).length()
+			var d: float = (pd.mesh.global_position - player.global_position).length()
 			if d < RANGE and d < best_dist:
 				best_dist = d
 				_nearest = pd
@@ -94,7 +94,7 @@ func _process(delta: float) -> void:
 		if not pd.searching:
 			continue
 		pd.search_t += delta
-		var progress := pd.search_t / SEARCH_TIME
+		var progress: float = pd.search_t / SEARCH_TIME
 		GameManager.pile_search_progress.emit(progress)
 		if pd.search_t >= SEARCH_TIME:
 			_finish_search(pd)

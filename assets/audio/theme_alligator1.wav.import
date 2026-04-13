@@ -2,19 +2,20 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://alligator1_import"
-path="res://.godot/imported/theme_alligator1.wav-alligator1.sample"
+uid="uid://bkvefruq6saup"
+path="res://.godot/imported/theme_alligator1.wav-deca41fcfada0f2de1156300f006b20f.sample"
 
 [deps]
 
 source_file="res://assets/audio/theme_alligator1.wav"
-dest_files=["res://.godot/imported/theme_alligator1.wav-alligator1.sample"]
+dest_files=["res://.godot/imported/theme_alligator1.wav-deca41fcfada0f2de1156300f006b20f.sample"]
 
 [params]
 
-format/mode=2
-format/mix_rate=null
-format/pcm_bitdepth=16.0
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
 edit/trim=false
 edit/normalize=false
 edit/loop_mode=0

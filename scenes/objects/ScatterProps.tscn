@@ -1,6 +1,8 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/ScatterProps.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/mot_03.jpg" id="TexRust"]
+[ext_resource type="Texture2D" path="res://assets/textures/br_04.jpg" id="TexWeld"]
 
 [sub_resource type="CylinderMesh" id="BarrelMesh"]
 top_radius = 0.28
@@ -45,9 +47,11 @@ roughness = 0.96
 size = Vector3(2.4, 0.06, 1.5)
 
 [sub_resource type="StandardMaterial3D" id="MatSheet"]
-albedo_color = Color(0.22, 0.20, 0.18, 1)
-metallic = 0.62
-roughness = 0.65
+albedo_color = Color(0.75, 0.62, 0.48, 1)
+albedo_texture = ExtResource("TexRust")
+metallic = 0.55
+roughness = 0.72
+uv1_scale = Vector3(2.0, 1.0, 1)
 
 [sub_resource type="CylinderMesh" id="PipeMesh"]
 top_radius = 0.10
@@ -55,12 +59,11 @@ bottom_radius = 0.10
 height = 2.6
 
 [sub_resource type="StandardMaterial3D" id="MatPipe"]
-albedo_color = Color(0.20, 0.15, 0.10, 1)
-metallic = 0.48
-roughness = 0.80
-emission_enabled = true
-emission = Color(0.03, 0.01, 0.0, 1)
-emission_energy_multiplier = 0.2
+albedo_color = Color(0.55, 0.42, 0.30, 1)
+albedo_texture = ExtResource("TexRust")
+metallic = 0.52
+roughness = 0.78
+uv1_scale = Vector3(0.8, 3.0, 1)
 
 [node name="ScatterProps" type="Node3D"]
 script = ExtResource("1")

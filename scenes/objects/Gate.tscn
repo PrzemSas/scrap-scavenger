@@ -48,7 +48,7 @@ surface_material_override/0 = SubResource("PostMat")
 
 [node name="PostLBody" type="StaticBody3D" parent="PostL"]
 
-[node name="PostLShape" type="CollisionShape3D" parent="PostLBody"]
+[node name="PostLShape" type="CollisionShape3D" parent="PostL/PostLBody"]
 shape = SubResource("PostShapeL")
 
 [node name="PostR" type="MeshInstance3D" parent="."]
@@ -58,7 +58,7 @@ surface_material_override/0 = SubResource("PostMat")
 
 [node name="PostRBody" type="StaticBody3D" parent="PostR"]
 
-[node name="PostRShape" type="CollisionShape3D" parent="PostRBody"]
+[node name="PostRShape" type="CollisionShape3D" parent="PostR/PostRBody"]
 shape = SubResource("PostShapeR")
 
 [node name="Lintel" type="MeshInstance3D" parent="."]

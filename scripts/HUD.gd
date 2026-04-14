@@ -23,7 +23,7 @@ extends Control
 @onready var sell_list:VBoxContainer=$SellPanel/ScrollContainer/SellList
 @onready var pile_hint:Label=$PileHintLabel
 @onready var search_bar:Control=$SearchBar
-@onready var search_progress:ProgressBar=$SearchBar/SearchProgress
+@onready var search_progress:ProgressBar=$SearchBar/SearchInner/SearchProgress
 var _nt:float=0.0
 var _panels:Array=[]
 var _proximity_panel:String=""

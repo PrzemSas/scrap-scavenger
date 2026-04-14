@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=27 format=3]
 
 [ext_resource type="Script" path="res://scripts/ScatterProps.gd" id="1"]
 [ext_resource type="PackedScene" path="res://assets/models/polyhaven/Barrel_01/Barrel_01_2k.glb" id="2"]
@@ -17,6 +17,15 @@
 [ext_resource type="PackedScene" path="res://assets/models/polyhaven/modular_chainlink_fence/modular_chainlink_fence_2k.glb" id="15"]
 [ext_resource type="PackedScene" path="res://assets/models/polyhaven/modular_electric_cables/modular_electric_cables_2k.glb" id="16"]
 [ext_resource type="PackedScene" path="res://assets/models/polyhaven/modular_airduct_circular_01/modular_airduct_circular_01_2k.glb" id="17"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/detail-tank/detail-tank.glb" id="18"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/city-kit-industrial/Models/GLB format/building-a.glb" id="19"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/city-kit-industrial/Models/GLB format/building-b.glb" id="20"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/chimney-small/chimney-small.glb" id="21"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/crowbar_01/crowbar_01_2k.glb" id="22"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/pipe_wrench/pipe_wrench_2k.glb" id="23"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/small_lpg_tank/small_lpg_tank_2k.glb" id="24"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/furniture-kit/Models/GLTF format/cardboardBoxClosed.glb" id="25"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/furniture-kit/Models/GLTF format/cardboardBoxOpen.glb" id="26"]
 
 [node name="ScatterProps" type="Node3D"]
 script = ExtResource("1")
@@ -110,3 +119,75 @@ transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -10, 0, -40)
 
 [node name="Airduct_02" parent="." instance=ExtResource("17")]
 transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 35, 0, 15)
+
+[node name="Tank_01" parent="." instance=ExtResource("18")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 40, 0, -30)
+
+[node name="Tank_02" parent="." instance=ExtResource("18")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, -38, 0, 30)
+
+[node name="Tank_03" parent="." instance=ExtResource("18")]
+transform = Transform3D(0.7,0,0.7, 0,1,0, -0.7,0,0.7, 20, 0, 42)
+
+[node name="Building_A" parent="." instance=ExtResource("19")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -45, 0, -35)
+
+[node name="Building_B" parent="." instance=ExtResource("20")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, 42, 0, 35)
+
+[node name="Chimney_01" parent="." instance=ExtResource("21")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -44, 0, 10)
+
+[node name="Chimney_02" parent="." instance=ExtResource("21")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 44, 0, -15)
+
+[node name="Crowbar_01" parent="." instance=ExtResource("22")]
+transform = Transform3D(0,0,1, 0.3,0.95,0, -0.95,0.3,0, -5, 0, -25)
+
+[node name="Crowbar_02" parent="." instance=ExtResource("22")]
+transform = Transform3D(0.7,0,0.7, 0,1,0, -0.7,0,0.7, 22, 0, 10)
+
+[node name="Crowbar_03" parent="." instance=ExtResource("22")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -28, 0, -12)
+
+[node name="Crowbar_04" parent="." instance=ExtResource("22")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, 5, 0, 35)
+
+[node name="PipeWrench_01" parent="." instance=ExtResource("23")]
+transform = Transform3D(0.8,0,0.6, 0,1,0, -0.6,0,0.8, 18, 0, -22)
+
+[node name="PipeWrench_02" parent="." instance=ExtResource("23")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -22, 0, 20)
+
+[node name="PipeWrench_03" parent="." instance=ExtResource("23")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -35, 0, -5)
+
+[node name="SmallLPG_01" parent="." instance=ExtResource("24")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 28, 0, 28)
+
+[node name="SmallLPG_02" parent="." instance=ExtResource("24")]
+transform = Transform3D(0.9,0,0.4, 0,1,0, -0.4,0,0.9, 29.5, 0, 28.5)
+
+[node name="SmallLPG_03" parent="." instance=ExtResource("24")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -18, 0, -35)
+
+[node name="SmallLPG_04" parent="." instance=ExtResource("24")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, 32, 0, -20)
+
+[node name="CardboxClosed_01" parent="." instance=ExtResource("25")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -32, 0, 22)
+
+[node name="CardboxClosed_02" parent="." instance=ExtResource("25")]
+transform = Transform3D(0.95,0,0.3, 0,1,0, -0.3,0,0.95, -33, 0.55, 22.3)
+
+[node name="CardboxOpen_01" parent="." instance=ExtResource("26")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -31.5, 1.1, 22)
+
+[node name="CardboxClosed_03" parent="." instance=ExtResource("25")]
+transform = Transform3D(0.8,0,-0.6, 0,1,0, 0.6,0,0.8, 16, 0, 38)
+
+[node name="CardboxOpen_02" parent="." instance=ExtResource("26")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 17.5, 0, 38.5)
+
+[node name="CardboxClosed_04" parent="." instance=ExtResource("25")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -42, 0, -22)

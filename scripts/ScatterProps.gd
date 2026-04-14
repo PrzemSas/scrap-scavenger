@@ -11,30 +11,30 @@ func _ready() -> void:
 		_find_meshes(child, meshes)
 		if meshes.is_empty():
 			continue
-		# Build combined AABB in child's local space
+		# Build combined AABB in child's local space using global transforms
 		var combined := AABB()
 		var first := true
 		for mi: MeshInstance3D in meshes:
 			if not mi.mesh:
 				continue
-			# transform mesh AABB to child's local space
-			var rel: Transform3D = child.transform.inverse() * mi.global_transform
+			var rel: Transform3D = child.global_transform.inverse() * mi.global_transform
 			var m: AABB = rel * mi.mesh.get_aabb()
 			if first:
 				combined = m
 				first = false
 			else:
 				combined = combined.merge(m)
-		if first:  # no valid meshes
+		if first:
 			continue
+		# Add body to self (not to child instance) to avoid "modified from inside instance" warning
 		var body := StaticBody3D.new()
-		child.add_child(body)
+		add_child(body)
 		var cs := CollisionShape3D.new()
 		var shape := BoxShape3D.new()
 		shape.size = combined.size.max(Vector3(0.1, 0.1, 0.1))
-		cs.position = combined.get_center()
 		cs.shape = shape
 		body.add_child(cs)
+		body.transform = Transform3D(child.transform.basis, child.transform * combined.get_center())
 
 func _find_meshes(node: Node, result: Array) -> void:
 	if node is MeshInstance3D:

@@ -45,6 +45,19 @@ content_margin_right = 10.0
 content_margin_top = 6.0
 content_margin_bottom = 6.0
 
+[sub_resource type="StyleBoxFlat" id="HotbarPanel"]
+bg_color = Color(0.04, 0.02, 0.01, 0.78)
+border_color = Color(1.0, 0.45, 0.0, 0.30)
+set_border_width_all = 1
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+
 [node name="HUD" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -391,3 +404,22 @@ value = 0.0
 show_percentage = false
 theme_override_styles/fill = SubResource("SearchFill")
 theme_override_styles/background = SubResource("SearchBG")
+
+[node name="Hotbar" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -140.0
+offset_right = 160.0
+offset_bottom = -102.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("HotbarPanel")
+
+[node name="HotbarSlots" type="HBoxContainer" parent="Hotbar"]
+layout_mode = 2
+theme_override_constants/separation = 4

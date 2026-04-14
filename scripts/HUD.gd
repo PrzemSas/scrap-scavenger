@@ -24,13 +24,14 @@ extends Control
 @onready var pile_hint:Label=$PileHintLabel
 @onready var search_bar:Control=$SearchBar
 @onready var search_progress:ProgressBar=$SearchBar/SearchInner/SearchProgress
+@onready var hotbar_slots:HBoxContainer=$Hotbar/HotbarSlots
 var _nt:float=0.0
 var _panels:Array=[]
 var _proximity_panel:String=""
 func _ready()->void:
 	_panels=[inv_panel,shop_panel,sort_panel,furnace_panel,stats_panel,forge_panel,craft_panel,leaderboard_panel,sell_panel]
 	GameManager.coins_changed.connect(func(c): coin_label.text="%d SC"%c; _shop())
-	GameManager.inventory_changed.connect(func(): inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]; _inv())
+	GameManager.inventory_changed.connect(func(): inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]; _inv(); _refresh_hotbar())
 	GameManager.upgrade_purchased.connect(func(_x): _shop())
 	GameManager.notification.connect(func(m): notif_label.text=m; notif_label.visible=true; _nt=3.0)
 	GameManager.prestige_done.connect(func(_x): _shop())
@@ -58,6 +59,7 @@ func _ready()->void:
 	coin_label.text="%d SC"%GameManager.coins
 	inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]
 	_shop()
+	_refresh_hotbar()
 func _on_proximity_enter(pid:String)->void:
 	_proximity_panel=pid
 	for p in _panels: p.visible=false
@@ -115,6 +117,29 @@ func _slot_style(c:Color,a:float)->StyleBoxFlat:
 	s.border_color=Color(c.r,c.g,c.b,0.5); s.set_border_width_all(1)
 	s.corner_radius_top_left=4; s.corner_radius_top_right=4
 	s.corner_radius_bottom_left=4; s.corner_radius_bottom_right=4; return s
+
+func _refresh_hotbar()->void:
+	for c in hotbar_slots.get_children(): c.queue_free()
+	var cl:Array=[Color("#888"),Color("#ff6a00"),Color("#00e5ff"),Color("#FFD700")]
+	for i in GameManager.max_slots:
+		var slot:=PanelContainer.new()
+		slot.custom_minimum_size=Vector2(30,30)
+		var lbl:=Label.new()
+		lbl.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+		lbl.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
+		lbl.add_theme_font_size_override("font_size",9)
+		if i < GameManager.inventory.size():
+			var it:=GameManager.inventory[i]
+			var r:int=it.get("rarity",0)
+			var c:=cl[r]
+			slot.add_theme_stylebox_override("panel",_slot_style(c,0.30))
+			lbl.text=ICON_CHARS.get(it.get("id",""),"?")
+			lbl.add_theme_color_override("font_color",c)
+		else:
+			slot.add_theme_stylebox_override("panel",_slot_style(Color(0.2,0.2,0.2),0.12))
+			lbl.text=""
+		slot.add_child(lbl)
+		hotbar_slots.add_child(slot)
 func _shop()->void:
 	for c in shop_list.get_children(): c.queue_free()
 	for uid in GameManager.upgrade_config:

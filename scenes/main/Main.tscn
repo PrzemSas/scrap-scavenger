@@ -67,16 +67,16 @@ emission = Color(0.06,0.02,0.002,1)
 emission_energy_multiplier = 0.7
 uv1_scale = Vector3(3,3,3)
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
-sky_top_color = Color(0.04, 0.02, 0.015, 1)
-sky_horizon_color = Color(0.30, 0.10, 0.03, 1)
-sky_curve = 0.13
-sky_energy_multiplier = 1.0
-ground_bottom_color = Color(0.02, 0.01, 0.008, 1)
-ground_horizon_color = Color(0.14, 0.06, 0.02, 1)
-ground_curve = 0.02
+sky_top_color = Color(0.06, 0.04, 0.14, 1)
+sky_horizon_color = Color(0.88, 0.28, 0.04, 1)
+sky_curve = 0.18
+sky_energy_multiplier = 1.2
+ground_bottom_color = Color(0.02, 0.01, 0.01, 1)
+ground_horizon_color = Color(0.28, 0.08, 0.02, 1)
+ground_curve = 0.03
 ground_energy_multiplier = 1.0
-sun_angle_max = 40.0
-sun_curve = 0.12
+sun_angle_max = 32.0
+sun_curve = 0.08
 
 [sub_resource type="Sky" id="Sky1"]
 sky_material = SubResource("SkyMat")
@@ -85,13 +85,14 @@ sky_material = SubResource("SkyMat")
 background_mode = 2
 sky = SubResource("Sky1")
 ambient_light_source = 2
-ambient_light_color = Color(0.12,0.08,0.04,1)
-ambient_light_energy = 0.4
+ambient_light_color = Color(0.22, 0.10, 0.04, 1)
+ambient_light_energy = 0.55
 glow_enabled = true
-glow_intensity = 0.5
+glow_intensity = 0.85
+glow_bloom = 0.12
 fog_enabled = true
-fog_light_color = Color(0.18,0.07,0.02,1)
-fog_density = 0.012
+fog_light_color = Color(0.45, 0.16, 0.03, 1)
+fog_density = 0.016
 [node name="Main" type="Node3D"]
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1,0,0,0,0.707,0.707,0,-0.707,0.707,0,8,8)
@@ -99,20 +100,32 @@ current = true
 fov = 50.0
 script = ExtResource("4")
 [node name="SunLight" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1,0,0,0,0.707,0.707,0,-0.707,0.707,0,0,0)
-light_color = Color(1,0.85,0.6,1)
-light_energy = 0.7
+transform = Transform3D(0.85,0,0.53, 0.27,0.87,-0.42, -0.46,0.50,0.74, 0,0,0)
+light_color = Color(1.0, 0.55, 0.15, 1)
+light_energy = 1.1
 shadow_enabled = true
 script = ExtResource("7")
 [node name="FillLight" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1,0,0,0,0.707,-0.707,0,0.707,0.707,0,0,0)
-light_color = Color(0.3,0.4,0.6,1)
-light_energy = 0.2
+transform = Transform3D(-0.8,0,-0.6, 0.2,0.94,-0.27, 0.57,-0.34,-0.75, 0,0,0)
+light_color = Color(0.25, 0.30, 0.55, 1)
+light_energy = 0.18
 [node name="ForgeLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,3,0)
 light_color = Color(1,0.5,0.1,1)
-light_energy = 0.6
-omni_range = 14.0
+light_energy = 0.7
+omni_range = 16.0
+[node name="BarrelFire_A" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1, -18.5, 1.0, -5.5)
+light_color = Color(1.0, 0.40, 0.05, 1)
+light_energy = 2.2
+omni_range = 8.0
+omni_attenuation = 1.5
+[node name="BarrelFire_B" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1, -30.2, 1.0, 8.2)
+light_color = Color(1.0, 0.45, 0.06, 1)
+light_energy = 2.8
+omni_range = 9.0
+omni_attenuation = 1.5
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("E1")
 [node name="Ground" type="StaticBody3D" parent="."]

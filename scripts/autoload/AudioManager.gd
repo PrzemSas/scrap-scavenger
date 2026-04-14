@@ -142,6 +142,9 @@ func play_prestige() -> void:
 func play_click() -> void:
 	_beep(600.0, 0.03)
 
+func play_footstep() -> void:
+	_noise_burst(0.055)
+
 func _play_wav(audio: AudioStreamWAV) -> void:
 	for p in _players:
 		if not p.playing:
@@ -205,6 +208,24 @@ func _beep_sweep(freq_start: float, freq_end: float, dur: float) -> void:
 		phase += freq / sr * TAU
 		var env := pow(1.0 - progress, 0.8)
 		data[i] = int(clampf(sin(phase) * env * 0.5 + 0.5, 0.0, 1.0) * 255)
+	audio.data = data
+	_play_wav(audio)
+
+# Szum z obwiednią — kroki na żwirze/metalu
+func _noise_burst(dur: float) -> void:
+	var sr := 22050.0
+	var samples := int(sr * dur)
+	var audio := AudioStreamWAV.new()
+	audio.format = AudioStreamWAV.FORMAT_8_BITS
+	audio.mix_rate = int(sr)
+	var data := PackedByteArray()
+	data.resize(samples)
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	for i in samples:
+		var env := pow(1.0 - float(i) / samples, 3.0)
+		var n := rng.randf_range(-1.0, 1.0)
+		data[i] = int(clampf(n * env * 0.25 + 0.5, 0.0, 1.0) * 255)
 	audio.data = data
 	_play_wav(audio)
 

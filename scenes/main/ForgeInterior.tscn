@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3]
+[gd_scene load_steps=35 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="1"]
 [ext_resource type="Script" path="res://scripts/CameraController.gd" id="2"]
@@ -19,6 +19,12 @@
 [ext_resource type="PackedScene" path="res://assets/models/polyhaven/metal_tool_chest/metal_tool_chest_2k.glb" id="17"]
 [ext_resource type="PackedScene" path="res://assets/models/polyhaven/bench_vice_01/bench_vice_01_2k.glb" id="18"]
 [ext_resource type="PackedScene" path="res://assets/models/polyhaven/sledgehammer_01/sledgehammer_01_2k.glb" id="19"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/Barrel_01/Barrel_01_2k.glb" id="20"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/Barrel_02/Barrel_02_2k.glb" id="21"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/barrel_stove/barrel_stove_2k.glb" id="22"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/power_box_01/power_box_01_2k.glb" id="23"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/propane_tank/propane_tank_2k.glb" id="24"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/metal_trash_can/metal_trash_can_2k.glb" id="25"]
 
 [sub_resource type="Environment" id="ForgeEnv"]
 background_mode = 1
@@ -220,3 +226,21 @@ transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 4.5, 0, -6.5)
 
 [node name="Sledgehammer" parent="ForgeProps" instance=ExtResource("19")]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -5.5, 0, -5.5)
+
+[node name="Barrel_A" parent="ForgeProps" instance=ExtResource("20")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -7.2, 0, 3.0)
+
+[node name="Barrel_B" parent="ForgeProps" instance=ExtResource("21")]
+transform = Transform3D(0.95,0,0.31, 0,1,0, -0.31,0,0.95, -7.2, 0, 4.2)
+
+[node name="BarrelStove" parent="ForgeProps" instance=ExtResource("22")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 6.5, 0, 5.5)
+
+[node name="PowerBox" parent="ForgeProps" instance=ExtResource("23")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, -9.4, 1.2, 0.0)
+
+[node name="PropaneTank" parent="ForgeProps" instance=ExtResource("24")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 2.8, 0, -6.8)
+
+[node name="TrashCan" parent="ForgeProps" instance=ExtResource("25")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 7.5, 0, 5.5)

@@ -1,24 +1,43 @@
 extends Node3D
 
 func _ready() -> void:
+	await get_tree().process_frame
 	for child in get_children():
-		if not (child is MeshInstance3D):
+		if child is StaticBody3D:
 			continue
-		var mesh = child.mesh
+		if not (child is Node3D):
+			continue
+		var meshes: Array = []
+		_find_meshes(child, meshes)
+		if meshes.is_empty():
+			continue
+		# Build combined AABB in child's local space
+		var combined := AABB()
+		var first := true
+		for mi: MeshInstance3D in meshes:
+			if not mi.mesh:
+				continue
+			# transform mesh AABB to child's local space
+			var rel: Transform3D = child.transform.inverse() * mi.global_transform
+			var m: AABB = rel * mi.mesh.get_aabb()
+			if first:
+				combined = m
+				first = false
+			else:
+				combined = combined.merge(m)
+		if first:  # no valid meshes
+			continue
 		var body := StaticBody3D.new()
-		body.transform = child.transform
-		add_child(body)
+		child.add_child(body)
 		var cs := CollisionShape3D.new()
-		if mesh is BoxMesh:
-			var shape := BoxShape3D.new()
-			shape.size = (mesh as BoxMesh).size
-			cs.shape = shape
-		elif mesh is CylinderMesh:
-			var cyl := mesh as CylinderMesh
-			var shape := CylinderShape3D.new()
-			shape.radius = maxf(cyl.top_radius, cyl.bottom_radius)
-			shape.height = cyl.height
-			cs.shape = shape
-		else:
-			continue
+		var shape := BoxShape3D.new()
+		shape.size = combined.size.max(Vector3(0.1, 0.1, 0.1))
+		cs.position = combined.get_center()
+		cs.shape = shape
 		body.add_child(cs)
+
+func _find_meshes(node: Node, result: Array) -> void:
+	if node is MeshInstance3D:
+		result.append(node)
+	for child in node.get_children():
+		_find_meshes(child, result)

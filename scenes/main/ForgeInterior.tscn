@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3]
+[gd_scene load_steps=29 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="1"]
 [ext_resource type="Script" path="res://scripts/CameraController.gd" id="2"]
@@ -13,6 +13,12 @@
 [ext_resource type="PackedScene" path="res://scenes/objects/ForgeStructure.tscn" id="11"]
 [ext_resource type="PackedScene" path="res://scenes/objects/Gate.tscn" id="13_gate"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/forge_stone.webp" id="13"]
+[ext_resource type="Script" path="res://scripts/ScatterProps.gd" id="14"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/steel_frame_shelves_01/steel_frame_shelves_01_2k.glb" id="15"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/steel_frame_shelves_02/steel_frame_shelves_02_2k.glb" id="16"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/metal_tool_chest/metal_tool_chest_2k.glb" id="17"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/bench_vice_01/bench_vice_01_2k.glb" id="18"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/sledgehammer_01/sledgehammer_01_2k.glb" id="19"]
 
 [sub_resource type="Environment" id="ForgeEnv"]
 background_mode = 1
@@ -196,3 +202,21 @@ script = ExtResource("2")
 [node name="HUD" parent="CanvasLayer" instance=ExtResource("1")]
 
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("3")]
+
+[node name="ForgeProps" type="Node3D" parent="."]
+script = ExtResource("14")
+
+[node name="SteelShelves_01" parent="ForgeProps" instance=ExtResource("15")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -7.8, 0, -5.5)
+
+[node name="SteelShelves_02" parent="ForgeProps" instance=ExtResource("16")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -7.8, 0, -1.5)
+
+[node name="ToolChest" parent="ForgeProps" instance=ExtResource("17")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, 7.5, 0, -5.0)
+
+[node name="BenchVice" parent="ForgeProps" instance=ExtResource("18")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 4.5, 0, -6.5)
+
+[node name="Sledgehammer" parent="ForgeProps" instance=ExtResource("19")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -5.5, 0, -5.5)

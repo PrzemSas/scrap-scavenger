@@ -129,9 +129,9 @@ func _refresh_hotbar()->void:
 		lbl.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
 		lbl.add_theme_font_size_override("font_size",9)
 		if i < GameManager.inventory.size():
-			var it:=GameManager.inventory[i]
+			var it:Dictionary=GameManager.inventory[i]
 			var r:int=it.get("rarity",0)
-			var c:=cl[r]
+			var c:Color=cl[r]
 			slot.add_theme_stylebox_override("panel",_slot_style(c,0.30))
 			lbl.text=ICON_CHARS.get(it.get("id",""),"?")
 			lbl.add_theme_color_override("font_color",c)

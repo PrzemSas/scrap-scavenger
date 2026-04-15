@@ -143,13 +143,13 @@ func play_click() -> void:
 	_beep(600.0, 0.03)
 
 func play_footstep() -> void:
-	_noise_burst(0.055)
+	_footstep_thud()
 
-func _play_wav(audio: AudioStreamWAV) -> void:
+func _play_wav(audio: AudioStreamWAV, vol_db: float = -12.0) -> void:
 	for p in _players:
 		if not p.playing:
 			p.stream = audio
-			p.volume_db = -12.0
+			p.volume_db = vol_db
 			p.play()
 			return
 
@@ -211,9 +211,10 @@ func _beep_sweep(freq_start: float, freq_end: float, dur: float) -> void:
 	audio.data = data
 	_play_wav(audio)
 
-# Szum z obwiednią — kroki na żwirze/metalu
-func _noise_burst(dur: float) -> void:
+# Miękki krok — filtrowany szum + niski thump, bez wysokich częstotliwości
+func _footstep_thud() -> void:
 	var sr := 22050.0
+	var dur := 0.09
 	var samples := int(sr * dur)
 	var audio := AudioStreamWAV.new()
 	audio.format = AudioStreamWAV.FORMAT_8_BITS
@@ -222,12 +223,19 @@ func _noise_burst(dur: float) -> void:
 	data.resize(samples)
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
+	var lp := 0.0  # stan filtra low-pass
 	for i in samples:
-		var env := pow(1.0 - float(i) / samples, 3.0)
-		var n := rng.randf_range(-1.0, 1.0)
-		data[i] = int(clampf(n * env * 0.25 + 0.5, 0.0, 1.0) * 255)
+		var progress := float(i) / float(samples)
+		# Obwiednia: szybki atak, wolne zanikanie
+		var env := exp(-progress * 14.0)
+		# Szum przefiltrowany low-pass (alpha=0.12 → tylko niskie freq)
+		lp = lerp(lp, rng.randf_range(-1.0, 1.0), 0.12)
+		# Niski "thump" sinusowy (stąpnięcie)
+		var thump := sin(progress * PI) * exp(-progress * 22.0)
+		var v := (lp * 0.35 + thump * 0.65) * env
+		data[i] = int(clampf(v * 0.5 + 0.5, 0.0, 1.0) * 255)
 	audio.data = data
-	_play_wav(audio)
+	_play_wav(audio, -22.0)
 
 func _beep(freq: float, dur: float) -> void:
 	var sr: float = 22050.0

@@ -5,6 +5,7 @@ var workers: Array = []
 
 func _ready() -> void:
 	GameManager.upgrade_purchased.connect(func(_id): _check())
+	GameManager.forge_item_purchased.connect(func(_id): _check())
 	_check()
 
 func _check() -> void:

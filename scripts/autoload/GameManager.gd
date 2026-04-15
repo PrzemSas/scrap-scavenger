@@ -12,6 +12,8 @@ signal ground_changed(skin_id:String)
 @warning_ignore("unused_signal") signal proximity_exited(panel_id:String)
 @warning_ignore("unused_signal") signal pile_search_progress(progress:float)  # -1 = ukryj, 0..1 = postęp
 @warning_ignore("unused_signal") signal pile_hint_changed(text:String)  # "" = ukryj
+@warning_ignore("unused_signal") signal smelt_queue_changed(size:int)
+@warning_ignore("unused_signal") signal forge_item_purchased(fid:String)
 var coins:int=0
 var inventory:Array=[]
 var sorted_materials:Array=[]
@@ -187,7 +189,7 @@ func buy_forge_item(fid:String)->bool:
 		"ground_rust": current_ground="rust"; ground_changed.emit("rust")
 		"ground_ash": current_ground="ash"; ground_changed.emit("ash")
 		"ground_gold": current_ground="gold"; ground_changed.emit("gold")
-	notification.emit("Forge: %s"%c.get("desc","")); return true
+	notification.emit("Forge: %s"%c.get("desc","")); forge_item_purchased.emit(fid); return true
 func can_prestige()->bool: return lifetime_coins>=50000
 func get_prestige_tokens()->int:
 	if lifetime_coins<10000: return 0

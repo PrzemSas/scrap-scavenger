@@ -3,6 +3,7 @@ var _active:bool=false
 var _t:float=0.0
 func _ready()->void:
 	GameManager.sorted_changed.connect(_ck); GameManager.ingots_changed.connect(_ck)
+	GameManager.smelt_queue_changed.connect(_on_queue_changed)
 func _ck()->void:
 	_active=GameManager.sorted_materials.size()>0 or GameManager.ingots.size()>0
 func _process(delta:float)->void:
@@ -15,3 +16,8 @@ func _process(delta:float)->void:
 	else:
 		if light: light.light_energy=lerpf(light.light_energy,0.0,delta*2)
 		if smoke: smoke.emitting=false
+func _on_queue_changed(size:int)->void:
+	var lbl=get_node_or_null("QueueLabel")
+	if not lbl: return
+	lbl.visible=size>0
+	lbl.text="QUEUE %d/3"%size

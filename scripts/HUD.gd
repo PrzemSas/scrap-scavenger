@@ -28,6 +28,7 @@ extends Control
 var _nt:float=0.0
 var _panels:Array=[]
 var _proximity_panel:String=""
+var _interact_hint:Label
 func _ready()->void:
 	_panels=[inv_panel,shop_panel,sort_panel,furnace_panel,stats_panel,forge_panel,craft_panel,leaderboard_panel,sell_panel]
 	GameManager.coins_changed.connect(func(c): coin_label.text="%d SC"%c; _shop())
@@ -60,22 +61,49 @@ func _ready()->void:
 	inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]
 	_shop()
 	_refresh_hotbar()
+	_interact_hint=Label.new()
+	_interact_hint.anchor_left=0.5; _interact_hint.anchor_top=1.0
+	_interact_hint.anchor_right=0.5; _interact_hint.anchor_bottom=1.0
+	_interact_hint.offset_left=-200.0; _interact_hint.offset_top=-198.0
+	_interact_hint.offset_right=200.0; _interact_hint.offset_bottom=-170.0
+	_interact_hint.grow_horizontal=Control.GROW_DIRECTION_BOTH
+	_interact_hint.grow_vertical=Control.GROW_DIRECTION_BEGIN
+	_interact_hint.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+	_interact_hint.add_theme_color_override("font_color",Color(0.3,1.0,0.5,1))
+	_interact_hint.add_theme_font_size_override("font_size",15)
+	_interact_hint.visible=false
+	add_child(_interact_hint)
+const _PANEL_NAMES:Dictionary={"sort":"Sorting Table","furnace":"Furnace","sell":"Sell Point","shop":"Shop"}
 func _on_proximity_enter(pid:String)->void:
 	_proximity_panel=pid
 	for p in _panels: p.visible=false
-	match pid:
-		"sort": sort_panel.visible=true; _sort_hint()
-		"furnace": furnace_panel.visible=true
-		"sell": sell_panel.visible=true; _sell()
-		"shop": shop_panel.visible=true; _shop()
+	_interact_hint.text="[E]  %s"%_PANEL_NAMES.get(pid,pid.to_upper())
+	_interact_hint.visible=true
 func _on_proximity_exit(pid:String)->void:
 	if _proximity_panel!=pid: return
 	_proximity_panel=""
-	match pid:
-		"sort": sort_panel.visible=false
-		"furnace": furnace_panel.visible=false
-		"sell": sell_panel.visible=false
-		"shop": shop_panel.visible=false
+	_interact_hint.visible=false
+	for p in _panels: p.visible=false
+func _unhandled_input(event:InputEvent)->void:
+	if _proximity_panel=="": return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode==KEY_E:
+		get_viewport().set_input_as_handled()
+		_open_proximity_panel()
+func _open_proximity_panel()->void:
+	var was:bool
+	match _proximity_panel:
+		"sort":
+			was=sort_panel.visible; for p in _panels: p.visible=false
+			if not was: sort_panel.visible=true; _sort_hint()
+		"furnace":
+			was=furnace_panel.visible; for p in _panels: p.visible=false
+			if not was: furnace_panel.visible=true
+		"sell":
+			was=sell_panel.visible; for p in _panels: p.visible=false
+			if not was: sell_panel.visible=true; _sell()
+		"shop":
+			was=shop_panel.visible; for p in _panels: p.visible=false
+			if not was: shop_panel.visible=true; _shop()
 func _sort_hint()->void:
 	GameManager.notification.emit("Sorting table — drag items to bins")
 func _process(delta:float)->void:
@@ -86,6 +114,15 @@ func _toggle(panel:Control)->void:
 	var was=panel.visible
 	for p in _panels: p.visible=false
 	panel.visible=not was
+func _show_panel(name:String)->void:
+	var map:={
+		"inv":inv_panel,"sort":sort_panel,"furnace":furnace_panel,
+		"shop":shop_panel,"forge":forge_panel,"stats":stats_panel
+	}
+	var panel:Control=map.get(name)
+	if panel: _toggle(panel)
+	if name=="stats": _stats()
+	elif name=="forge": _fshop()
 const ICON_CHARS:Dictionary={"can":"CAN","bolt":"BOLT","pipe":"PIPE","cable":"CBL","battery":"BAT","chip":"CHIP","coil":"COIL","motor":"MOT","gear":"GEAR","gold":"GOLD","crystal":"XTAL"}
 func _get_icon(id:String)->Texture2D:
 	var si=get_node_or_null("/root/ScrapIcons")

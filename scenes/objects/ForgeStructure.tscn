@@ -1,16 +1,24 @@
-[gd_scene load_steps=50 format=3]
+[gd_scene load_steps=53 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/textures/ground/forge_stone.webp" id="TexStone"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground/concrete_floor_diff.jpg" id="TexConcrDiff"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground/concrete_floor_nor.jpg" id="TexConcrNor"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground/concrete_floor_rough.jpg" id="TexConcrRough"]
 [ext_resource type="Texture2D" path="res://assets/textures/furnace_bg.jpg" id="TexFurnaceBg"]
 [ext_resource type="Texture2D" path="res://assets/textures/gt_01.jpg" id="TexGt01"]
 [ext_resource type="Texture2D" path="res://assets/textures/br_01.jpg" id="TexBr01"]
 [ext_resource type="Texture2D" path="res://assets/textures/forge_interior.jpg" id="TexForgeInt"]
 
 [sub_resource type="StandardMaterial3D" id="StoneMat"]
-albedo_color = Color(0.75, 0.68, 0.60, 1)
-albedo_texture = ExtResource("TexStone")
-roughness = 0.95
-uv1_scale = Vector3(3, 2, 1)
+albedo_color = Color(0.68, 0.62, 0.56, 1)
+albedo_texture = ExtResource("TexConcrDiff")
+normal_enabled = true
+normal_texture = ExtResource("TexConcrNor")
+normal_scale = 1.4
+roughness_texture = ExtResource("TexConcrRough")
+roughness = 0.88
+metallic = 0.04
+uv1_scale = Vector3(4, 3, 4)
 
 [sub_resource type="StandardMaterial3D" id="RoofMat"]
 albedo_color = Color(0.19, 0.12, 0.07, 1)

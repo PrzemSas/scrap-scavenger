@@ -27,7 +27,7 @@ func _process(delta:float)->void:
 		GameManager.add_ingot({"name":cfg.ingot,"value":int(_sm.get("sorted_value",_sm.get("value",1))*cfg.mult),"source":_sm.get("name","?")})
 		smelt_video.visible=false; smelt_video.stop()
 		AudioManager.play_smelt_done(); _uq()
-func _uq()->void: queue_l.text="QUEUE: %d/3"%_q.size()
+func _uq()->void: queue_l.text="QUEUE: %d/3"%_q.size(); GameManager.smelt_queue_changed.emit(_q.size())
 func load_mat(idx:int)->void:
 	if _q.size()>=3: return
 	if idx<0 or idx>=GameManager.sorted_materials.size(): return

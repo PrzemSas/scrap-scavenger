@@ -84,3 +84,11 @@ monitorable = false
 [node name="TriggerShape" type="CollisionShape3D" parent="ProximityZone"]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.0,0)
 shape = SubResource("FurnaceTrigger")
+
+[node name="QueueLabel" type="Label3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,3.0,0)
+billboard = 1
+text = "QUEUE 0/3"
+font_size = 20
+modulate = Color(1.0,0.55,0.1,1)
+visible = false

@@ -124,21 +124,38 @@ func play_collect_typed(id: String) -> void:
 		"crystal":  _beep_sweep(2200.0, 800.0, 0.45)            # kryształowy ton↓
 		_:          play_collect()
 func play_sell() -> void:
-	_beep(1200.0, 0.1)
+	# Dwa szybkie wznoszące tony — "ka-ching"
+	_beep_multi(600.0, 0.07, [1.0, 1.5])
+	await get_tree().create_timer(0.07).timeout
+	_beep_multi(900.0, 0.10, [1.0, 2.0])
 func play_sort_correct() -> void:
-	_beep(1000.0, 0.06)
+	# Krótki czysty ping w górę
+	_beep_sweep(700.0, 1100.0, 0.12)
 func play_sort_wrong() -> void:
-	_beep(200.0, 0.15)
+	# Niski brzęk — "nie"
+	_beep_multi(180.0, 0.18, [1.0, 1.5, 0.5])
 func play_smelt_done() -> void:
-	_beep(900.0, 0.08)
+	# Metaliczny klang z harmonicznymi
+	_beep_multi(520.0, 0.22, [1.0, 2.0, 3.0, 0.5])
 func play_upgrade() -> void:
-	_beep(700.0, 0.08)
+	# Trzy wznoszące tony
+	_beep(500.0, 0.06)
+	await get_tree().create_timer(0.06).timeout
+	_beep(700.0, 0.06)
+	await get_tree().create_timer(0.06).timeout
+	_beep(1000.0, 0.10)
 func play_error() -> void:
-	_beep(150.0, 0.2)
+	_beep_square(140.0, 0.2)
 func play_achievement() -> void:
-	_beep(1200.0, 0.1)
+	# Fanfara — cztery tony w górę
+	for freq in [600.0, 750.0, 900.0, 1200.0]:
+		_beep_multi(freq, 0.08, [1.0, 2.0])
+		await get_tree().create_timer(0.07).timeout
 func play_prestige() -> void:
-	_beep(600.0, 0.15)
+	# Długi sweep w górę + harmoniczne — dramatyczny efekt
+	_beep_sweep(300.0, 1800.0, 0.6)
+	await get_tree().create_timer(0.1).timeout
+	_beep_multi(900.0, 0.4, [1.0, 2.0, 3.0])
 func play_click() -> void:
 	_beep(600.0, 0.03)
 

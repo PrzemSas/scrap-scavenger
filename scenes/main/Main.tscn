@@ -38,8 +38,6 @@ radius = 2.5
 [sub_resource type="WorldBoundaryShape3D" id="FloorShape"]
 [sub_resource type="PlaneMesh" id="PM1"]
 size = Vector2(100,100)
-subdivide_width = 4
-subdivide_depth = 4
 
 [sub_resource type="StandardMaterial3D" id="GM1"]
 albedo_color = Color(0.92,0.88,0.84,1)

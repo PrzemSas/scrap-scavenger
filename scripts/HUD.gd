@@ -114,15 +114,15 @@ func _toggle(panel:Control)->void:
 	var was=panel.visible
 	for p in _panels: p.visible=false
 	panel.visible=not was
-func _show_panel(name:String)->void:
+func _show_panel(pid:String)->void:
 	var map:={
 		"inv":inv_panel,"sort":sort_panel,"furnace":furnace_panel,
 		"shop":shop_panel,"forge":forge_panel,"stats":stats_panel
 	}
-	var panel:Control=map.get(name)
+	var panel:Control=map.get(pid)
 	if panel: _toggle(panel)
-	if name=="stats": _stats()
-	elif name=="forge": _fshop()
+	if pid=="stats": _stats()
+	elif pid=="forge": _fshop()
 const ICON_CHARS:Dictionary={"can":"CAN","bolt":"BOLT","pipe":"PIPE","cable":"CBL","battery":"BAT","chip":"CHIP","coil":"COIL","motor":"MOT","gear":"GEAR","gold":"GOLD","crystal":"XTAL"}
 func _get_icon(id:String)->Texture2D:
 	var si=get_node_or_null("/root/ScrapIcons")

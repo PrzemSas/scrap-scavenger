@@ -18,9 +18,9 @@ func _ready() -> void:
 	if pd: pd.visible = false
 
 func _world_to_map(wx: float, wz: float) -> Vector2:
-	var map_rect := $MapBG.get_rect()
-	var nx := (wx / WORLD_HALF * 0.5 + 0.5) * map_rect.size.x
-	var ny := (wz / WORLD_HALF * 0.5 + 0.5) * map_rect.size.y
+	var map_rect: Rect2 = $MapBG.get_rect()
+	var nx: float = (wx / WORLD_HALF * 0.5 + 0.5) * map_rect.size.x
+	var ny: float = (wz / WORLD_HALF * 0.5 + 0.5) * map_rect.size.y
 	return map_rect.position + Vector2(nx, ny)
 
 func _process(delta: float) -> void:

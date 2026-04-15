@@ -43,6 +43,9 @@ var _was_on_floor:bool  = true
 
 func _ready() -> void:
 	add_to_group("player")
+	if SceneTransition.spawn_override != Vector3.ZERO:
+		global_position = SceneTransition.spawn_override
+		SceneTransition.spawn_override = Vector3.ZERO
 
 func _physics_process(delta: float) -> void:
 	var cam: Camera3D = get_viewport().get_camera_3d()

@@ -249,6 +249,7 @@ transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 1, 8)
 script = ExtResource("8")
 target_scene = "res://scenes/main/Main.tscn"
 label_text = "[E] Back to Junkyard"
+spawn_pos = Vector3(0, 0, 6)
 
 [node name="BackGateShape" type="CollisionShape3D" parent="BackGate"]
 shape = SubResource("GateShape")

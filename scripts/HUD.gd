@@ -86,7 +86,7 @@ func _on_proximity_exit(pid:String)->void:
 	for p in _panels: p.visible=false
 func _unhandled_input(event:InputEvent)->void:
 	if _proximity_panel=="": return
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode==KEY_E:
+	if event.is_action_pressed("interact") or event.is_action_pressed("ui_accept"):
 		get_viewport().set_input_as_handled()
 		_open_proximity_panel()
 func _open_proximity_panel()->void:

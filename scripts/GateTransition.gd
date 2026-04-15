@@ -2,6 +2,7 @@ extends Area3D
 
 @export var target_scene: String = ""
 @export var label_text: String = "[E] Enter"
+@export var spawn_pos: Vector3 = Vector3.ZERO
 
 var _player_inside: bool = false
 
@@ -21,6 +22,7 @@ func _on_body_exited(body: Node3D) -> void:
 
 func _process(_delta: float) -> void:
 	if _player_inside and target_scene != "":
-		if Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_E):
+		if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("interact"):
 			GameManager.pile_hint_changed.emit("")
+			SceneTransition.spawn_override = spawn_pos
 			SceneTransition.go(target_scene)

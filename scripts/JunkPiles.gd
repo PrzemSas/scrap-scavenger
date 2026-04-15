@@ -122,7 +122,7 @@ func _process(delta: float) -> void:
 
 	# E key
 	if _in_range and _nearest != null and _nearest.cooldown <= 0.0:
-		if Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_E):
+		if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("interact"):
 			_start_search(_nearest)
 
 func _start_search(pd: PileData) -> void:

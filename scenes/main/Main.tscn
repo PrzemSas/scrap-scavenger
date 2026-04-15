@@ -198,6 +198,7 @@ transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 1, 9)
 script = ExtResource("25")
 target_scene = "res://scenes/main/ForgeInterior.tscn"
 label_text = "[E] Enter Forge"
+spawn_pos = Vector3(0, 0, 5)
 
 [node name="ForgeGateShape" type="CollisionShape3D" parent="ForgeGate"]
 shape = SubResource("GateShape")

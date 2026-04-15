@@ -6,6 +6,7 @@ extends CanvasLayer
 var _overlay: ColorRect
 var _fading: bool = false
 var _target_scene: String = ""
+var spawn_override: Vector3 = Vector3.ZERO
 
 func _ready() -> void:
 	layer = 100

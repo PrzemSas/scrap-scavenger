@@ -67,8 +67,16 @@ func _process(delta: float) -> void:
 	_env.ambient_light_color  = amb
 	_env.ambient_light_energy = lerpf(0.20, 0.55, maxf(sin(_time * PI), 0.0))
 
-	# Mgła — gęstsza w nocy
+	# Mgła — gęstsza w nocy + bonus od pogody
 	var fog_night := Color(0.01, 0.01, 0.04)
 	var fog_day   := Color(0.45, 0.16, 0.03)
 	_env.fog_light_color = fog_night.lerp(fog_day, maxf(sin(_time * PI), 0.0))
-	_env.fog_density     = lerpf(0.028, 0.014, maxf(sin(_time * PI), 0.0))
+	var base_fog := lerpf(0.028, 0.014, maxf(sin(_time * PI), 0.0))
+	var ws := get_node_or_null("/root/WeatherSystem")
+	var weather_fog := 0.0
+	if ws:
+		match ws.current_weather:
+			"foggy": weather_fog = 0.045
+			"rain":  weather_fog = 0.012
+			"storm": weather_fog = 0.020
+	_env.fog_density = base_fog + weather_fog

@@ -22,7 +22,10 @@ var _ev_bonus:float=1.0
 func _ready()->void:
 	for i in MAX_ITEMS: spawn_random()
 func _process(delta:float)->void:
-	if get_child_count()<MAX_ITEMS:
+	var ws=get_node_or_null("/root/WeatherSystem")
+	var spawn_mult:float=ws.get_spawn_mult() if ws else 1.0
+	var max_now:int=int(MAX_ITEMS*spawn_mult)
+	if get_child_count()<max_now:
 		_rt+=delta
 		if _rt>=0.8: _rt=0.0; spawn_random()
 	if _ev_active:
@@ -54,5 +57,8 @@ func _roll_scrap()->Dictionary:
 		for s in scrap_types:
 			if s.rarity==picked.rarity+1: picked=s; break
 	var result=picked.duplicate()
-	if _ev_active: result["value"]=int(result["value"]*_ev_bonus)
+	var ws=get_node_or_null("/root/WeatherSystem")
+	var val_mult:float=ws.get_value_mult() if ws else 1.0
+	if _ev_active: val_mult*=_ev_bonus
+	result["value"]=int(result["value"]*val_mult)
 	return result

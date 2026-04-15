@@ -24,10 +24,4 @@ func _on_weather(weather: String) -> void:
 		rain_particles.amount = 80
 		rain_particles.initial_velocity_min = 5.0
 		rain_particles.initial_velocity_max = 7.0
-	# Fog handled by environment
-	var env_node = get_tree().current_scene.get_node_or_null("WorldEnvironment")
-	if env_node and env_node.environment:
-		if _target_fog:
-			env_node.environment.fog_density = 0.05
-		else:
-			env_node.environment.fog_density = 0.01
+	# Mgła zarządzana przez DayNightCycle — nie dotykamy tu fog_density

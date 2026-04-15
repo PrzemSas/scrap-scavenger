@@ -15,7 +15,8 @@ var weather_types: Array = [
 ]
 
 func _ready() -> void:
-	_set_weather("clear")
+	current_weather = "clear"
+	weather_changed.emit("clear")
 
 func _process(delta: float) -> void:
 	_timer += delta

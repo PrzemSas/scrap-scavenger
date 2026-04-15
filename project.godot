@@ -29,6 +29,7 @@ CraftingManager="*res://scripts/CraftingManager.gd"
 LeaderboardManager="*res://scripts/autoload/LeaderboardManager.gd"
 ScrapIcons="*res://scripts/autoload/ScrapIcons.gd"
 SceneTransition="*res://scripts/autoload/SceneTransition.gd"
+WeatherSystem="*res://scripts/WeatherSystem.gd"
 
 [input]
 

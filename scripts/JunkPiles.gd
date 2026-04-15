@@ -27,8 +27,9 @@ var _mat_depleted: StandardMaterial3D
 
 func _ready() -> void:
 	_mat_depleted = StandardMaterial3D.new()
-	_mat_depleted.albedo_color = Color(0.12, 0.12, 0.12, 1.0)
+	_mat_depleted.albedo_color = Color(0.28, 0.18, 0.12, 1.0)
 	_mat_depleted.roughness = 1.0
+	_mat_depleted.metallic = 0.0
 
 	for child in get_children():
 		if not (child is MeshInstance3D):

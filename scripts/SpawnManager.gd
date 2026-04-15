@@ -4,16 +4,16 @@ const WORLD_HALF:=44.0
 const MAX_ITEMS:=65
 var scrap_types:Array=[
 	{"id":"can","name":"Aluminum Can","value":1,"rarity":0,"weight":35},
-	{"id":"bolt","name":"Bolt","value":1,"rarity":0,"weight":25},
-	{"id":"pipe","name":"Steel Pipe","value":3,"rarity":0,"weight":15},
-	{"id":"cable","name":"Copper Cable","value":5,"rarity":1,"weight":12},
-	{"id":"battery","name":"Battery","value":8,"rarity":1,"weight":8},
-	{"id":"chip","name":"CPU Chip","value":12,"rarity":1,"weight":6},
-	{"id":"coil","name":"Copper Coil","value":7,"rarity":1,"weight":9},
-	{"id":"motor","name":"Motor","value":15,"rarity":2,"weight":4},
-	{"id":"gear","name":"Titanium Gear","value":25,"rarity":2,"weight":3},
-	{"id":"gold","name":"Gold Part","value":50,"rarity":3,"weight":1},
-	{"id":"crystal","name":"Forge Crystal","value":100,"rarity":3,"weight":0.5},
+	{"id":"bolt","name":"Bolt","value":2,"rarity":0,"weight":25},
+	{"id":"pipe","name":"Steel Pipe","value":4,"rarity":0,"weight":15},
+	{"id":"cable","name":"Copper Cable","value":6,"rarity":1,"weight":12},
+	{"id":"battery","name":"Battery","value":10,"rarity":1,"weight":8},
+	{"id":"chip","name":"CPU Chip","value":15,"rarity":1,"weight":6},
+	{"id":"coil","name":"Copper Coil","value":8,"rarity":1,"weight":9},
+	{"id":"motor","name":"Motor","value":20,"rarity":2,"weight":4},
+	{"id":"gear","name":"Titanium Gear","value":35,"rarity":2,"weight":3},
+	{"id":"gold","name":"Gold Part","value":60,"rarity":3,"weight":1},
+	{"id":"crystal","name":"Forge Crystal","value":120,"rarity":3,"weight":0.5},
 ]
 var _rt:float=0.0
 var _ev_active:bool=false

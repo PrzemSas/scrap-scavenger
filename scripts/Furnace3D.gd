@@ -20,4 +20,4 @@ func _on_queue_changed(size:int)->void:
 	var lbl=get_node_or_null("QueueLabel")
 	if not lbl: return
 	lbl.visible=size>0
-	lbl.text="QUEUE %d/3"%size
+	lbl.text="QUEUE %d/%d"%[size,GameManager.get_smelt_queue_max()]

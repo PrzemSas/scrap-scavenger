@@ -123,7 +123,7 @@ func _process(delta:float)->void:
 			for bid in sort_bins:
 				if item.get("id","") in sort_bins[bid]: cb=bid; break
 			if cb!="":
-				if randf()<0.85: try_sort(0,cb)
+				if randf()<0.93: try_sort(0,cb)
 				else: var ks=sort_bins.keys(); try_sort(0,ks[randi()%ks.size()])
 func add_coins(amount:int)->void:
 	var b:float=(1.0+forge_tokens*0.1)*(1.0+forge_purchases.get("income_boost",0)*0.1)
@@ -189,6 +189,7 @@ func buy_forge_item(fid:String)->bool:
 		"ground_rust": current_ground="rust"; ground_changed.emit("rust")
 		"ground_ash": current_ground="ash"; ground_changed.emit("ash")
 		"ground_gold": current_ground="gold"; ground_changed.emit("gold")
+		"third_furnace": smelt_queue_changed.emit(get_smelt_queue_max())
 	notification.emit("Forge: %s"%c.get("desc","")); forge_item_purchased.emit(fid); return true
 func can_prestige()->bool: return lifetime_coins>=50000
 func get_prestige_tokens()->int:
@@ -212,6 +213,8 @@ func _check_achievements()->void:
 		if expr.parse(ach.check,_names)!=OK: continue
 		if expr.execute(_vals)==true:
 			achievements_unlocked.append(ach.id); achievement_unlocked.emit(ach.id); notification.emit("🏆 %s"%ach.name)
+func get_smelt_queue_max()->int:
+	return 3+upgrades.get("second_furnace",0)*2+forge_purchases.get("third_furnace",0)*2
 func get_accuracy()->int:
 	if total_sorted==0: return 0
 	return int(float(correct_sorted)/float(total_sorted)*100.0)

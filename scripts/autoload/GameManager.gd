@@ -125,8 +125,9 @@ func _process(delta:float)->void:
 			if cb!="":
 				if randf()<0.93: try_sort(0,cb)
 				else: var ks=sort_bins.keys(); try_sort(0,ks[randi()%ks.size()])
+var combo_mult:float=1.0
 func add_coins(amount:int)->void:
-	var b:float=(1.0+forge_tokens*0.1)*(1.0+forge_purchases.get("income_boost",0)*0.1)
+	var b:float=(1.0+forge_tokens*0.1)*(1.0+forge_purchases.get("income_boost",0)*0.1)*combo_mult
 	coins+=int(amount*b); lifetime_coins+=int(amount*b); coins_changed.emit(coins)
 func spend_coins(amount:int)->bool:
 	if coins>=amount: coins-=amount; coins_changed.emit(coins); return true

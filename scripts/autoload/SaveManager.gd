@@ -12,6 +12,11 @@ func _process(delta: float) -> void:
 		_timer = 0.0
 		save_game()
 
+func _get_crafted() -> Array:
+	var cm := get_node_or_null("/root/CraftingManager")
+	if cm: return cm.get("crafted_items") if cm.get("crafted_items") != null else []
+	return []
+
 func save_game() -> void:
 	var d = {
 		"coins": GameManager.coins, "lifetime_coins": GameManager.lifetime_coins,
@@ -32,6 +37,7 @@ func save_game() -> void:
 		"best_daily_streak": GameManager.best_daily_streak,
 		"best_leaderboard_rank": GameManager.best_leaderboard_rank,
 		"timestamp": Time.get_unix_time_from_system(),
+		"crafted_items": _get_crafted(),
 	}
 	var f = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	if f:
@@ -74,6 +80,8 @@ func load_game() -> void:
 	GameManager.scrap_crown_crafted = d.get("scrap_crown_crafted", false)
 	GameManager.best_daily_streak = d.get("best_daily_streak", 0)
 	GameManager.best_leaderboard_rank = d.get("best_leaderboard_rank", 999)
+	var cm := get_node_or_null("/root/CraftingManager")
+	if cm: cm.set("crafted_items", d.get("crafted_items", []))
 	GameManager.coins_changed.emit(GameManager.coins)
 	GameManager.inventory_changed.emit()
 	GameManager.sorted_changed.emit()

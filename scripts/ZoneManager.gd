@@ -66,7 +66,7 @@ func _process(delta: float) -> void:
 	_env.ambient_light_color = JY_AMB_COL.lerp(FG_AMB_COL, _blend)
 	_env.ambient_light_energy = lerpf(JY_AMB_E, FG_AMB_E, _blend)
 	_env.fog_light_color = JY_FOG_COL.lerp(FG_FOG_COL, _blend)
-	_env.fog_density = lerpf(JY_FOG_D, FG_FOG_D, _blend)
+	# fog_density zarządzane przez DayNightCycle — nie dotykamy
 	_env.glow_intensity = lerpf(JY_GLOW, FG_GLOW, _blend)
 	if _sun:
 		_sun.light_energy = lerpf(JY_SUN, FG_SUN, _blend)

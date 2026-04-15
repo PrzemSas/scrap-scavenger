@@ -2,7 +2,7 @@ extends Node3D
 
 const SEARCH_TIME := 2.0   # sekundy szukania
 const COOLDOWN    := 30.0  # cooldown po przeszukaniu
-const SPAWN_COUNT := 3     # ile itemów wypada
+const SPAWN_COUNT := 5     # ile itemów wypada
 const RANGE       := 4.0   # zasięg wykrycia gracza
 
 const SCRAP_SCENE = preload("res://scenes/objects/ScrapItem.tscn")

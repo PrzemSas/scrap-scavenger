@@ -1,7 +1,7 @@
 extends Node3D
 const SCRAP_SCENE=preload("res://scenes/objects/ScrapItem.tscn")
 const WORLD_HALF:=44.0
-const MAX_ITEMS:=35
+const MAX_ITEMS:=65
 var scrap_types:Array=[
 	{"id":"can","name":"Aluminum Can","value":1,"rarity":0,"weight":35},
 	{"id":"bolt","name":"Bolt","value":1,"rarity":0,"weight":25},

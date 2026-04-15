@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3]
+[gd_scene load_steps=44 format=3]
 
 [ext_resource type="Script" path="res://scripts/ScatterProps.gd" id="1"]
 [ext_resource type="PackedScene" path="res://assets/models/polyhaven/Barrel_01/Barrel_01_2k.glb" id="2"]
@@ -26,6 +26,23 @@
 [ext_resource type="PackedScene" path="res://assets/models/polyhaven/small_lpg_tank/small_lpg_tank_2k.glb" id="24"]
 [ext_resource type="PackedScene" path="res://assets/models/kenney/furniture-kit/Models/GLTF format/cardboardBoxClosed.glb" id="25"]
 [ext_resource type="PackedScene" path="res://assets/models/kenney/furniture-kit/Models/GLTF format/cardboardBoxOpen.glb" id="26"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/modular_pipes/modular_pipes_2k.glb" id="27"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/city-kit-industrial/Models/GLB format/chimney-large.glb" id="28"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/city-kit-industrial/Models/GLB format/chimney-medium.glb" id="29"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/city-kit-industrial/Models/GLB format/building-c.glb" id="30"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/city-kit-industrial/Models/GLB format/building-d.glb" id="31"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/city-kit-industrial/Models/GLB format/building-e.glb" id="32"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/city-kit-industrial/Models/GLB format/building-f.glb" id="33"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/city-kit-industrial/Models/GLB format/building-g.glb" id="34"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/city-kit-industrial/Models/GLB format/chimney-basic.glb" id="35"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/furniture-kit/Models/GLTF format/televisionVintage.glb" id="36"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/furniture-kit/Models/GLTF format/kitchenFridge.glb" id="37"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/furniture-kit/Models/GLTF format/bathtub.glb" id="38"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/furniture-kit/Models/GLTF format/washer.glb" id="39"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/furniture-kit/Models/GLTF format/loungeSofa.glb" id="40"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/furniture-kit/Models/GLTF format/kitchenStove.glb" id="41"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/furniture-kit/Models/GLTF format/radio.glb" id="42"]
+[ext_resource type="PackedScene" path="res://assets/models/kenney/furniture-kit/Models/GLTF format/trashcan.glb" id="43"]
 
 [node name="ScatterProps" type="Node3D"]
 script = ExtResource("1")
@@ -191,3 +208,291 @@ transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 17.5, 0, 38.5)
 
 [node name="CardboxClosed_04" parent="." instance=ExtResource("25")]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -42, 0, -22)
+
+[node name="Barrel_NW_01" parent="." instance=ExtResource("2")]
+transform = Transform3D(0.95,0,0.3, 0,1,0, -0.3,0,0.95, -22, 0, -38)
+
+[node name="Barrel_NW_02" parent="." instance=ExtResource("3")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -23.5, 0, -39.2)
+
+[node name="Barrel_NW_03" parent="." instance=ExtResource("4")]
+transform = Transform3D(0.9,0,-0.4, 0,1,0, 0.4,0,0.9, -24.8, 0, -37.5)
+
+[node name="Pipes_NW" parent="." instance=ExtResource("9")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -30, 0, -36)
+
+[node name="Pipes_NW2" parent="." instance=ExtResource("27")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -36, 0, -28)
+
+[node name="Tire_NW_01" parent="." instance=ExtResource("6")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -35, 0, -20)
+
+[node name="Tire_NW_02" parent="." instance=ExtResource("6")]
+transform = Transform3D(0.8,0,0.6, 0,1,0, -0.6,0,0.8, -36.5, 0, -21.5)
+
+[node name="TrashCan_NW" parent="." instance=ExtResource("10")]
+transform = Transform3D(0.9,0,0.4, 0,1,0, -0.4,0,0.9, -28, 0, -28)
+
+[node name="Building_C" parent="." instance=ExtResource("30")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -43, 0, -43)
+
+[node name="ChimneyLarge_NW" parent="." instance=ExtResource("28")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -38, 0, -40)
+
+[node name="SmallLPG_NW" parent="." instance=ExtResource("24")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, -20, 0, -30)
+
+[node name="Barrel_NE_01" parent="." instance=ExtResource("2")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 38, 0, -22)
+
+[node name="Barrel_NE_02" parent="." instance=ExtResource("3")]
+transform = Transform3D(0.95,0,0.3, 0,1,0, -0.3,0,0.95, 39.5, 0, -23)
+
+[node name="Pipes_NE" parent="." instance=ExtResource("9")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 28, 0, -38)
+
+[node name="Pipes_NE2" parent="." instance=ExtResource("27")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, 36, 0, -32)
+
+[node name="Tire_NE_01" parent="." instance=ExtResource("6")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 32, 0, -32)
+
+[node name="Tire_NE_02" parent="." instance=ExtResource("6")]
+transform = Transform3D(0.7,0,0.7, 0,1,0, -0.7,0,0.7, 33.5, 0, -30.5)
+
+[node name="Building_D" parent="." instance=ExtResource("31")]
+transform = Transform3D(-1,0,0, 0,1,0, 0,0,-1, 42, 0, -43)
+
+[node name="ChimneyMedium_NE" parent="." instance=ExtResource("29")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 36, 0, -38)
+
+[node name="Tire_SE_01" parent="." instance=ExtResource("6")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 30, 0, 30)
+
+[node name="Tire_SE_02" parent="." instance=ExtResource("6")]
+transform = Transform3D(0.9,0,0.4, 0,1,0, -0.4,0,0.9, 31.5, 0, 31.5)
+
+[node name="Barrel_SE_01" parent="." instance=ExtResource("4")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 38, 0, 28)
+
+[node name="Barrel_SE_02" parent="." instance=ExtResource("2")]
+transform = Transform3D(0.9,0,-0.4, 0,1,0, 0.4,0,0.9, 39.5, 0, 29.5)
+
+[node name="TrashCan_SE_01" parent="." instance=ExtResource("10")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 35, 0, 38)
+
+[node name="TrashCan_SE_02" parent="." instance=ExtResource("10")]
+transform = Transform3D(0.95,0,0.3, 0,1,0, -0.3,0,0.95, 36.5, 0, 38.8)
+
+[node name="Pipes_SE" parent="." instance=ExtResource("27")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 25, 0, 38)
+
+[node name="ChimneyMedium_SE" parent="." instance=ExtResource("29")]
+transform = Transform3D(-1,0,0, 0,1,0, 0,0,-1, 40, 0, 42)
+
+[node name="Barrel_SW_01" parent="." instance=ExtResource("2")]
+transform = Transform3D(0.8,0,0.6, 0,1,0, -0.6,0,0.8, -25, 0, 40)
+
+[node name="Barrel_SW_02" parent="." instance=ExtResource("3")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -26.5, 0, 41.5)
+
+[node name="Pipes_SW" parent="." instance=ExtResource("9")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, -38, 0, 28)
+
+[node name="Pipes_SW2" parent="." instance=ExtResource("27")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -32, 0, 38)
+
+[node name="Tire_SW_01" parent="." instance=ExtResource("6")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -30, 0, 38)
+
+[node name="ChimneyLarge_SW" parent="." instance=ExtResource("28")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, -35, 0, 36)
+
+[node name="Fence_05" parent="." instance=ExtResource("15")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -42, 0, 10)
+
+[node name="Fence_06" parent="." instance=ExtResource("15")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -42, 0, 15)
+
+[node name="Fence_07" parent="." instance=ExtResource("15")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -42, 0, 20)
+
+[node name="Cables_02" parent="." instance=ExtResource("16")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -22, 0, 12)
+
+[node name="Cables_03" parent="." instance=ExtResource("16")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 18, 0, 28)
+
+[node name="Airduct_03" parent="." instance=ExtResource("17")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, -28, 0, 18)
+
+[node name="PropaneTank_03" parent="." instance=ExtResource("14")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -14, 0, 22)
+
+[node name="PowerBox_02" parent="." instance=ExtResource("13")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 22, 0, -18)
+
+[node name="Box_NE_01" parent="." instance=ExtResource("11")]
+transform = Transform3D(0.9,0,0.4, 0,1,0, -0.4,0,0.9, 26, 0, -40)
+
+[node name="Box_NE_02" parent="." instance=ExtResource("11")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 27, 0.45, -40.3)
+
+[node name="Crowbar_05" parent="." instance=ExtResource("22")]
+transform = Transform3D(0,0,1, 0.2,0.98,0, -0.98,0.2,0, -16, 0, 35)
+
+[node name="Crowbar_06" parent="." instance=ExtResource("22")]
+transform = Transform3D(0.7,0,-0.7, 0,1,0, 0.7,0,0.7, 38, 0, -40)
+
+[node name="PipeWrench_04" parent="." instance=ExtResource("23")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, -38, 0, -15)
+
+[node name="WheelRim_03" parent="." instance=ExtResource("7")]
+transform = Transform3D(0.7,0,0.7, 0,1,0, -0.7,0,0.7, 25, 0.1, -22)
+
+[node name="WheelRim_04" parent="." instance=ExtResource("8")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -20, 0.1, 28)
+
+[node name="Building_E" parent="." instance=ExtResource("32")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, -43, 0, 20)
+
+[node name="Building_F" parent="." instance=ExtResource("33")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 43, 0, 20)
+
+[node name="Building_G" parent="." instance=ExtResource("34")]
+transform = Transform3D(-1,0,0, 0,1,0, 0,0,-1, 0, 0, -44)
+
+[node name="ChimneyBasic_01" parent="." instance=ExtResource("35")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -30, 0, -42)
+
+[node name="ChimneyBasic_02" parent="." instance=ExtResource("35")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 10, 0, -44)
+
+[node name="ChimneyBasic_03" parent="." instance=ExtResource("35")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 44, 0, 10)
+
+[node name="ChimneyBasic_04" parent="." instance=ExtResource("35")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -10, 0, 44)
+
+[node name="TV_01" parent="." instance=ExtResource("36")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -8, 0, -28)
+
+[node name="TV_02" parent="." instance=ExtResource("36")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, -9.5, 0, -27.5)
+
+[node name="TV_03" parent="." instance=ExtResource("36")]
+transform = Transform3D(-1,0,0, 0,1,0, 0,0,-1, 20, 0, 18)
+
+[node name="Fridge_01" parent="." instance=ExtResource("37")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -6, 0, -29)
+
+[node name="Fridge_02" parent="." instance=ExtResource("37")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 22, 0, 20)
+
+[node name="Bathtub_01" parent="." instance=ExtResource("38")]
+transform = Transform3D(0.9,0,0.4, 0,1,0, -0.4,0,0.9, -5, 0, -32)
+
+[node name="Bathtub_02" parent="." instance=ExtResource("38")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, 28, 0, -20)
+
+[node name="Washer_01" parent="." instance=ExtResource("39")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -7, 0, -28.5)
+
+[node name="Washer_02" parent="." instance=ExtResource("39")]
+transform = Transform3D(-1,0,0, 0,1,0, 0,0,-1, -32, 0, 15)
+
+[node name="Sofa_01" parent="." instance=ExtResource("40")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 18, 0, 24)
+
+[node name="Sofa_02" parent="." instance=ExtResource("40")]
+transform = Transform3D(0.7,0,-0.7, 0,1,0, 0.7,0,0.7, -25, 0, -12)
+
+[node name="Sofa_03" parent="." instance=ExtResource("40")]
+transform = Transform3D(-1,0,0, 0,1,0, 0,0,-1, 12, 0, 36)
+
+[node name="Stove_01" parent="." instance=ExtResource("41")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, -8.5, 0, -27)
+
+[node name="Stove_02" parent="." instance=ExtResource("41")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 24, 0, 22)
+
+[node name="Radio_01" parent="." instance=ExtResource("42")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -7.5, 0, -30)
+
+[node name="Radio_02" parent="." instance=ExtResource("42")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 15, 0, -28)
+
+[node name="Radio_03" parent="." instance=ExtResource("42")]
+transform = Transform3D(0.8,0,-0.6, 0,1,0, 0.6,0,0.8, -18, 0, 25)
+
+[node name="Trashcan_A" parent="." instance=ExtResource("43")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -10, 0, -25)
+
+[node name="Trashcan_B" parent="." instance=ExtResource("43")]
+transform = Transform3D(0.95,0,0.3, 0,1,0, -0.3,0,0.95, -11.2, 0, -24.5)
+
+[node name="Trashcan_C" parent="." instance=ExtResource("43")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 15, 0, 30)
+
+[node name="Trashcan_D" parent="." instance=ExtResource("43")]
+transform = Transform3D(-1,0,0, 0,1,0, 0,0,-1, -15, 0, 12)
+
+[node name="Trashcan_E" parent="." instance=ExtResource("43")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 26, 0, -14)
+
+[node name="Tire_Stack_01" parent="." instance=ExtResource("6")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -18, 0, -12)
+
+[node name="Tire_Stack_02" parent="." instance=ExtResource("6")]
+transform = Transform3D(1,0,0, 0,0.3,0.95, 0,-0.95,0.3, -18, 0.7, -12)
+
+[node name="Tire_Stack_03" parent="." instance=ExtResource("6")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -18, 1.4, -12)
+
+[node name="Tire_Stack_04" parent="." instance=ExtResource("6")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 26, 0, 8)
+
+[node name="Tire_Stack_05" parent="." instance=ExtResource("6")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 26, 0.7, 8)
+
+[node name="Tire_Stack_06" parent="." instance=ExtResource("6")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 26, 1.4, 8)
+
+[node name="Barrel_Cluster_01" parent="." instance=ExtResource("2")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 14, 0, -12)
+
+[node name="Barrel_Cluster_02" parent="." instance=ExtResource("3")]
+transform = Transform3D(0.9,0,0.4, 0,1,0, -0.4,0,0.9, 15.2, 0, -12.8)
+
+[node name="Barrel_Cluster_03" parent="." instance=ExtResource("4")]
+transform = Transform3D(0.95,0,-0.3, 0,1,0, 0.3,0,0.95, 13.5, 0, -14)
+
+[node name="Barrel_Cluster_04" parent="." instance=ExtResource("2")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 14.8, 0.9, -13)
+
+[node name="Barrel_Cluster_05" parent="." instance=ExtResource("3")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -20, 0, 8)
+
+[node name="Barrel_Cluster_06" parent="." instance=ExtResource("4")]
+transform = Transform3D(0.9,0,0.4, 0,1,0, -0.4,0,0.9, -21.2, 0, 9)
+
+[node name="Barrel_Cluster_07" parent="." instance=ExtResource("2")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -19.5, 0.9, 8.5)
+
+[node name="WheelRim_05" parent="." instance=ExtResource("7")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, -24, 0.1, -8)
+
+[node name="WheelRim_06" parent="." instance=ExtResource("8")]
+transform = Transform3D(0.7,0,0.7, 0,1,0, -0.7,0,0.7, -22, 0.1, -8.5)
+
+[node name="WheelRim_07" parent="." instance=ExtResource("7")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 10, 0.1, 30)
+
+[node name="Tank_04" parent="." instance=ExtResource("18")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -38, 0, 5)
+
+[node name="Tank_05" parent="." instance=ExtResource("18")]
+transform = Transform3D(0,0,1, 0,1,0, -1,0,0, 15, 0, 42)
+
+[node name="Tank_06" parent="." instance=ExtResource("18")]
+transform = Transform3D(0,0,-1, 0,1,0, 1,0,0, -5, 0, 42)

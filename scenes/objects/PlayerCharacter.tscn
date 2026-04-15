@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://scripts/PlayerCharacter.gd" id="1"]
 
@@ -50,6 +50,21 @@ size = Vector3(0.13, 0.16, 0.11)
 albedo_color = Color(0.78, 0.32, 0.04, 1)
 roughness = 0.85
 
+[sub_resource type="BoxMesh" id="LegMesh"]
+size = Vector3(0.14, 0.38, 0.14)
+
+[sub_resource type="BoxMesh" id="BootMesh"]
+size = Vector3(0.17, 0.12, 0.22)
+
+[sub_resource type="StandardMaterial3D" id="LegMat"]
+albedo_color = Color(0.18, 0.14, 0.10, 1)
+roughness = 0.96
+
+[sub_resource type="StandardMaterial3D" id="BootMat"]
+albedo_color = Color(0.10, 0.09, 0.08, 1)
+metallic = 0.25
+roughness = 0.88
+
 [sub_resource type="CapsuleShape3D" id="ColShape"]
 radius = 0.28
 height = 1.2
@@ -93,6 +108,26 @@ surface_material_override/0 = SubResource("GloveMat")
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0.36,0.50,0)
 mesh = SubResource("GloveRMesh")
 surface_material_override/0 = SubResource("GloveMat")
+
+[node name="LegL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-0.13,0.19,0)
+mesh = SubResource("LegMesh")
+surface_material_override/0 = SubResource("LegMat")
+
+[node name="LegR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0.13,0.19,0)
+mesh = SubResource("LegMesh")
+surface_material_override/0 = SubResource("LegMat")
+
+[node name="BootL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-0.13,0.04,0.03)
+mesh = SubResource("BootMesh")
+surface_material_override/0 = SubResource("BootMat")
+
+[node name="BootR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0.13,0.04,0.03)
+mesh = SubResource("BootMesh")
+surface_material_override/0 = SubResource("BootMat")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.6,0)

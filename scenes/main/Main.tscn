@@ -66,14 +66,14 @@ emission = Color(0.06,0.02,0.002,1)
 emission_energy_multiplier = 0.7
 uv1_scale = Vector3(3,3,3)
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
-sky_top_color = Color(0.06, 0.04, 0.14, 1)
-sky_horizon_color = Color(0.88, 0.28, 0.04, 1)
-sky_curve = 0.18
-sky_energy_multiplier = 1.2
-ground_bottom_color = Color(0.02, 0.01, 0.01, 1)
-ground_horizon_color = Color(0.28, 0.08, 0.02, 1)
-ground_curve = 0.03
-ground_energy_multiplier = 1.0
+sky_top_color = Color(0.28, 0.38, 0.60, 1)
+sky_horizon_color = Color(0.90, 0.55, 0.22, 1)
+sky_curve = 0.22
+sky_energy_multiplier = 1.6
+ground_bottom_color = Color(0.08, 0.06, 0.04, 1)
+ground_horizon_color = Color(0.35, 0.18, 0.06, 1)
+ground_curve = 0.05
+ground_energy_multiplier = 1.2
 sun_angle_max = 32.0
 sun_curve = 0.08
 
@@ -84,8 +84,8 @@ sky_material = SubResource("SkyMat")
 background_mode = 2
 sky = SubResource("Sky1")
 ambient_light_source = 2
-ambient_light_color = Color(0.22, 0.10, 0.04, 1)
-ambient_light_energy = 0.55
+ambient_light_color = Color(0.45, 0.32, 0.18, 1)
+ambient_light_energy = 1.1
 glow_enabled = true
 glow_intensity = 0.85
 glow_bloom = 0.12
@@ -100,14 +100,14 @@ fov = 50.0
 script = ExtResource("4")
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.85,0,0.53, 0.27,0.87,-0.42, -0.46,0.50,0.74, 0,0,0)
-light_color = Color(1.0, 0.55, 0.15, 1)
-light_energy = 1.1
+light_color = Color(1.0, 0.72, 0.35, 1)
+light_energy = 2.0
 shadow_enabled = true
 script = ExtResource("7")
 [node name="FillLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8,0,-0.6, 0.2,0.94,-0.27, 0.57,-0.34,-0.75, 0,0,0)
-light_color = Color(0.25, 0.30, 0.55, 1)
-light_energy = 0.18
+light_color = Color(0.35, 0.42, 0.70, 1)
+light_energy = 0.45
 [node name="ForgeLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,3,0)
 light_color = Color(1,0.5,0.1,1)

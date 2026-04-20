@@ -43,7 +43,7 @@ func _ready() -> void:
 	_skip_btn.pressed.connect(_finish)
 
 func _show_step() -> void:
-	var s := STEPS[_step]
+	var s: Dictionary = STEPS[_step]
 	_text.text = s["text"]
 	_counter.text = "%d / %d" % [_step + 1, STEPS.size()]
 	_next_btn.text = "Finish!" if _step == STEPS.size() - 1 else "Next ▶"

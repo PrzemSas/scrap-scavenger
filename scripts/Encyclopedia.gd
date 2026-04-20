@@ -32,7 +32,7 @@ func _build_display() -> void:
 	var rarity_names = ["Common", "Uncommon", "Rare", "Legendary"]
 	var rarity_colors = ["#888888", "#ff6a00", "#00e5ff", "#FFD700"]
 	var all_types = ["can", "bolt", "pipe", "cable", "battery", "motor", "gold"]
-	var all_names = {
+	var _all_names = {
 		"can": "Aluminum Can", "bolt": "Bolt", "pipe": "Steel Pipe",
 		"cable": "Copper Cable", "battery": "Battery", "motor": "Motor", "gold": "Gold Part"
 	}

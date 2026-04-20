@@ -4,17 +4,26 @@ const S := 48
 var icons : Dictionary = {}
 
 func _ready() -> void:
-	_make("can",     Color("#2D5FA0"), _can)
-	_make("bolt",    Color("#555555"), _bolt)
-	_make("pipe",    Color("#404048"), _pipe)
-	_make("cable",   Color("#A04808"), _cable)
-	_make("battery", Color("#186818"), _battery)
-	_make("chip",    Color("#0A6868"), _chip)
-	_make("coil",    Color("#884010"), _coil)
-	_make("motor",   Color("#182848"), _motor)
-	_make("gear",    Color("#383838"), _gear)
-	_make("gold",    Color("#906000"), _gold)
-	_make("crystal", Color("#005870"), _crystal)
+	_make("can",           Color("#2D5FA0"), _can)
+	_make("bolt",          Color("#555555"), _bolt)
+	_make("pipe",          Color("#404048"), _pipe)
+	_make("cable",         Color("#A04808"), _cable)
+	_make("battery",       Color("#186818"), _battery)
+	_make("chip",          Color("#0A6868"), _chip)
+	_make("coil",          Color("#884010"), _coil)
+	_make("motor",         Color("#182848"), _motor)
+	_make("gear",          Color("#383838"), _gear)
+	_make("gold",          Color("#906000"), _gold)
+	_make("crystal",       Color("#005870"), _crystal)
+	_make("stone_chunk",   Color("#6E5E4A"), _stone_chunk)
+	_make("steel_beam",    Color("#3A4A5A"), _steel_beam)
+	_make("concrete_slab", Color("#5A5A50"), _concrete_slab)
+	_make("wiring",        Color("#7A3010"), _wiring)
+	_make("alloy_frame",   Color("#304050"), _alloy_frame)
+	_make("titanium_plate",Color("#505868"), _titanium_plate)
+	_make("nano_chip",     Color("#082838"), _nano_chip)
+	_make("reactor_core",  Color("#180820"), _reactor_core)
+	_make("scrap_drone",   Color("#182828"), _scrap_drone)
 
 func get_icon(id: String) -> Texture2D:
 	return icons.get(id, null)
@@ -192,15 +201,92 @@ func _gold(img: Image) -> void:
 	_rect(img, 24, 21, 29, 24, gl)
 
 func _crystal(img: Image) -> void:
-	# Hexagonal forge crystal
 	var c1 := Color("#00FFFF")
 	var c2 := Color("#40D0FF")
-	# top facet
 	_diamond(img, 24, 14, 8, c1)
-	# bottom facet
 	_diamond(img, 24, 34, 8, c2)
-	# middle band
 	_rect(img, 16, 18, 31, 30, Color("#20A8C8"))
-	# shine
 	_rect(img, 18, 19, 21, 24, Color("#AAFFFF"))
 	_rect(img, 19, 20, 20, 22, WW)
+
+func _stone_chunk(img: Image) -> void:
+	var c := Color("#C8B89A")
+	_diamond(img, 24, 24, 15, c)
+	_diamond(img, 18, 20, 8, Color("#B0A080"))
+	_diamond(img, 30, 28, 6, Color("#D0C0A0"))
+	_rect(img, 20, 18, 28, 30, c)
+
+func _steel_beam(img: Image) -> void:
+	var c := Color("#8899AA")
+	_rect(img, 10, 20, 38, 27, c)
+	_rect(img, 10, 20, 14, 37, c)
+	_rect(img, 34, 20, 38, 37, c)
+	_rect(img, 10, 33, 38, 37, c)
+
+func _concrete_slab(img: Image) -> void:
+	var c := Color("#AAAAAA")
+	_rect(img, 8, 16, 39, 32, c)
+	_rect(img, 8, 16, 39, 18, Color("#888888"))
+	for i in 3:
+		_rect(img, 8+i*11, 16, 9+i*11, 32, Color("#777777"))
+
+func _wiring(img: Image) -> void:
+	var c := Color("#FF8820")
+	for i in 3:
+		var oy := -6 + i * 6
+		for j in 20:
+			var t := float(j) / 19.0
+			var x := int(8 + t * 30)
+			var y := int(24 + oy + sin(t * PI * 3.0) * 4)
+			_circ(img, x, y, 2, c)
+
+func _alloy_frame(img: Image) -> void:
+	var c := Color("#88AACC")
+	_rect(img, 10, 10, 38, 14, c)
+	_rect(img, 10, 34, 38, 38, c)
+	_rect(img, 10, 10, 14, 38, c)
+	_rect(img, 34, 10, 38, 38, c)
+	_rect(img, 10, 23, 38, 25, Color("#6688AA"))
+
+func _titanium_plate(img: Image) -> void:
+	var c := Color("#C0C8D8")
+	_rect(img, 9, 13, 39, 35, c)
+	_rect(img, 9, 13, 39, 16, Color("#A0A8B8"))
+	for i in 4:
+		_rect(img, 9, 13+i*6, 39, 14+i*6, Color("#A0A8B8"))
+	_rect(img, 18, 20, 30, 28, Color("#D8E0F0"))
+
+func _nano_chip(img: Image) -> void:
+	var c := Color("#40D0FF")
+	_rect(img, 14, 14, 33, 33, Color("#082838"))
+	_rect(img, 17, 17, 30, 30, c)
+	_circ(img, 24, 24, 4, Color("#00FFFF"))
+	for i in range(3):
+		_rect(img, 6, 17+i*4, 14, 18+i*4, Color("#40D0FF"))
+		_rect(img, 33, 17+i*4, 41, 18+i*4, Color("#40D0FF"))
+		_rect(img, 17+i*4, 6, 18+i*4, 14, Color("#40D0FF"))
+
+func _reactor_core(img: Image) -> void:
+	_circ(img, 24, 24, 17, Color("#300818"))
+	_ring(img, 24, 24, 17, 13, Color("#FF2080"))
+	_ring(img, 24, 24, 11, 8, Color("#FF60C0"))
+	_circ(img, 24, 24, 6, Color("#FFAAFF"))
+	_circ(img, 24, 24, 3, WW)
+	for i in 6:
+		var angle := float(i) * TAU / 6.0
+		var x := int(24 + cos(angle) * 15)
+		var y := int(24 + sin(angle) * 15)
+		_circ(img, x, y, 2, Color("#FF80D0"))
+
+func _scrap_drone(img: Image) -> void:
+	var c := Color("#60D0D0")
+	_circ(img, 24, 24, 7, c)
+	_circ(img, 24, 24, 3, Color("#182828"))
+	_rect(img, 10, 22, 17, 25, Color("#408888"))
+	_rect(img, 31, 22, 38, 25, Color("#408888"))
+	_rect(img, 22, 10, 25, 17, Color("#408888"))
+	_rect(img, 22, 31, 25, 38, Color("#408888"))
+	_circ(img, 11, 11, 5, Color("#50C0C0"))
+	_circ(img, 37, 11, 5, Color("#50C0C0"))
+	_circ(img, 11, 37, 5, Color("#50C0C0"))
+	_circ(img, 37, 37, 5, Color("#50C0C0"))

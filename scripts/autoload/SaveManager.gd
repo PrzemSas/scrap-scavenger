@@ -34,8 +34,10 @@ func save_game() -> void:
 		"current_ground": GameManager.current_ground,
 		"total_crafted": GameManager.total_crafted,
 		"scrap_crown_crafted": GameManager.scrap_crown_crafted,
+		"building_materials": GameManager.building_materials,
 		"best_daily_streak": GameManager.best_daily_streak,
 		"best_leaderboard_rank": GameManager.best_leaderboard_rank,
+		"forge_stage": GameManager.forge_stage,
 		"timestamp": Time.get_unix_time_from_system(),
 		"crafted_items": _get_crafted(),
 	}
@@ -78,8 +80,11 @@ func load_game() -> void:
 	GameManager.current_ground = d.get("current_ground", "default")
 	GameManager.total_crafted = d.get("total_crafted", 0)
 	GameManager.scrap_crown_crafted = d.get("scrap_crown_crafted", false)
+	var bm = d.get("building_materials", {})
+	for k in GameManager.building_materials: GameManager.building_materials[k] = bm.get(k, 0)
 	GameManager.best_daily_streak = d.get("best_daily_streak", 0)
 	GameManager.best_leaderboard_rank = d.get("best_leaderboard_rank", 999)
+	GameManager.forge_stage = d.get("forge_stage", 0)
 	var cm := get_node_or_null("/root/CraftingManager")
 	if cm: cm.set("crafted_items", d.get("crafted_items", []))
 	GameManager.coins_changed.emit(GameManager.coins)

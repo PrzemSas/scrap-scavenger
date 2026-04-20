@@ -130,7 +130,7 @@ func _show_panel(pid:String)->void:
 	elif pid=="craft": _craft()
 	elif pid=="leaderboard": _leaderboard()
 	elif pid=="encyclopedia" and encyclopedia_panel.visible: encyclopedia_panel.show_encyclopedia()
-const ICON_CHARS:Dictionary={"can":"CAN","bolt":"BOLT","pipe":"PIPE","cable":"CBL","battery":"BAT","chip":"CHIP","coil":"COIL","motor":"MOT","gear":"GEAR","gold":"GOLD","crystal":"XTAL"}
+const ICON_CHARS:Dictionary={"can":"CAN","bolt":"BOLT","pipe":"PIPE","cable":"CBL","battery":"BAT","chip":"CHIP","coil":"COIL","motor":"MOT","gear":"GEAR","gold":"GOLD","crystal":"XTAL","stone_chunk":"STN","steel_beam":"STL","concrete_slab":"CON","wiring":"WIR","alloy_frame":"ALY","titanium_plate":"TIT","nano_chip":"NCH","reactor_core":"RCT","scrap_drone":"DRN"}
 func _get_icon(id:String)->Texture2D:
 	var si=get_node_or_null("/root/ScrapIcons")
 	if si: return si.get_icon(id)

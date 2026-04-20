@@ -1,0 +1,90 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ForgeExpansionPanel.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="BG"]
+bg_color = Color(0.04, 0.02, 0.01, 0.92)
+border_color = Color(1, 0.42, 0, 0.55)
+set_border_width_all = 2
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+content_margin_left = 14.0
+content_margin_right = 14.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="BtnBuild"]
+bg_color = Color(0.8, 0.35, 0.0, 0.9)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="ForgeExpansionPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -320.0
+offset_top = 60.0
+offset_right = -10.0
+offset_bottom = 340.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("BG")
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.42, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "🔨 PODZIEMNA KUŹNIA"
+
+[node name="Title" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.75, 0.4, 1)
+theme_override_font_sizes/font_size = 12
+text = "Buduj:"
+
+[node name="StageLabel" type="RichTextLabel" parent="Panel/VBox"]
+layout_mode = 2
+fit_content = true
+bbcode_enabled = true
+theme_override_font_sizes/normal_font_size = 11
+theme_override_colors/default_color = Color(0.75, 0.75, 0.75, 1)
+text = "Stan:"
+
+[node name="Separator" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="ReqList" type="VBoxContainer" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="BuildBtn" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 34)
+theme_override_styles/normal = SubResource("BtnBuild")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "🔨 Buduj"
+
+[node name="DoneLabel" type="RichTextLabel" parent="Panel/VBox"]
+layout_mode = 2
+fit_content = true
+bbcode_enabled = true
+theme_override_font_sizes/normal_font_size = 11
+visible = false
+text = ""

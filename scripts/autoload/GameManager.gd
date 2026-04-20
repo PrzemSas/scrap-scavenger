@@ -38,6 +38,19 @@ var current_ground:String="default"
 var near_sell_point:bool=false
 var total_crafted:int=0
 var scrap_crown_crafted:bool=false
+var building_materials:Dictionary={"stone_chunk":0,"steel_beam":0,"concrete_slab":0,"wiring":0}
+var building_material_values:Dictionary={"stone_chunk":3,"steel_beam":12,"concrete_slab":8,"wiring":15}
+var building_material_names:Dictionary={"stone_chunk":"Kawał Skały","steel_beam":"Stalowa Belka","concrete_slab":"Płyta Betonowa","wiring":"Okablowanie"}
+signal building_materials_changed()
+var forge_stage:int=0
+signal forge_stage_changed(stage:int)
+const FORGE_REQUIREMENTS:Array=[
+	{},
+	{"stone_chunk":15,"concrete_slab":8},
+	{"steel_beam":12,"wiring":15},
+	{"stone_chunk":25,"steel_beam":20,"concrete_slab":15,"wiring":10},
+]
+const FORGE_STAGE_NAMES:Array=["Nie zbudowana","Fundament","Komnata Kuźni","Tunel Wyjściowy"]
 var best_daily_streak:int=0
 var best_leaderboard_rank:int=999
 var achievements_unlocked:Array=[]
@@ -96,7 +109,7 @@ var forge_shop_config:Dictionary={
 	"hire_worker":{"cost":2,"max":3,"desc":"Hire worker NPC"},
 }
 var forge_purchases:Dictionary={"income_boost":0,"rare_boost":0,"start_coins":0,"ground_rust":0,"ground_ash":0,"ground_gold":0,"third_furnace":0,"auto_collect_2":0,"hire_worker":0}
-var sort_bins:Dictionary={"ferrous":["bolt","pipe"],"electronics":["battery","motor","chip"],"non_ferrous":["can","cable","coil"],"precious":["gold","crystal"],"mechanical":["gear"]}
+var sort_bins:Dictionary={"ferrous":["bolt","pipe","steel_beam","alloy_frame","titanium_plate"],"electronics":["battery","motor","chip","nano_chip","reactor_core","scrap_drone"],"non_ferrous":["can","cable","coil","wiring"],"precious":["gold","crystal","plasma_cell"],"mechanical":["gear"],"raw":["stone_chunk","concrete_slab"]}
 var smelt_config:Dictionary={
 	"can":{"time":5.0,"mult":2.0,"ingot":"Aluminum Ingot"},
 	"bolt":{"time":10.0,"mult":2.5,"ingot":"Steel Ingot"},
@@ -109,6 +122,11 @@ var smelt_config:Dictionary={
 	"coil":{"time":7.0,"mult":2.8,"ingot":"Copper Wire"},
 	"gear":{"time":14.0,"mult":3.5,"ingot":"Titanium Rod"},
 	"crystal":{"time":25.0,"mult":6.0,"ingot":"Forge Shard"},
+	"alloy_frame":{"time":18.0,"mult":4.0,"ingot":"Alloy Ingot"},
+	"titanium_plate":{"time":22.0,"mult":4.5,"ingot":"Titanium Ingot"},
+	"nano_chip":{"time":16.0,"mult":3.8,"ingot":"Neural Core"},
+	"reactor_core":{"time":30.0,"mult":6.5,"ingot":"Plasma Cell"},
+	"scrap_drone":{"time":35.0,"mult":7.0,"ingot":"Drone Core"},
 }
 var _auto_sort_timer:float=0.0
 func _ready()->void:
@@ -132,7 +150,41 @@ func add_coins(amount:int)->void:
 func spend_coins(amount:int)->bool:
 	if coins>=amount: coins-=amount; coins_changed.emit(coins); return true
 	return false
+func sell_building_material(bid:String)->void:
+	if building_materials.get(bid,0)<=0: return
+	var val:int=building_material_values.get(bid,1); building_materials[bid]-=1
+	add_coins(val); building_materials_changed.emit()
+func sell_all_building_materials()->void:
+	var total:int=0
+	for bid in building_materials:
+		total+=building_materials[bid]*building_material_values.get(bid,1)
+		building_materials[bid]=0
+	if total>0: add_coins(total)
+	building_materials_changed.emit()
+func get_building_materials_count()->int:
+	var total:int=0
+	for bid in building_materials: total+=building_materials[bid]
+	return total
+func can_expand_forge()->bool:
+	if forge_stage>=3: return false
+	var req:Dictionary=FORGE_REQUIREMENTS[forge_stage+1]
+	for mat in req:
+		if building_materials.get(mat,0)<req[mat]: return false
+	return true
+func try_expand_forge()->bool:
+	if not can_expand_forge(): return false
+	var req:Dictionary=FORGE_REQUIREMENTS[forge_stage+1]
+	for mat in req: building_materials[mat]-=req[mat]
+	forge_stage+=1
+	building_materials_changed.emit()
+	forge_stage_changed.emit(forge_stage)
+	notification.emit("🔨 %s ukończona!"%FORGE_STAGE_NAMES[forge_stage])
+	return true
 func add_to_inventory(d:Dictionary)->bool:
+	if d.get("category","")=="building":
+		var bid:String=d.get("id",""); building_materials[bid]=building_materials.get(bid,0)+1
+		total_collected+=1; notification.emit("+1 %s"%d.get("name",bid))
+		building_materials_changed.emit(); return true
 	if inventory.size()>=max_slots: inventory_full=true; return false
 	inventory.append(d); total_collected+=1
 	if d.get("id","")=="gold": has_found_gold=true

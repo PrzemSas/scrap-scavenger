@@ -11,7 +11,7 @@ func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	if required_stage > 0:
-		GameManager.forge_stage_changed.connect(func(_s): _update_hint())
+		GameManager.forge_stage_changed.connect(func(_s: int): _update_hint())
 
 func _is_unlocked() -> bool:
 	return required_stage == 0 or GameManager.forge_stage >= required_stage

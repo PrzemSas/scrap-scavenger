@@ -9,7 +9,7 @@ extends Control
 func _ready() -> void:
 	visible = false
 	GameManager.building_materials_changed.connect(_refresh)
-	GameManager.forge_stage_changed.connect(func(_s): _refresh())
+	GameManager.forge_stage_changed.connect(func(_s: int): _refresh())
 	_build_btn.pressed.connect(_on_build)
 	_refresh()
 

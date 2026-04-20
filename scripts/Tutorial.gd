@@ -5,7 +5,7 @@ const DONE_PATH := "user://tutorial_done.flag"
 const STEPS := [
 	{
 		"text": "[color=#ff6a00]Welcome to Scrap Scavenger![/color]\n\nWalk around the junkyard and press [color=#FFD700][E][/color] near scrap to collect it.\nYour goal: collect → sort → smelt → sell.",
-		"trigger": "collect"
+		"trigger": "manual"
 	},
 	{
 		"text": "Nice! You collected your first scrap.\n\nOpen the [color=#ff6a00]Sorting Table[/color] with [color=#FFD700][2][/color] or the [color=#ff6a00]♻[/color] button,\nthen drag items into the correct bins.",
@@ -37,7 +37,6 @@ func _ready() -> void:
 		queue_free()
 		return
 	_show_step()
-	GameManager.inventory_changed.connect(_on_inventory_changed)
 	_next_btn.pressed.connect(_advance)
 	_skip_btn.pressed.connect(_finish)
 
@@ -47,11 +46,6 @@ func _show_step() -> void:
 	_counter.text = "%d / %d" % [_step + 1, STEPS.size()]
 	_next_btn.text = "Finish!" if _step == STEPS.size() - 1 else "Next ▶"
 	_next_btn.visible = s["trigger"] == "manual" or _step == STEPS.size() - 1
-
-func _on_inventory_changed() -> void:
-	if _step < STEPS.size() and STEPS[_step]["trigger"] == "collect":
-		if GameManager.inventory.size() >= 1:
-			_advance()
 
 func _advance() -> void:
 	_step += 1

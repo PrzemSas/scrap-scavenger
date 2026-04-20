@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/SortingTable.tscn" id="2"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/DailyReward.tscn" id="20"]
 [ext_resource type="Texture2D" path="res://assets/textures/scrapcoin.jpg" id="30"]
 [ext_resource type="PackedScene" path="res://scenes/ui/Encyclopedia.tscn" id="40"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Tutorial.tscn" id="50"]
 
 [sub_resource type="StyleBoxFlat" id="PS1"]
 bg_color = Color(0.03,0.03,0.05,0.65)
@@ -437,3 +438,5 @@ theme_override_styles/panel = SubResource("HotbarPanel")
 [node name="HotbarSlots" type="HBoxContainer" parent="Hotbar"]
 layout_mode = 2
 theme_override_constants/separation = 4
+
+[node name="Tutorial" parent="." instance=ExtResource("50")]

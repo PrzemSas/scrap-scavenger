@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://scripts/ScrapCounter.gd" id="16"]
 [ext_resource type="Script" path="res://scripts/EventSystem.gd" id="17"]
 [ext_resource type="Script" path="res://scripts/WorkerManager.gd" id="18"]
+[ext_resource type="Script" path="res://scripts/ScrapMagnet.gd" id="scrapmagnet"]
 [ext_resource type="PackedScene" path="res://scenes/objects/PlayerCharacter.tscn" id="19"]
 [ext_resource type="PackedScene" path="res://scenes/objects/Table3D.tscn" id="20"]
 [ext_resource type="PackedScene" path="res://scenes/objects/ForgeStructure.tscn" id="21"]
@@ -40,7 +41,7 @@ radius = 2.5
 size = Vector2(100,100)
 
 [sub_resource type="StandardMaterial3D" id="GM1"]
-albedo_color = Color(0.92,0.88,0.84,1)
+albedo_color = Color(0.58, 0.54, 0.48, 1)
 albedo_texture = ExtResource("tex_junk_color")
 normal_enabled = true
 normal_texture = ExtResource("tex_junk_normal")
@@ -61,18 +62,16 @@ albedo_color = Color(0.55,0.45,0.38,1)
 albedo_texture = ExtResource("tex_forge_stone")
 metallic = 0.04
 roughness = 0.88
-emission_enabled = true
-emission = Color(0.06,0.02,0.002,1)
-emission_energy_multiplier = 0.7
+emission_enabled = false
 uv1_scale = Vector3(3,3,3)
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
-sky_top_color = Color(0.28, 0.38, 0.60, 1)
-sky_horizon_color = Color(0.90, 0.55, 0.22, 1)
-sky_curve = 0.22
-sky_energy_multiplier = 1.6
-ground_bottom_color = Color(0.08, 0.06, 0.04, 1)
-ground_horizon_color = Color(0.35, 0.18, 0.06, 1)
-ground_curve = 0.05
+sky_top_color = Color(0.30, 0.50, 0.78, 1)
+sky_horizon_color = Color(0.72, 0.80, 0.88, 1)
+sky_curve = 0.25
+sky_energy_multiplier = 1.8
+ground_bottom_color = Color(0.18, 0.15, 0.12, 1)
+ground_horizon_color = Color(0.28, 0.24, 0.20, 1)
+ground_curve = 0.06
 ground_energy_multiplier = 1.2
 sun_angle_max = 32.0
 sun_curve = 0.08
@@ -84,14 +83,14 @@ sky_material = SubResource("SkyMat")
 background_mode = 2
 sky = SubResource("Sky1")
 ambient_light_source = 2
-ambient_light_color = Color(0.45, 0.32, 0.18, 1)
-ambient_light_energy = 1.1
+ambient_light_color = Color(0.90, 0.92, 1.0, 1)
+ambient_light_energy = 1.8
 glow_enabled = true
-glow_intensity = 0.85
+glow_intensity = 0.9
 glow_bloom = 0.12
 fog_enabled = true
-fog_light_color = Color(0.45, 0.16, 0.03, 1)
-fog_density = 0.016
+fog_light_color = Color(0.68, 0.65, 0.60, 1)
+fog_density = 0.006
 [node name="Main" type="Node3D"]
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1,0,0,0,0.707,0.707,0,-0.707,0.707,0,8,8)
@@ -100,31 +99,31 @@ fov = 50.0
 script = ExtResource("4")
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.85,0,0.53, 0.27,0.87,-0.42, -0.46,0.50,0.74, 0,0,0)
-light_color = Color(1.0, 0.72, 0.35, 1)
-light_energy = 2.0
+light_color = Color(1.0, 0.97, 0.90, 1)
+light_energy = 6.5
 shadow_enabled = true
 script = ExtResource("7")
 [node name="FillLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8,0,-0.6, 0.2,0.94,-0.27, 0.57,-0.34,-0.75, 0,0,0)
-light_color = Color(0.35, 0.42, 0.70, 1)
-light_energy = 0.45
+light_color = Color(0.55, 0.65, 1.0, 1)
+light_energy = 1.2
 [node name="ForgeLight" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,3,0)
-light_color = Color(1,0.5,0.1,1)
-light_energy = 0.7
+light_color = Color(1,0.6,0.2,1)
+light_energy = 0.2
 omni_range = 16.0
 [node name="BarrelFire_A" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1, -18.5, 1.0, -5.5)
-light_color = Color(1.0, 0.40, 0.05, 1)
-light_energy = 2.2
-omni_range = 8.0
-omni_attenuation = 1.5
+light_color = Color(1.0, 0.55, 0.20, 1)
+light_energy = 0.4
+omni_range = 5.0
+omni_attenuation = 2.0
 [node name="BarrelFire_B" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1, -30.2, 1.0, 8.2)
-light_color = Color(1.0, 0.45, 0.06, 1)
-light_energy = 2.8
-omni_range = 9.0
-omni_attenuation = 1.5
+light_color = Color(1.0, 0.55, 0.20, 1)
+light_energy = 0.4
+omni_range = 5.0
+omni_attenuation = 2.0
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("E1")
 [node name="Ground" type="StaticBody3D" parent="."]
@@ -168,6 +167,9 @@ script = ExtResource("1")
 script = ExtResource("3")
 [node name="EventSystem" type="Node" parent="."]
 script = ExtResource("17")
+[node name="ScrapMagnet" type="Node3D" parent="."]
+script = ExtResource("scrapmagnet")
+
 [node name="WorkerManager" type="Node3D" parent="."]
 script = ExtResource("18")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -202,4 +204,17 @@ label_text = "[E] Enter Forge"
 spawn_pos = Vector3(0, 0, 5)
 
 [node name="ForgeGateShape" type="CollisionShape3D" parent="ForgeGate"]
+shape = SubResource("GateShape")
+
+[node name="UGForgeGateVisual" parent="." instance=ExtResource("26")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -8, 0, -5)
+
+[node name="UGForgeGate" type="Area3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -8, 1, -5)
+script = ExtResource("25")
+target_scene = "res://scenes/main/UndergroundForge.tscn"
+label_text = "[E] Podziemna Kuźnia"
+spawn_pos = Vector3(0, 0, 10)
+
+[node name="UGForgeGateShape" type="CollisionShape3D" parent="UGForgeGate"]
 shape = SubResource("GateShape")

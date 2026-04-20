@@ -1,7 +1,10 @@
 extends DirectionalLight3D
 
+signal is_night_changed(night: bool)
+
 var _time: float = 0.3   # 0=noc, 0.25=wschód, 0.5=południe, 0.75=zachód
 var _env: Environment = null
+var is_night: bool = false
 
 # Kolory nieba w ciągu dnia
 const SKY_TOP: Array = [
@@ -18,9 +21,9 @@ const SKY_HOR: Array = [
 ]
 const AMB_COL: Array = [
 	Color(0.04, 0.04, 0.12),   # noc
-	Color(0.20, 0.10, 0.06),   # wschód
-	Color(0.28, 0.22, 0.16),   # dzień
-	Color(0.22, 0.10, 0.04),   # zachód
+	Color(0.55, 0.42, 0.32),   # wschód
+	Color(0.72, 0.72, 0.78),   # dzień
+	Color(0.60, 0.40, 0.25),   # zachód
 ]
 
 func _ready() -> void:
@@ -32,6 +35,12 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_time += delta * 0.0033
 	if _time > 1.0: _time -= 1.0
+
+	var night_now: bool = _time > 0.75 or _time < 0.25
+	if night_now != is_night:
+		is_night = night_now
+		is_night_changed.emit(is_night)
+		GameManager.notification.emit("🌙 Night falls..." if is_night else "☀️ Dawn breaks.")
 
 	# Oświetlenie kierunkowe
 	light_energy = lerpf(0.05, 1.1, maxf(sin(_time * PI), 0.0))
@@ -65,11 +74,11 @@ func _process(delta: float) -> void:
 		sky_mat.ground_horizon_color = sky_hor.darkened(0.55)
 
 	_env.ambient_light_color  = amb
-	_env.ambient_light_energy = lerpf(0.20, 0.55, maxf(sin(_time * PI), 0.0))
+	_env.ambient_light_energy = lerpf(0.30, 1.5, maxf(sin(_time * PI), 0.0))
 
 	# Mgła — gęstsza w nocy + bonus od pogody
 	var fog_night := Color(0.01, 0.01, 0.04)
-	var fog_day   := Color(0.45, 0.16, 0.03)
+	var fog_day   := Color(0.55, 0.50, 0.44)
 	_env.fog_light_color = fog_night.lerp(fog_day, maxf(sin(_time * PI), 0.0))
 	var base_fog := lerpf(0.028, 0.014, maxf(sin(_time * PI), 0.0))
 	var ws := get_node_or_null("/root/WeatherSystem")

@@ -14,6 +14,10 @@ var scrap_types:Array=[
 	{"id":"gear","name":"Titanium Gear","value":35,"rarity":2,"weight":3},
 	{"id":"gold","name":"Gold Part","value":60,"rarity":3,"weight":1},
 	{"id":"crystal","name":"Forge Crystal","value":120,"rarity":3,"weight":0.5},
+	{"id":"stone_chunk","name":"Kawał Skały","value":0,"rarity":0,"weight":20,"category":"building"},
+	{"id":"steel_beam","name":"Stalowa Belka","value":0,"rarity":0,"weight":14,"category":"building"},
+	{"id":"concrete_slab","name":"Płyta Betonowa","value":0,"rarity":0,"weight":10,"category":"building"},
+	{"id":"wiring","name":"Okablowanie","value":0,"rarity":1,"weight":8,"category":"building"},
 ]
 var _rt:float=0.0
 var _ev_active:bool=false
@@ -24,7 +28,9 @@ func _ready()->void:
 func _process(delta:float)->void:
 	var ws=get_node_or_null("/root/WeatherSystem")
 	var spawn_mult:float=ws.get_spawn_mult() if ws else 1.0
-	var max_now:int=int(MAX_ITEMS*spawn_mult)
+	var dnc=get_parent().get_node_or_null("SunLight")
+	var night_mult:float=1.2 if (dnc and dnc.get("is_night")) else 1.0
+	var max_now:int=int(MAX_ITEMS*spawn_mult*night_mult)
 	if get_child_count()<max_now:
 		_rt+=delta
 		if _rt>=0.8: _rt=0.0; spawn_random()

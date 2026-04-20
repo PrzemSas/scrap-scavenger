@@ -18,6 +18,7 @@ extends Control
 @onready var leaderboard_panel:PanelContainer=$LeaderboardPanel
 @onready var lb_list:VBoxContainer=$LeaderboardPanel/ScrollContainer/LBList
 @onready var daily_panel:Control=$DailyRewardPanel
+@onready var encyclopedia_panel:Control=$EncyclopediaPanel
 @onready var notif_label:Label=$NotifLabel
 @onready var sell_panel:PanelContainer=$SellPanel
 @onready var sell_list:VBoxContainer=$SellPanel/ScrollContainer/SellList
@@ -30,7 +31,7 @@ var _panels:Array=[]
 var _proximity_panel:String=""
 var _interact_hint:Label
 func _ready()->void:
-	_panels=[inv_panel,shop_panel,sort_panel,furnace_panel,stats_panel,forge_panel,craft_panel,leaderboard_panel,sell_panel]
+	_panels=[inv_panel,shop_panel,sort_panel,furnace_panel,stats_panel,forge_panel,craft_panel,leaderboard_panel,sell_panel,encyclopedia_panel]
 	GameManager.coins_changed.connect(func(c): coin_label.text="%d SC"%c; _shop())
 	GameManager.inventory_changed.connect(func(): inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]; _inv(); _refresh_hotbar())
 	GameManager.upgrade_purchased.connect(func(_x): _shop())
@@ -38,6 +39,7 @@ func _ready()->void:
 	GameManager.prestige_done.connect(func(_x): _shop())
 	GameManager.ingots_changed.connect(func(): _craft(); _sell())
 	GameManager.inventory_changed.connect(func(): _sell())
+	GameManager.building_materials_changed.connect(func(): _sell(); _stats())
 	GameManager.proximity_entered.connect(_on_proximity_enter)
 	GameManager.proximity_exited.connect(_on_proximity_exit)
 	sell_btn.visible=false
@@ -51,6 +53,7 @@ func _ready()->void:
 	$TopBar/BtnCraft.pressed.connect(func(): _toggle(craft_panel); _craft())
 	$TopBar/BtnDaily.pressed.connect(func(): daily_panel.show_panel())
 	$TopBar/BtnLeaderboard.pressed.connect(func(): _toggle(leaderboard_panel); _leaderboard())
+	$TopBar/BtnEncyclopedia.pressed.connect(func(): _toggle(encyclopedia_panel); if encyclopedia_panel.visible: encyclopedia_panel.show_encyclopedia())
 	GameManager.pile_search_progress.connect(_on_search_progress)
 	GameManager.pile_hint_changed.connect(_on_pile_hint)
 	for p in _panels: p.visible=false
@@ -117,12 +120,16 @@ func _toggle(panel:Control)->void:
 func _show_panel(pid:String)->void:
 	var map:={
 		"inv":inv_panel,"sort":sort_panel,"furnace":furnace_panel,
-		"shop":shop_panel,"forge":forge_panel,"stats":stats_panel
+		"shop":shop_panel,"forge":forge_panel,"stats":stats_panel,
+		"craft":craft_panel,"leaderboard":leaderboard_panel,"encyclopedia":encyclopedia_panel
 	}
 	var panel:Control=map.get(pid)
 	if panel: _toggle(panel)
 	if pid=="stats": _stats()
 	elif pid=="forge": _fshop()
+	elif pid=="craft": _craft()
+	elif pid=="leaderboard": _leaderboard()
+	elif pid=="encyclopedia" and encyclopedia_panel.visible: encyclopedia_panel.show_encyclopedia()
 const ICON_CHARS:Dictionary={"can":"CAN","bolt":"BOLT","pipe":"PIPE","cable":"CBL","battery":"BAT","chip":"CHIP","coil":"COIL","motor":"MOT","gear":"GEAR","gold":"GOLD","crystal":"XTAL"}
 func _get_icon(id:String)->Texture2D:
 	var si=get_node_or_null("/root/ScrapIcons")
@@ -281,6 +288,13 @@ func _stats()->void:
 	t+="Smelted: %d | Streak: %d | Time: %dh%dm\n"%[GameManager.total_smelted,GameManager.best_streak,h,m]
 	t+="\n[color=#ff3300]PRESTIGE[/color]\nTokens: [color=#FFD700]%d[/color] | Count: %d | +%d%%\n"%[GameManager.forge_tokens,GameManager.prestige_count,GameManager.forge_tokens*10]
 	if GameManager.can_prestige(): t+="[color=#39FF14]+%d tokens available[/color]\n"%GameManager.get_prestige_tokens()
+	var bmc:int=GameManager.get_building_materials_count()
+	if bmc>0:
+		t+="\n[color=#88cc55]MATERIAŁY BUDOWLANE[/color]\n"
+		for bid in GameManager.building_materials:
+			var qty:int=GameManager.building_materials[bid]
+			if qty>0:
+				t+="  %s: [color=#88cc55]%d[/color]\n"%[GameManager.building_material_names.get(bid,bid),qty]
 	t+="\n[color=#FFD700]ACHIEVEMENTS %d/%d[/color]\n"%[GameManager.achievements_unlocked.size(),GameManager.achievements_config.size()]
 	t+="[color=#888]Daily streak: %d | Best: %d[/color]\n"%[daily_panel.login_streak if daily_panel else 0,GameManager.best_daily_streak]
 	for a in GameManager.achievements_config:
@@ -328,6 +342,29 @@ func _sell()->void:
 		sell_all.add_theme_color_override("font_color",Color("#FFD700"))
 		sell_all.pressed.connect(func(): GameManager.sell_all_ingots(); AudioManager.play_sell(); _sell())
 		sell_list.add_child(sell_all)
+	var bm_total:int=GameManager.get_building_materials_count()
+	if bm_total>0:
+		var hdr=Label.new(); hdr.text="-- MATERIAŁY BUDOWLANE --"
+		hdr.add_theme_color_override("font_color",Color("#88cc55")); hdr.add_theme_font_size_override("font_size",11)
+		sell_list.add_child(hdr)
+		var bm_value:int=0
+		for bid in GameManager.building_materials:
+			var qty:int=GameManager.building_materials[bid]
+			if qty<=0: continue
+			var val:int=GameManager.building_material_values.get(bid,1)
+			bm_value+=qty*val
+			var h=HBoxContainer.new()
+			var lbl=Label.new()
+			lbl.text="%s x%d — %dc each"%[GameManager.building_material_names.get(bid,bid),qty,val]
+			lbl.add_theme_color_override("font_color",Color("#88cc55")); lbl.add_theme_font_size_override("font_size",10)
+			lbl.size_flags_horizontal=Control.SIZE_EXPAND_FILL; h.add_child(lbl)
+			var btn=Button.new(); btn.text="SELL 1"; btn.custom_minimum_size=Vector2(65,0)
+			var b=bid; btn.pressed.connect(func(): GameManager.sell_building_material(b); AudioManager.play_sell(); _sell())
+			h.add_child(btn); sell_list.add_child(h)
+		var sell_all_bm=Button.new(); sell_all_bm.text="SELL ALL MAT. (%dc)"%bm_value
+		sell_all_bm.add_theme_color_override("font_color",Color("#88cc55"))
+		sell_all_bm.pressed.connect(func(): GameManager.sell_all_building_materials(); AudioManager.play_sell(); _sell())
+		sell_list.add_child(sell_all_bm)
 
 func _on_search_progress(progress:float)->void:
 	if progress < 0.0:

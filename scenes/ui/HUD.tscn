@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/HUD.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/SortingTable.tscn" id="2"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/ScrapRadar.tscn" id="10"]
 [ext_resource type="PackedScene" path="res://scenes/ui/DailyReward.tscn" id="20"]
 [ext_resource type="Texture2D" path="res://assets/textures/scrapcoin.jpg" id="30"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Encyclopedia.tscn" id="40"]
 
 [sub_resource type="StyleBoxFlat" id="PS1"]
 bg_color = Color(0.03,0.03,0.05,0.65)
@@ -121,6 +122,12 @@ layout_mode = 2
 text = "🏆"
 theme_override_font_sizes/font_size = 14
 tooltip_text = "Leaderboard"
+
+[node name="BtnEncyclopedia" type="Button" parent="TopBar"]
+layout_mode = 2
+text = "📖"
+theme_override_font_sizes/font_size = 14
+tooltip_text = "Encyclopedia"
 
 [node name="Spacer" type="Control" parent="TopBar"]
 layout_mode = 2
@@ -338,6 +345,13 @@ size_flags_horizontal = 3
 [node name="ScrapRadar" parent="." instance=ExtResource("10")]
 
 [node name="DailyRewardPanel" parent="." instance=ExtResource("20")]
+
+[node name="EncyclopediaPanel" parent="." instance=ExtResource("40")]
+layout_mode = 1
+offset_left = 10.0
+offset_top = 60.0
+offset_right = 410.0
+offset_bottom = 520.0
 
 [node name="NotifLabel" type="Label" parent="."]
 layout_mode = 1

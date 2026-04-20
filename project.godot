@@ -30,6 +30,7 @@ LeaderboardManager="*res://scripts/autoload/LeaderboardManager.gd"
 ScrapIcons="*res://scripts/autoload/ScrapIcons.gd"
 SceneTransition="*res://scripts/autoload/SceneTransition.gd"
 WeatherSystem="*res://scripts/WeatherSystem.gd"
+HotkeyManager="*res://scripts/HotkeyManager.gd"
 
 [display]
 

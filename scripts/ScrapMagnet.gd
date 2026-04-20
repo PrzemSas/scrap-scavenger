@@ -29,5 +29,5 @@ func _process(delta: float) -> void:
 		if c is Area3D and c.has_method("collect"):
 			var diff: Vector3 = player.global_position - c.global_position
 			diff.y = 0.0
-			if diff.length() < magnet_range:
+			if diff.length() < magnet_range * (1.0 + GameManager.detect_range_bonus):
 				c.global_position += diff.normalized() * delta * 6.0

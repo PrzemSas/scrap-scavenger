@@ -186,8 +186,23 @@ func _refresh_hotbar()->void:
 		hotbar_slots.add_child(slot)
 func _shop()->void:
 	for c in shop_list.get_children(): c.queue_free()
+	var t2_any:bool=false
 	for uid in GameManager.upgrade_config:
-		var cfg=GameManager.upgrade_config[uid]; var lv=GameManager.upgrades.get(uid,0)
+		var req:int=GameManager.upgrade_config[uid].get("required_stage",0)
+		if req>0 and GameManager.forge_stage>=req: t2_any=true; break
+	if t2_any:
+		var hdr:=Label.new(); hdr.text="── TIER 1 ──"
+		hdr.add_theme_color_override("font_color",Color("#555")); hdr.add_theme_font_size_override("font_size",9)
+		shop_list.add_child(hdr)
+	for uid in GameManager.upgrade_config:
+		var cfg=GameManager.upgrade_config[uid]
+		var req:int=cfg.get("required_stage",0)
+		if req>0 and GameManager.forge_stage<req: continue
+		if req>0 and uid==GameManager.upgrade_config.keys().filter(func(k): return GameManager.upgrade_config[k].get("required_stage",0)>0)[0]:
+			var hdr2:=Label.new(); hdr2.text="── TIER 2 (Kuźnia) ──"
+			hdr2.add_theme_color_override("font_color",Color("#ff6a00")); hdr2.add_theme_font_size_override("font_size",9)
+			shop_list.add_child(hdr2)
+		var lv=GameManager.upgrades.get(uid,0)
 		var mx=lv>=cfg.get("max",1); var cost=GameManager.get_upgrade_cost(uid); var can=not mx and GameManager.coins>=cost
 		var h=HBoxContainer.new(); h.custom_minimum_size=Vector2(0,34)
 		var info=VBoxContainer.new(); info.size_flags_horizontal=Control.SIZE_EXPAND_FILL
@@ -205,7 +220,14 @@ func _fshop()->void:
 	var hl=Label.new(); hl.text="TOKENS: %d"%GameManager.forge_tokens; hl.add_theme_color_override("font_color",Color("#FFD700"))
 	forge_list.add_child(hl)
 	for fid in GameManager.forge_shop_config:
-		var cfg=GameManager.forge_shop_config[fid]; var cur=GameManager.forge_purchases.get(fid,0)
+		var cfg=GameManager.forge_shop_config[fid]
+		var freq:int=cfg.get("required_stage",0)
+		if freq>0 and GameManager.forge_stage<freq: continue
+		if freq>0 and fid==GameManager.forge_shop_config.keys().filter(func(k): return GameManager.forge_shop_config[k].get("required_stage",0)>0)[0]:
+			var hdr3:=Label.new(); hdr3.text="── TIER 2 (Etap 2) ──"
+			hdr3.add_theme_color_override("font_color",Color("#ff6a00")); hdr3.add_theme_font_size_override("font_size",9)
+			forge_list.add_child(hdr3)
+		var cur=GameManager.forge_purchases.get(fid,0)
 		var mx=cur>=cfg.get("max",1); var cost=cfg.get("cost",1); var can=not mx and GameManager.forge_tokens>=cost
 		var h=HBoxContainer.new(); h.custom_minimum_size=Vector2(0,30)
 		var nl=Label.new(); nl.text=fid.replace("_"," ").to_upper()+" - "+cfg.desc

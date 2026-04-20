@@ -38,6 +38,12 @@ func save_game() -> void:
 		"best_daily_streak": GameManager.best_daily_streak,
 		"best_leaderboard_rank": GameManager.best_leaderboard_rank,
 		"forge_stage": GameManager.forge_stage,
+		"scrap_value_bonus": GameManager.scrap_value_bonus,
+		"combo_cap_bonus": GameManager.combo_cap_bonus,
+		"detect_range_bonus": GameManager.detect_range_bonus,
+		"ingot_value_bonus": GameManager.ingot_value_bonus,
+		"worker_speed_bonus": GameManager.worker_speed_bonus,
+		"wasteland_luck_bonus": GameManager.wasteland_luck_bonus,
 		"timestamp": Time.get_unix_time_from_system(),
 		"crafted_items": _get_crafted(),
 	}
@@ -85,6 +91,12 @@ func load_game() -> void:
 	GameManager.best_daily_streak = d.get("best_daily_streak", 0)
 	GameManager.best_leaderboard_rank = d.get("best_leaderboard_rank", 999)
 	GameManager.forge_stage = d.get("forge_stage", 0)
+	GameManager.scrap_value_bonus = d.get("scrap_value_bonus", 0.0)
+	GameManager.combo_cap_bonus = d.get("combo_cap_bonus", 0.0)
+	GameManager.detect_range_bonus = d.get("detect_range_bonus", 0.0)
+	GameManager.ingot_value_bonus = d.get("ingot_value_bonus", 0.0)
+	GameManager.worker_speed_bonus = d.get("worker_speed_bonus", 0.0)
+	GameManager.wasteland_luck_bonus = d.get("wasteland_luck_bonus", 0.0)
 	var cm := get_node_or_null("/root/CraftingManager")
 	if cm: cm.set("crafted_items", d.get("crafted_items", []))
 	GameManager.coins_changed.emit(GameManager.coins)

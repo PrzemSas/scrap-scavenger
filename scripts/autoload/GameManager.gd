@@ -86,7 +86,13 @@ var achievements_config:Array=[
 	{"id":"leaderboard_10","name":"On the Board","check":"best_leaderboard_rank <= 10"},
 	{"id":"leaderboard_3","name":"Podium","check":"best_leaderboard_rank <= 3"},
 ]
-var upgrades:Dictionary={"bigger_bag":0,"click_power":0,"lucky_find":0,"fast_furnace":0,"sort_mastery":0,"auto_sort":0,"second_furnace":0,"night_shift":0}
+var scrap_value_bonus:float=0.0
+var combo_cap_bonus:float=0.0
+var detect_range_bonus:float=0.0
+var ingot_value_bonus:float=0.0
+var worker_speed_bonus:float=0.0
+var wasteland_luck_bonus:float=0.0
+var upgrades:Dictionary={"bigger_bag":0,"click_power":0,"lucky_find":0,"fast_furnace":0,"sort_mastery":0,"auto_sort":0,"second_furnace":0,"night_shift":0,"reinforced_bag":0,"scrap_press":0,"combo_master":0,"deep_scan":0}
 var upgrade_config:Dictionary={
 	"bigger_bag":{"base":30,"mult":1.7,"max":8,"desc":"+2 slots"},
 	"click_power":{"base":60,"mult":2.0,"max":5,"desc":"+1/click"},
@@ -96,6 +102,10 @@ var upgrade_config:Dictionary={
 	"auto_sort":{"base":5000,"mult":1.0,"max":1,"desc":"Auto-sort"},
 	"second_furnace":{"base":2500,"mult":1.0,"max":1,"desc":"+2 queue"},
 	"night_shift":{"base":3000,"mult":1.0,"max":1,"desc":"75% offline"},
+	"reinforced_bag":{"base":8000,"mult":2.2,"max":4,"desc":"+4 slots","required_stage":1},
+	"scrap_press":{"base":6000,"mult":2.5,"max":5,"desc":"+20% item value","required_stage":1},
+	"combo_master":{"base":5000,"mult":2.0,"max":5,"desc":"+1 combo cap","required_stage":1},
+	"deep_scan":{"base":7000,"mult":2.3,"max":5,"desc":"+30% detect range","required_stage":1},
 }
 var forge_shop_config:Dictionary={
 	"income_boost":{"cost":1,"max":10,"desc":"+10% income"},
@@ -107,8 +117,12 @@ var forge_shop_config:Dictionary={
 	"third_furnace":{"cost":3,"max":1,"desc":"3rd furnace"},
 	"auto_collect_2":{"cost":2,"max":1,"desc":"Collect 5s"},
 	"hire_worker":{"cost":2,"max":3,"desc":"Hire worker NPC"},
+	"wasteland_scout":{"cost":3,"max":5,"desc":"+20% rare w Wasteland","required_stage":2},
+	"plasma_forge":{"cost":4,"max":5,"desc":"+15% wartość ingotów","required_stage":2},
+	"overclock":{"cost":3,"max":4,"desc":"-25% czas wytopu","required_stage":2},
+	"worker_turbo":{"cost":5,"max":3,"desc":"Workerzy +50% prędkości","required_stage":2},
 }
-var forge_purchases:Dictionary={"income_boost":0,"rare_boost":0,"start_coins":0,"ground_rust":0,"ground_ash":0,"ground_gold":0,"third_furnace":0,"auto_collect_2":0,"hire_worker":0}
+var forge_purchases:Dictionary={"income_boost":0,"rare_boost":0,"start_coins":0,"ground_rust":0,"ground_ash":0,"ground_gold":0,"third_furnace":0,"auto_collect_2":0,"hire_worker":0,"wasteland_scout":0,"plasma_forge":0,"overclock":0,"worker_turbo":0}
 var sort_bins:Dictionary={"ferrous":["bolt","pipe","steel_beam","alloy_frame","titanium_plate"],"electronics":["battery","motor","chip","nano_chip","reactor_core","scrap_drone"],"non_ferrous":["can","cable","coil","wiring"],"precious":["gold","crystal","plasma_cell"],"mechanical":["gear"],"raw":["stone_chunk","concrete_slab"]}
 var smelt_config:Dictionary={
 	"can":{"time":5.0,"mult":2.0,"ingot":"Aluminum Ingot"},
@@ -186,6 +200,8 @@ func add_to_inventory(d:Dictionary)->bool:
 		total_collected+=1; notification.emit("+1 %s"%d.get("name",bid))
 		building_materials_changed.emit(); return true
 	if inventory.size()>=max_slots: inventory_full=true; return false
+	if scrap_value_bonus > 0.0:
+		d = d.duplicate(); d["value"] = int(d.get("value",1) * (1.0 + scrap_value_bonus))
 	inventory.append(d); total_collected+=1
 	if d.get("id","")=="gold": has_found_gold=true
 	if inventory.size()>=max_slots: inventory_full=true
@@ -207,11 +223,14 @@ func try_sort(idx:int,bid:String)->bool:
 	if correct:
 		correct_sorted+=1; streak+=1
 		if streak>best_streak: best_streak=streak
-		var sv:int=int(item.get("value",1)*1.8*(1.0+upgrades.get("sort_mastery",0)*0.1)*(1.0+minf(streak*0.05,0.5)))
+		var sv:int=int(item.get("value",1)*1.8*(1.0+upgrades.get("sort_mastery",0)*0.1)*(1.0+minf(streak*0.05,0.5+combo_cap_bonus)))
 		var si=item.duplicate(); si["sorted_value"]=sv; sorted_materials.append(si)
 		remove_from_inventory(idx); sorted_changed.emit(); return true
 	else: streak=0; remove_from_inventory(idx); notification.emit("Wrong bin!"); return false
-func add_ingot(d:Dictionary)->void: ingots.append(d); total_smelted+=1; ingots_changed.emit()
+func add_ingot(d:Dictionary)->void:
+	if ingot_value_bonus > 0.0:
+		d = d.duplicate(); d["value"] = int(d.get("value",1) * (1.0 + ingot_value_bonus))
+	ingots.append(d); total_smelted+=1; ingots_changed.emit()
 func sell_ingot(i:int)->void:
 	if i>=0 and i<ingots.size(): add_coins(ingots[i].get("value",1)); ingots.remove_at(i); ingots_changed.emit()
 func sell_all_ingots()->void:
@@ -232,6 +251,10 @@ func buy_upgrade(uid:String)->bool:
 		"click_power": click_power+=1
 		"lucky_find": luck_bonus+=0.03
 		"fast_furnace": smelt_speed_bonus+=0.15
+		"reinforced_bag": max_slots+=4; inventory_changed.emit()
+		"scrap_press": scrap_value_bonus+=0.20
+		"combo_master": combo_cap_bonus+=1.0
+		"deep_scan": detect_range_bonus+=0.30
 	upgrade_purchased.emit(uid); return true
 func buy_forge_item(fid:String)->bool:
 	var c=forge_shop_config.get(fid,{}); var cur=forge_purchases.get(fid,0)
@@ -243,6 +266,10 @@ func buy_forge_item(fid:String)->bool:
 		"ground_ash": current_ground="ash"; ground_changed.emit("ash")
 		"ground_gold": current_ground="gold"; ground_changed.emit("gold")
 		"third_furnace": smelt_queue_changed.emit(get_smelt_queue_max())
+		"wasteland_scout": wasteland_luck_bonus+=0.20
+		"plasma_forge": ingot_value_bonus+=0.15
+		"overclock": smelt_speed_bonus+=0.25
+		"worker_turbo": worker_speed_bonus+=0.50
 	notification.emit("Forge: %s"%c.get("desc","")); forge_item_purchased.emit(fid); return true
 func can_prestige()->bool: return lifetime_coins>=50000
 func get_prestige_tokens()->int:

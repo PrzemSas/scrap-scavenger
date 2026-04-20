@@ -5,7 +5,7 @@ var _music_a: AudioStreamPlayer
 var _music_b: AudioStreamPlayer
 var _music_active: AudioStreamPlayer
 var _music_fade_target: float = -22.0
-var _music_fade_speed: float = 1.5  # dB/s
+var _music_fade_speed: float = 15.0  # dB/s
 
 const TRACKS := {
 	"junkyard": "res://assets/audio/theme_trashinus.mp3",

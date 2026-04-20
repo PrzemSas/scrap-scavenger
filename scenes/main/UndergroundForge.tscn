@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="Script" path="res://scripts/CameraController.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/GateTransition.gd" id="2"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/objects/Gate.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ForgeExpansionPanel.tscn" id="8"]
 [ext_resource type="Script" path="res://scripts/ForgeExpansionPanel.gd" id="9"]
+[ext_resource type="Script" path="res://scripts/ZoneMusic.gd" id="zm"]
 
 [sub_resource type="Environment" id="UGEnv"]
 background_mode = 1
@@ -67,6 +68,10 @@ size = Vector3(0.8, 8.0, 30.0)
 radius = 2.5
 
 [node name="UndergroundForge" type="Node3D"]
+
+[node name="ZoneMusic" type="Node" parent="."]
+script = ExtResource("zm")
+zone = "forge"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("UGEnv")

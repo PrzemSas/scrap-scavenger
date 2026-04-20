@@ -27,7 +27,6 @@ const STEPS := [
 
 var _step: int = 0
 
-@onready var _panel: PanelContainer = $Panel
 @onready var _text: RichTextLabel = $Panel/VBox/Text
 @onready var _next_btn: Button = $Panel/VBox/Buttons/NextBtn
 @onready var _skip_btn: Button = $Panel/VBox/Buttons/SkipBtn

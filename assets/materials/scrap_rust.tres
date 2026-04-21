@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/mot_03.jpg" id="1"]
+
+[resource]
+albedo_color = Color(0.72, 0.42, 0.22, 1)
+albedo_texture = ExtResource("1")
+metallic = 0.18
+roughness = 0.94
+uv1_scale = Vector3(2.0, 2.0, 1.0)

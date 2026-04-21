@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ScrapType" format=3]
+
+[ext_resource type="Script" path="res://scripts/ScrapType.gd" id="1"]
+[ext_resource type="Material" path="res://assets/materials/scrap_rust.tres" id="2"]
+
+[sub_resource type="BoxMesh" id="BM1"]
+size = Vector3(0.7, 0.06, 0.45)
+
+[resource]
+script = ExtResource("1")
+name = "Blachy"
+mesh = SubResource("BM1")
+material = ExtResource("2")
+count = 40
+scale_min = 0.6
+scale_max = 1.9
+height_variation = 1.2
+random_rotation = true

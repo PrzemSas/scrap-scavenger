@@ -7,6 +7,10 @@ const RANGE       := 4.0   # zasięg wykrycia gracza
 
 const SCRAP_SCENE = preload("res://scenes/objects/ScrapItem.tscn")
 
+# Modele dekoracyjne wyrastające z kupki
+const TYRE_SCENE = preload("res://assets/models/polyhaven/old_tyre/old_tyre_2k.glb")
+const RIM_SCENE  = preload("res://assets/models/polyhaven/rusted_wheel_rim_01/rusted_wheel_rim_01_2k.glb")
+
 class PileData:
 	var mesh: MeshInstance3D
 	var position: Vector3      # local position (origin do shake reset)
@@ -63,6 +67,7 @@ func _ready() -> void:
 		bcs.shape = bshape
 		body.add_child(bcs)
 
+		_add_visual_junk(mesh)
 		_piles.append(pd)
 
 	await get_tree().process_frame
@@ -164,6 +169,82 @@ func _finish_search(pd: PileData) -> void:
 				scrap.setup({"id":"can","name":"Aluminum Can","value":1,"rarity":0})
 
 	GameManager.notification.emit("+%d scrap found!" % SPAWN_COUNT)
+
+func _add_visual_junk(pile: MeshInstance3D) -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(pile.position)
+
+	var base: Vector3 = Vector3(2, 1, 2)
+	if pile.mesh is BoxMesh:
+		base = (pile.mesh as BoxMesh).size
+
+	var mat: Material = pile.get_surface_override_material(0)
+
+	# Blachy/belki sterczące pod kątem
+	var sheet_count := rng.randi_range(5, 9)
+	for i in sheet_count:
+		var mi := MeshInstance3D.new()
+		var bm := BoxMesh.new()
+		var style := rng.randi_range(0, 2)
+		match style:
+			0: # płaska blacha
+				bm.size = Vector3(rng.randf_range(0.4, base.x * 0.7),
+								  rng.randf_range(0.06, 0.18),
+								  rng.randf_range(0.3, base.z * 0.6))
+			1: # pionowa belka
+				bm.size = Vector3(rng.randf_range(0.12, 0.28),
+								  rng.randf_range(0.4, base.y * 1.4),
+								  rng.randf_range(0.12, 0.28))
+			2: # rura/pręt
+				bm.size = Vector3(rng.randf_range(0.1, 0.22),
+								  rng.randf_range(0.3, 0.16),
+								  rng.randf_range(0.5, base.z * 0.9))
+		mi.mesh = bm
+		mi.set_surface_override_material(0, mat)
+
+		var px := rng.randf_range(-base.x * 0.45, base.x * 0.45)
+		var py := rng.randf_range(base.y * 0.2, base.y * 0.55)
+		var pz := rng.randf_range(-base.z * 0.45, base.z * 0.45)
+		mi.position = Vector3(px, py, pz)
+
+		mi.rotation.y = rng.randf_range(-PI, PI)
+		mi.rotation.x = rng.randf_range(-0.55, 0.55)
+		mi.rotation.z = rng.randf_range(-0.45, 0.45)
+		pile.add_child(mi)
+
+	# Małe detale na wierzchu (kawałki metalu)
+	var chunk_count := rng.randi_range(3, 6)
+	for i in chunk_count:
+		var mi := MeshInstance3D.new()
+		var bm := BoxMesh.new()
+		bm.size = Vector3(rng.randf_range(0.15, 0.45),
+						  rng.randf_range(0.1, 0.3),
+						  rng.randf_range(0.15, 0.4))
+		mi.mesh = bm
+		mi.set_surface_override_material(0, mat)
+		mi.position = Vector3(
+			rng.randf_range(-base.x * 0.4, base.x * 0.4),
+			base.y * 0.5 + rng.randf_range(0.0, 0.25),
+			rng.randf_range(-base.z * 0.4, base.z * 0.4)
+		)
+		mi.rotation = Vector3(rng.randf_range(-PI, PI),
+							  rng.randf_range(-PI, PI),
+							  rng.randf_range(-PI, PI))
+		pile.add_child(mi)
+
+	# Co trzecia kupa dostaje oponę lub felgę
+	if rng.randi_range(0, 2) == 0:
+		var prop_scene := TYRE_SCENE if rng.randi_range(0, 1) == 0 else RIM_SCENE
+		var prop: Node3D = prop_scene.instantiate()
+		prop.position = Vector3(
+			rng.randf_range(-base.x * 0.35, base.x * 0.35),
+			base.y * 0.45,
+			rng.randf_range(-base.z * 0.35, base.z * 0.35)
+		)
+		prop.rotation.y = rng.randf_range(-PI, PI)
+		prop.rotation.x = rng.randf_range(-0.8, 0.8)
+		prop.scale = Vector3.ONE * rng.randf_range(0.55, 0.85)
+		pile.add_child(prop)
 
 func _find_player() -> Node3D:
 	var players := get_tree().get_nodes_in_group("player")

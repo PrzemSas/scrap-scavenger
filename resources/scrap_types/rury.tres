@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ScrapType" format=3]
+
+[ext_resource type="Script" path="res://scripts/ScrapType.gd" id="1"]
+[ext_resource type="Material" path="res://assets/materials/scrap_gray.tres" id="2"]
+
+[sub_resource type="CylinderMesh" id="CM1"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 0.9
+
+[resource]
+script = ExtResource("1")
+name = "Rury"
+mesh = SubResource("CM1")
+material = ExtResource("2")
+count = 22
+scale_min = 0.7
+scale_max = 2.4
+height_variation = 1.6
+random_rotation = true

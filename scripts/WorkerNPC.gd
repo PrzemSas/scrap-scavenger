@@ -55,10 +55,17 @@ func _find_nearest_scrap() -> Node3D:
 	var sm = get_tree().current_scene.get_node_or_null("SpawnManager")
 	if not sm:
 		return null
+	var players := get_tree().get_nodes_in_group("player")
+	var player_pos := Vector3.ZERO
+	var has_player := not players.is_empty()
+	if has_player:
+		player_pos = (players[0] as Node3D).global_position
 	var best: Node3D = null
 	var best_dist: float = DETECT_DIST * (1.0 + GameManager.detect_range_bonus)
 	for ch in sm.get_children():
 		if ch is Area3D and ch.has_method("collect"):
+			if has_player and ch.global_position.distance_to(player_pos) < 6.0:
+				continue
 			var d: float = ch.global_position.distance_to(global_position)
 			if d < best_dist:
 				best_dist = d

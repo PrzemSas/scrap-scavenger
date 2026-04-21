@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bddh85yeqdbfm"
-path="res://.godot/imported/small_lpg_tank_2k_small_lpg_tank_metal-small_lpg_tank_rough.jpg-fedb9db7c0786b215408b902c1eaf390.ctex"
+path.s3tc="res://.godot/imported/small_lpg_tank_2k_small_lpg_tank_metal-small_lpg_tank_rough.jpg-fedb9db7c0786b215408b902c1eaf390.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "640540217f08b1e92c452b59f9ce1882"
@@ -14,11 +15,11 @@ generator_parameters={
 [deps]
 
 source_file="res://assets/models/polyhaven/small_lpg_tank/small_lpg_tank_2k_small_lpg_tank_metal-small_lpg_tank_rough.jpg"
-dest_files=["res://.godot/imported/small_lpg_tank_2k_small_lpg_tank_metal-small_lpg_tank_rough.jpg-fedb9db7c0786b215408b902c1eaf390.ctex"]
+dest_files=["res://.godot/imported/small_lpg_tank_2k_small_lpg_tank_metal-small_lpg_tank_rough.jpg-fedb9db7c0786b215408b902c1eaf390.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

@@ -38,11 +38,26 @@ func setup(data:Dictionary)->void:
 			var m:=PrismMesh.new(); m.size=Vector3(0.3,0.3,0.3); mi.mesh=m
 		"crystal":
 			var m:=PrismMesh.new(); m.size=Vector3(0.2,0.4,0.2); mi.mesh=m
+		"stone_chunk":
+			var m:=BoxMesh.new(); m.size=Vector3(0.35,0.22,0.30); mi.mesh=m
+		"steel_beam":
+			var m:=BoxMesh.new(); m.size=Vector3(0.6,0.1,0.12); mi.mesh=m
+		"concrete_slab":
+			var m:=BoxMesh.new(); m.size=Vector3(0.40,0.08,0.32); mi.mesh=m
+		"wiring":
+			var m:=TorusMesh.new(); m.inner_radius=0.05; m.outer_radius=0.16; mi.mesh=m
 		_:
 			var m:=BoxMesh.new(); m.size=Vector3(0.3,0.3,0.3); mi.mesh=m
 	var mat:=StandardMaterial3D.new()
-	mat.albedo_color=cl[r]; mat.emission_enabled=true; mat.emission=cl[r]
-	mat.emission_energy_multiplier=0.5+r*0.4; mat.metallic=0.3+r*0.15; mat.roughness=0.7-r*0.1
+	var is_building:bool=data.get("category","")=="building"
+	if is_building:
+		var bcl:Dictionary={"stone_chunk":Color("#9E9E9E"),"steel_beam":Color("#607D8B"),"concrete_slab":Color("#BDBDBD"),"wiring":Color("#FFC107")}
+		var bc:Color=bcl.get(data.get("id",""),Color("#9E9E9E"))
+		mat.albedo_color=bc; mat.emission_enabled=true; mat.emission=bc
+		mat.emission_energy_multiplier=0.3; mat.metallic=0.1; mat.roughness=0.9
+	else:
+		mat.albedo_color=cl[r]; mat.emission_enabled=true; mat.emission=cl[r]
+		mat.emission_energy_multiplier=0.5+r*0.4; mat.metallic=0.3+r*0.15; mat.roughness=0.7-r*0.1
 	mi.material_override=mat
 	if r>=2: mi.scale=Vector3(1.4,1.4,1.4)
 	if r>=3: mi.scale=Vector3(1.8,1.8,1.8)
@@ -64,16 +79,23 @@ func collect()->void:
 	if _collected or not is_inside_tree() or is_queued_for_deletion(): return
 	_collected=true
 	var pos:=global_position
+	AudioManager.play_collect_typed(scrap_data.get("id", ""))
+	var sp=SPARKS.instantiate()
+	if scrap_data.get("category","")=="building":
+		GameManager.add_to_inventory(scrap_data.duplicate())
+		sp.position=pos; sp.color=Color("#9E9E9E")
+		get_tree().current_scene.add_child(sp); sp.emitting=true
+		get_tree().create_timer(1.0).timeout.connect(sp.queue_free)
+		queue_free(); return
 	var val:int=scrap_data.get("value",1)*GameManager.click_power
 	for i in GameManager.click_power:
 		if GameManager.inventory.size()<GameManager.max_slots: GameManager.add_to_inventory(scrap_data.duplicate())
-	AudioManager.play_collect_typed(scrap_data.get("id", ""))
 	var r:int=scrap_data.get("rarity",0)
 	var cl:Array=[Color("#888"),Color("#ff6a00"),Color("#00e5ff"),Color("#FFD700")]
 	if r>=2:
 		var cam=get_tree().current_scene.get_node_or_null("Camera3D")
 		if cam and cam.has_method("shake"): cam.shake(0.15 if r<3 else 0.5,5.0)
-	var sp=SPARKS.instantiate(); sp.position=pos; sp.color=cl[r]
+	sp.position=pos; sp.color=cl[r]
 	get_tree().current_scene.add_child(sp)
 	sp.emitting=true
 	get_tree().create_timer(1.0).timeout.connect(sp.queue_free)

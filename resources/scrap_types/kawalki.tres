@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ScrapType" format=3]
+
+[ext_resource type="Script" path="res://scripts/ScrapType.gd" id="1"]
+[ext_resource type="Material" path="res://assets/materials/scrap_dark.tres" id="2"]
+
+[sub_resource type="BoxMesh" id="BM1"]
+size = Vector3(0.28, 0.22, 0.32)
+
+[resource]
+script = ExtResource("1")
+name = "Kawałki"
+mesh = SubResource("BM1")
+material = ExtResource("2")
+count = 30
+scale_min = 0.4
+scale_max = 1.4
+height_variation = 0.9
+random_rotation = true

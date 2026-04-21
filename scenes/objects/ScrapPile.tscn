@@ -1,0 +1,29 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/ScrapPile.gd" id="1"]
+[ext_resource type="Resource" path="res://resources/scrap_types/blachy.tres" id="2"]
+[ext_resource type="Resource" path="res://resources/scrap_types/rury.tres" id="3"]
+[ext_resource type="Resource" path="res://resources/scrap_types/kawalki.tres" id="4"]
+[ext_resource type="Resource" path="res://resources/scrap_types/kable.tres" id="5"]
+[ext_resource type="Resource" path="res://resources/scrap_types/kola.tres" id="6"]
+
+[node name="ScrapPile" type="Node3D"]
+script = ExtResource("1")
+pile_radius = 2.8
+seed_override = 0
+scrap_types = [ExtResource("2"), ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6")]
+
+[node name="MultiMesh_Blachy" type="MultiMeshInstance3D" parent="."]
+cast_shadow = 1
+
+[node name="MultiMesh_Rury" type="MultiMeshInstance3D" parent="."]
+cast_shadow = 1
+
+[node name="MultiMesh_Kawałki" type="MultiMeshInstance3D" parent="."]
+cast_shadow = 1
+
+[node name="MultiMesh_Kable" type="MultiMeshInstance3D" parent="."]
+cast_shadow = 1
+
+[node name="MultiMesh_KołaZębate" type="MultiMeshInstance3D" parent="."]
+cast_shadow = 1

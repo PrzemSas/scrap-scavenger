@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=3]
+[gd_scene load_steps=43 format=3]
 [ext_resource type="Script" path="res://scripts/SpawnManager.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2"]
 [ext_resource type="Script" path="res://scripts/AutoCollector.gd" id="3"]
@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" path="res://scenes/objects/ScatterProps.tscn" id="24"]
 [ext_resource type="Script" path="res://scripts/GateTransition.gd" id="25"]
 [ext_resource type="PackedScene" path="res://scenes/objects/Gate.tscn" id="26"]
+[ext_resource type="Shader" path="res://assets/shaders/ground_plates.gdshader" id="sh_ground_plates"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_color.jpg" id="tex_junk_color"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_normal.jpg" id="tex_junk_normal"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_roughness.jpg" id="tex_junk_rough"]
@@ -40,19 +41,33 @@ radius = 2.5
 [sub_resource type="PlaneMesh" id="PM1"]
 size = Vector2(100,100)
 
-[sub_resource type="StandardMaterial3D" id="GM1"]
-albedo_color = Color(0.58, 0.54, 0.48, 1)
-albedo_texture = ExtResource("tex_junk_color")
-normal_enabled = true
-normal_texture = ExtResource("tex_junk_normal")
-normal_scale = 1.2
-roughness = 0.92
-roughness_texture = ExtResource("tex_junk_rough")
-roughness_texture_channel = 0
-ao_enabled = true
-ao_texture = ExtResource("tex_junk_ao")
-metallic = 0.04
-uv1_scale = Vector3(7,7,1)
+[sub_resource type="ShaderMaterial" id="GM1"]
+shader = ExtResource("sh_ground_plates")
+shader_parameter/uv_scale = Vector2(5.0, 5.0)
+shader_parameter/brightness = 1.7
+shader_parameter/plate_size = 3.2
+shader_parameter/seam_width = 0.055
+shader_parameter/col_seam = Color(0.04, 0.03, 0.02, 1.0)
+shader_parameter/col_rust_a = Color(0.88, 0.28, 0.04, 1.0)
+shader_parameter/col_rust_b = Color(0.65, 0.18, 0.05, 1.0)
+shader_parameter/col_moss = Color(0.18, 0.52, 0.10, 1.0)
+shader_parameter/col_puddle = Color(0.06, 0.22, 0.48, 1.0)
+shader_parameter/col_oil_a = Color(0.05, 0.12, 0.35, 1.0)
+shader_parameter/col_oil_b = Color(0.40, 0.05, 0.30, 1.0)
+shader_parameter/col_warn = Color(0.95, 0.72, 0.02, 1.0)
+shader_parameter/col_paint = Color(0.55, 0.08, 0.06, 1.0)
+shader_parameter/col_dirt = Color(0.38, 0.28, 0.16, 1.0)
+shader_parameter/str_rust = 0.80
+shader_parameter/str_moss = 0.60
+shader_parameter/str_puddle = 0.65
+shader_parameter/str_oil = 0.55
+shader_parameter/str_warn = 0.50
+shader_parameter/str_paint = 0.40
+shader_parameter/str_dirt = 0.55
+shader_parameter/albedo_tex = ExtResource("tex_junk_color")
+shader_parameter/normal_tex = ExtResource("tex_junk_normal")
+shader_parameter/roughness_tex = ExtResource("tex_junk_rough")
+shader_parameter/ao_tex = ExtResource("tex_junk_ao")
 
 [sub_resource type="PlaneMesh" id="PM_forge"]
 size = Vector2(9,9)

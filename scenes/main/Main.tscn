@@ -1,4 +1,5 @@
-[gd_scene load_steps=43 format=3]
+[gd_scene load_steps=44 format=3]
+[ext_resource type="Script" path="res://scripts/ScrapyardOutskirts.gd" id="so"]
 [ext_resource type="Script" path="res://scripts/SpawnManager.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2"]
 [ext_resource type="Script" path="res://scripts/AutoCollector.gd" id="3"]
@@ -80,32 +81,33 @@ roughness = 0.88
 emission_enabled = false
 uv1_scale = Vector3(3,3,3)
 [sub_resource type="ProceduralSkyMaterial" id="SkyMat"]
-sky_top_color = Color(0.30, 0.50, 0.78, 1)
-sky_horizon_color = Color(0.72, 0.80, 0.88, 1)
-sky_curve = 0.25
-sky_energy_multiplier = 1.8
-ground_bottom_color = Color(0.18, 0.15, 0.12, 1)
-ground_horizon_color = Color(0.28, 0.24, 0.20, 1)
+sky_top_color = Color(0.13, 0.38, 0.75, 1)
+sky_horizon_color = Color(0.60, 0.80, 0.96, 1)
+sky_curve = 0.18
+sky_energy_multiplier = 2.4
+ground_bottom_color = Color(0.20, 0.17, 0.12, 1)
+ground_horizon_color = Color(0.35, 0.30, 0.22, 1)
 ground_curve = 0.06
-ground_energy_multiplier = 1.2
-sun_angle_max = 32.0
-sun_curve = 0.08
+ground_energy_multiplier = 1.4
+sun_angle_max = 28.0
+sun_curve = 0.06
 
 [sub_resource type="Sky" id="Sky1"]
 sky_material = SubResource("SkyMat")
 
 [sub_resource type="Environment" id="E1"]
 background_mode = 2
+background_energy_multiplier = 2.0
 sky = SubResource("Sky1")
 ambient_light_source = 2
 ambient_light_color = Color(0.90, 0.92, 1.0, 1)
-ambient_light_energy = 1.8
+ambient_light_energy = 2.4
 glow_enabled = true
-glow_intensity = 0.9
-glow_bloom = 0.12
+glow_intensity = 0.7
+glow_bloom = 0.08
 fog_enabled = true
-fog_light_color = Color(0.68, 0.65, 0.60, 1)
-fog_density = 0.006
+fog_light_color = Color(0.65, 0.72, 0.78, 1)
+fog_density = 0.004
 [node name="Main" type="Node3D"]
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1,0,0,0,0.707,0.707,0,-0.707,0.707,0,8,8)
@@ -163,6 +165,8 @@ script = ExtResource("22")
 [node name="EnvironmentProps" parent="." instance=ExtResource("5")]
 [node name="JunkPiles" parent="." instance=ExtResource("6")]
 [node name="WorldBorder" parent="." instance=ExtResource("10")]
+[node name="ScrapyardOutskirts" type="Node3D" parent="."]
+script = ExtResource("so")
 [node name="Furnace3D" parent="." instance=ExtResource("11")]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0,0)
 [node name="SellPoint" parent="." instance=ExtResource("13")]

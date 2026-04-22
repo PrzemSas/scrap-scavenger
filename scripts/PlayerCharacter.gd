@@ -57,7 +57,15 @@ func _physics_process(delta: float) -> void:
 	_is_sprinting = Input.is_key_pressed(KEY_SHIFT)
 	var speed := SPRINT_SPEED if _is_sprinting else SPEED
 	var dir := Vector3.ZERO
-	if input_dir != Vector2.ZERO:
+	if GameManager.fp_mode:
+		# lewo/prawo = obrót gracza, góra/dół = ruch w przód/tył bez zmiany obrotu
+		if input_dir.x != 0.0:
+			rotation.y -= input_dir.x * delta * 2.5
+		if input_dir.y != 0.0:
+			var pf := -global_basis.z; pf.y = 0.0
+			if pf.length_squared() > 0.001:
+				dir = pf.normalized() * (-input_dir.y)
+	elif input_dir != Vector2.ZERO:
 		if cam:
 			var cf := -cam.global_basis.z; cf.y = 0
 			var cr :=  cam.global_basis.x; cr.y = 0
@@ -67,7 +75,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			dir = Vector3(input_dir.x, 0, input_dir.y).normalized()
 	_is_moving = dir.length_squared() > 0
-	if _is_moving:
+	if _is_moving and not GameManager.fp_mode:
 		rotation.y = lerp_angle(rotation.y, atan2(-dir.x, -dir.z), 0.18)
 		_footstep_t += delta
 		var step_interval := 0.38 * (SPEED / speed)

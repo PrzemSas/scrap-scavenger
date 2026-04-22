@@ -2,28 +2,27 @@ extends DirectionalLight3D
 
 signal is_night_changed(night: bool)
 
-var _time: float = 0.3   # 0=noc, 0.25=wschód, 0.5=południe, 0.75=zachód
+var _time: float = 0.5   # 0=noc, 0.25=wschód, 0.5=południe, 0.75=zachód
 var _env: Environment = null
 var is_night: bool = false
 
-# Kolory nieba w ciągu dnia
 const SKY_TOP: Array = [
-	Color(0.02, 0.02, 0.08),   # noc
-	Color(0.12, 0.06, 0.22),   # wschód
-	Color(0.08, 0.14, 0.38),   # dzień
-	Color(0.06, 0.04, 0.14),   # zachód (obecny klimat)
+	Color(0.01, 0.01, 0.06),   # noc
+	Color(0.10, 0.06, 0.22),   # wschód
+	Color(0.13, 0.38, 0.75),   # dzień — jasny błękit
+	Color(0.06, 0.04, 0.14),   # zachód
 ]
 const SKY_HOR: Array = [
-	Color(0.04, 0.03, 0.10),   # noc
-	Color(0.85, 0.30, 0.06),   # wschód
-	Color(0.55, 0.72, 0.90),   # dzień
-	Color(0.88, 0.28, 0.04),   # zachód
+	Color(0.03, 0.03, 0.09),   # noc
+	Color(0.90, 0.40, 0.08),   # wschód — pomarańcz
+	Color(0.60, 0.80, 0.96),   # dzień — jasnoniebieski
+	Color(0.92, 0.32, 0.05),   # zachód — czerwień
 ]
 const AMB_COL: Array = [
-	Color(0.04, 0.04, 0.12),   # noc
-	Color(0.55, 0.42, 0.32),   # wschód
-	Color(0.72, 0.72, 0.78),   # dzień
-	Color(0.60, 0.40, 0.25),   # zachód
+	Color(0.05, 0.05, 0.14),   # noc
+	Color(0.62, 0.46, 0.30),   # wschód
+	Color(0.88, 0.90, 0.95),   # dzień — neutralne jasne
+	Color(0.68, 0.46, 0.24),   # zachód
 ]
 
 func _ready() -> void:
@@ -43,13 +42,13 @@ func _process(delta: float) -> void:
 		GameManager.notification.emit("🌙 Night falls..." if is_night else "☀️ Dawn breaks.")
 
 	# Oświetlenie kierunkowe
-	light_energy = lerpf(0.05, 1.1, maxf(sin(_time * PI), 0.0))
+	light_energy = lerpf(0.04, 3.2, maxf(sin(_time * PI), 0.0))
 	var t := _time
-	if   t < 0.25: light_color = Color(0.15, 0.2, 0.4).lerp(Color(1.0, 0.45, 0.15), t / 0.25)
-	elif t < 0.5:  light_color = Color(1.0, 0.45, 0.15).lerp(Color(1.0, 0.88, 0.65), (t - 0.25) / 0.25)
-	elif t < 0.75: light_color = Color(1.0, 0.88, 0.65).lerp(Color(1.0, 0.45, 0.15), (t - 0.5) / 0.25)
-	else:          light_color = Color(1.0, 0.45, 0.15).lerp(Color(0.15, 0.2, 0.4),  (t - 0.75) / 0.25)
-	rotation_degrees.x = lerpf(-17.0, -70.0, sin(_time * PI))
+	if   t < 0.25: light_color = Color(0.20, 0.25, 0.50).lerp(Color(1.0, 0.55, 0.20), t / 0.25)
+	elif t < 0.5:  light_color = Color(1.0, 0.55, 0.20).lerp(Color(1.0, 0.95, 0.80), (t - 0.25) / 0.25)
+	elif t < 0.75: light_color = Color(1.0, 0.95, 0.80).lerp(Color(1.0, 0.50, 0.18), (t - 0.5) / 0.25)
+	else:          light_color = Color(1.0, 0.50, 0.18).lerp(Color(0.20, 0.25, 0.50), (t - 0.75) / 0.25)
+	rotation_degrees.x = lerpf(-15.0, -72.0, sin(_time * PI))
 
 	if not _env:
 		return
@@ -74,13 +73,13 @@ func _process(delta: float) -> void:
 		sky_mat.ground_horizon_color = sky_hor.darkened(0.55)
 
 	_env.ambient_light_color  = amb
-	_env.ambient_light_energy = lerpf(0.30, 1.5, maxf(sin(_time * PI), 0.0))
+	_env.ambient_light_energy = lerpf(0.20, 2.4, maxf(sin(_time * PI), 0.0))
 
 	# Mgła — gęstsza w nocy + bonus od pogody
-	var fog_night := Color(0.01, 0.01, 0.04)
-	var fog_day   := Color(0.55, 0.50, 0.44)
+	var fog_night := Color(0.01, 0.01, 0.05)
+	var fog_day   := Color(0.65, 0.72, 0.78)
 	_env.fog_light_color = fog_night.lerp(fog_day, maxf(sin(_time * PI), 0.0))
-	var base_fog := lerpf(0.028, 0.014, maxf(sin(_time * PI), 0.0))
+	var base_fog := lerpf(0.022, 0.004, maxf(sin(_time * PI), 0.0))
 	var ws := get_node_or_null("/root/WeatherSystem")
 	var weather_fog := 0.0
 	if ws:

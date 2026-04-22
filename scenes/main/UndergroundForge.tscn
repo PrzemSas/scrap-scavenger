@@ -1,6 +1,7 @@
-[gd_scene load_steps=23 format=3]
+[gd_scene load_steps=24 format=3]
 
 [ext_resource type="Script" path="res://scripts/CameraController.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/ForgeVisuals.gd" id="fv"]
 [ext_resource type="Script" path="res://scripts/GateTransition.gd" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/objects/PlayerCharacter.tscn" id="3"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="4"]
@@ -220,3 +221,6 @@ shape = SubResource("GateShape")
 [node name="PauseMenu" parent="CanvasLayer" instance=ExtResource("5")]
 
 [node name="ForgeExpansionPanel" parent="CanvasLayer" instance=ExtResource("8")]
+
+[node name="ForgeVisuals" type="Node" parent="."]
+script = ExtResource("fv")

@@ -7,6 +7,8 @@ const PANEL_TO_NODE: Dictionary = {
 	"sell":    "SellPoint",
 }
 
+@export var start_in_fp: bool = false
+
 var _zoom: float = 14.0
 var _target: Node3D = null
 var _shake_amount: float = 0.0
@@ -36,6 +38,8 @@ func _ready() -> void:
 				_player_meshes.append(child)
 	GameManager.proximity_entered.connect(_on_proximity_entered)
 	GameManager.proximity_exited.connect(_on_proximity_exited)
+	if start_in_fp:
+		_enter_fp()
 
 func shake(amount: float, freq: float = 5.0) -> void:
 	_shake_amount = amount

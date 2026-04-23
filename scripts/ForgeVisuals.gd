@@ -2,17 +2,12 @@ extends Node
 
 @onready var _env_node: WorldEnvironment = get_parent().get_node("WorldEnvironment")
 @onready var _main_light: OmniLight3D = get_parent().get_node("MainForgeLight")
-@onready var _pit_nw: OmniLight3D = get_parent().get_node("FirePit_NW")
-@onready var _pit_ne: OmniLight3D = get_parent().get_node("FirePit_NE")
-@onready var _pit_sw: OmniLight3D = get_parent().get_node("FirePit_SW")
-@onready var _pit_se: OmniLight3D = get_parent().get_node("FirePit_SE")
 @onready var _embers: CPUParticles3D = get_parent().get_node("EmberDrift")
 
 const STAGE_FOG:    Array = [0.06, 0.04, 0.022, 0.012]
 const STAGE_AMBIENT: Array = [0.4,  0.7,  1.0,   1.3]
 const STAGE_GLOW:   Array = [0.8,  1.1,  1.7,   2.3]
 const STAGE_MAIN:   Array = [2.5,  3.2,  4.5,   5.5]
-const STAGE_PITS:   Array = [1.2,  2.0,  3.0,   3.8]
 const STAGE_EMBERS: Array = [30,   65,   110,   160]
 
 var _stage_groups: Array[Node3D] = []
@@ -96,15 +91,11 @@ func _apply_stage(stage: int, animate: bool) -> void:
 		tw.tween_property(env, "ambient_light_energy", STAGE_AMBIENT[stage], dur)
 		tw.tween_property(env, "glow_intensity",       STAGE_GLOW[stage],   dur)
 		tw.tween_property(_main_light, "light_energy", STAGE_MAIN[stage],   dur)
-		for pit in [_pit_nw, _pit_ne, _pit_sw, _pit_se]:
-			tw.tween_property(pit, "light_energy", STAGE_PITS[stage], dur)
 	else:
 		env.fog_density          = STAGE_FOG[stage]
 		env.ambient_light_energy = STAGE_AMBIENT[stage]
 		env.glow_intensity       = STAGE_GLOW[stage]
 		_main_light.light_energy = STAGE_MAIN[stage]
-		for pit in [_pit_nw, _pit_ne, _pit_sw, _pit_se]:
-			pit.light_energy = STAGE_PITS[stage]
 
 	_embers.amount = STAGE_EMBERS[stage]
 

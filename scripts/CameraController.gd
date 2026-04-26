@@ -16,6 +16,7 @@ var _shake_freq:  float = 5.0
 var _shake_t:     float = 0.0
 
 var _fp_mode: bool = false
+var _zone_fp: bool = false
 var _focus_target: Node3D = null
 var _user_override: bool = false
 var _fp_look_dir: Vector3 = Vector3.FORWARD  # stały kierunek patrzenia (bez celu)
@@ -58,6 +59,15 @@ func _on_proximity_exited(panel_id: String) -> void:
 	if not PANEL_TO_NODE.has(panel_id): return
 	_focus_target = null
 	_user_override = false
+	if not _zone_fp:
+		_exit_fp()
+
+func enter_zone_fp() -> void:
+	_zone_fp = true
+	_enter_fp()
+
+func exit_zone_fp() -> void:
+	_zone_fp = false
 	_exit_fp()
 
 func _enter_fp() -> void:

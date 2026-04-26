@@ -3,11 +3,9 @@ extends Node3D
 var _env: Environment
 var _sun: DirectionalLight3D
 var _forge_zone: Area3D
+var _camera: Camera3D
 var _in_forge: bool = false
 var _blend: float = 0.0
-
-# Nodes to hide when inside the forge (roof + south wall block the isometric camera)
-var _hide_when_inside: Array[Node3D] = []
 
 const JY_AMB_COL  := Color(0.12, 0.08, 0.04)
 const JY_AMB_E    := 0.4
@@ -33,29 +31,21 @@ func _ready() -> void:
 	if _forge_zone:
 		_forge_zone.body_entered.connect(_on_enter)
 		_forge_zone.body_exited.connect(_on_exit)
-
-	# Collect nodes to hide when inside
-	var fs := get_parent().get_node_or_null("ForgeStructure")
-	if fs:
-		for node_name in ["RoofWest", "RoofEast", "WallS"]:
-			var n: Node3D = fs.get_node_or_null(node_name)
-			if n:
-				_hide_when_inside.append(n)
-
+	_camera = get_parent().get_node_or_null("Camera3D")
 	AudioManager.play_zone("junkyard", -22.0)
 
 func _on_enter(body: Node3D) -> void:
 	if body.is_in_group("player"):
 		_in_forge = true
-		for n in _hide_when_inside:
-			n.visible = false
+		if _camera:
+			_camera.enter_zone_fp()
 		AudioManager.play_zone("forge", -20.0)
 
 func _on_exit(body: Node3D) -> void:
 	if body.is_in_group("player"):
 		_in_forge = false
-		for n in _hide_when_inside:
-			n.visible = true
+		if _camera:
+			_camera.exit_zone_fp()
 		AudioManager.play_zone("junkyard", -22.0)
 
 func _process(delta: float) -> void:

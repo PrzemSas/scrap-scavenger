@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3]
+[gd_scene load_steps=45 format=3]
 [ext_resource type="Script" path="res://scripts/ScrapyardOutskirts.gd" id="so"]
 [ext_resource type="Script" path="res://scripts/SpawnManager.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2"]
@@ -26,6 +26,7 @@
 [ext_resource type="Script" path="res://scripts/ZoneManager.gd" id="22"]
 [ext_resource type="PackedScene" path="res://scenes/objects/ScatterProps.tscn" id="24"]
 [ext_resource type="Script" path="res://scripts/GateTransition.gd" id="25"]
+[ext_resource type="Script" path="res://scripts/ForgePaths.gd" id="forge_paths"]
 [ext_resource type="PackedScene" path="res://scenes/objects/Gate.tscn" id="26"]
 [ext_resource type="Shader" path="res://assets/shaders/ground_plates.gdshader" id="sh_ground_plates"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_color.jpg" id="tex_junk_color"]
@@ -226,3 +227,6 @@ spawn_pos = Vector3(0, 0, 10)
 
 [node name="UGForgeGateShape" type="CollisionShape3D" parent="UGForgeGate"]
 shape = SubResource("GateShape")
+
+[node name="ForgePaths" type="Node3D" parent="."]
+script = ExtResource("forge_paths")

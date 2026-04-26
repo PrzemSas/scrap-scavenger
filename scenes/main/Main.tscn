@@ -207,9 +207,6 @@ script = ExtResource("16")
 
 [node name="WeatherEffects" parent="." instance=ExtResource("weather_fx")]
 
-[node name="ForgeGateVisual" parent="." instance=ExtResource("26")]
-transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 0, 9)
-
 [node name="ForgeGate" type="Area3D" parent="."]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 1, 9)
 script = ExtResource("25")
@@ -219,9 +216,6 @@ spawn_pos = Vector3(0, 0, 5)
 
 [node name="ForgeGateShape" type="CollisionShape3D" parent="ForgeGate"]
 shape = SubResource("GateShape")
-
-[node name="UGForgeGateVisual" parent="." instance=ExtResource("26")]
-transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -8, 0, -5)
 
 [node name="UGForgeGate" type="Area3D" parent="."]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -8, 1, -5)

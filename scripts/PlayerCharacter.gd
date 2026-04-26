@@ -60,7 +60,7 @@ func _physics_process(delta: float) -> void:
 	if GameManager.fp_mode:
 		# lewo/prawo = obrót gracza, góra/dół = ruch w przód/tył bez zmiany obrotu
 		if input_dir.x != 0.0:
-			rotation.y -= input_dir.x * delta * 2.5
+			rotation.y -= input_dir.x * delta * 1.2
 		if input_dir.y != 0.0:
 			var pf := -global_basis.z; pf.y = 0.0
 			if pf.length_squared() > 0.001:

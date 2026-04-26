@@ -5,3 +5,4 @@ exports/
 Thumbs.db
 *.exe
 *.pck
+.claude/

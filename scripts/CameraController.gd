@@ -110,7 +110,7 @@ func _process(delta: float) -> void:
 			var d := _focus_target.global_position - _target.global_position
 			d.y = 0.0
 			_fp_look_dir = d.normalized() if d.length() > 0.1 else _fp_look_dir
-			var eye := _target.global_position + Vector3(0, 1.6, 0) + _fp_look_dir * 0.5
+			var eye := _target.global_position + Vector3(0, 1.6, 0)
 			global_position = eye
 			look_at(_focus_target.global_position + Vector3(0, 1.1, 0))
 		else:
@@ -119,7 +119,7 @@ func _process(delta: float) -> void:
 			fwd.y = 0.0
 			if fwd.length() > 0.01:
 				_fp_look_dir = fwd.normalized()
-			var eye := _target.global_position + Vector3(0, 1.6, 0) + _fp_look_dir * 0.3
+			var eye := _target.global_position + Vector3(0, 1.6, 0)
 			global_position = eye
 			look_at(eye + _fp_look_dir * 5.0)
 		return

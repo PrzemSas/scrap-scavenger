@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3]
+[gd_scene load_steps=30 format=3]
 
 [ext_resource type="Script" path="res://scripts/CameraController.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/ForgeVisuals.gd" id="fv"]
@@ -9,32 +9,45 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="4"]
 [ext_resource type="PackedScene" path="res://scenes/ui/PauseMenu.tscn" id="5"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/forge_stone.webp" id="6"]
+[ext_resource type="Texture2D" path="res://assets/textures/monastery/floor_color.jpg" id="MonColor"]
+[ext_resource type="Texture2D" path="res://assets/textures/monastery/floor_normal.exr" id="MonNormal"]
+[ext_resource type="Texture2D" path="res://assets/textures/monastery/floor_rough.exr" id="MonRough"]
 [ext_resource type="PackedScene" path="res://scenes/objects/Gate.tscn" id="7"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ForgeExpansionPanel.tscn" id="8"]
 [ext_resource type="Script" path="res://scripts/ForgeExpansionPanel.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/ZoneMusic.gd" id="zm"]
+[ext_resource type="Script" path="res://scripts/ForgeLightFlicker.gd" id="flicker"]
 
 [sub_resource type="Environment" id="UGEnv"]
 background_mode = 1
-background_color = Color(0.01, 0.005, 0.002, 1)
-ambient_light_color = Color(0.22, 0.09, 0.02, 1)
-ambient_light_energy = 0.9
+background_color = Color(0.008, 0.003, 0.001, 1)
+ambient_light_color = Color(0.28, 0.10, 0.02, 1)
+ambient_light_energy = 1.1
+tonemap_mode = 2
+tonemap_exposure = 1.15
 fog_enabled = true
-fog_light_color = Color(0.12, 0.04, 0.01, 1)
-fog_density = 0.03
+fog_light_color = Color(0.18, 0.06, 0.01, 1)
+fog_density = 0.04
 glow_enabled = true
-glow_intensity = 1.4
-glow_bloom = 0.18
+glow_normalized = true
+glow_intensity = 2.0
+glow_bloom = 0.30
+glow_blend_mode = 2
 
 [sub_resource type="PlaneMesh" id="FloorMesh"]
 size = Vector2(30, 30)
 
 [sub_resource type="StandardMaterial3D" id="StoneMat"]
-albedo_color = Color(0.50, 0.42, 0.32, 1)
-albedo_texture = ExtResource("6")
-roughness = 0.92
-metallic = 0.01
-uv1_scale = Vector3(8, 8, 8)
+albedo_color = Color(0.68, 0.55, 0.40, 1)
+albedo_texture = ExtResource("MonColor")
+normal_enabled = true
+normal_texture = ExtResource("MonNormal")
+normal_scale = 1.4
+roughness_texture = ExtResource("MonRough")
+roughness_texture_channel = 0
+roughness = 0.88
+metallic = 0.02
+uv1_scale = Vector3(6, 6, 6)
 
 [sub_resource type="StandardMaterial3D" id="WallMat"]
 albedo_color = Color(0.25, 0.14, 0.07, 1)
@@ -86,6 +99,7 @@ light_color = Color(1.0, 0.50, 0.12, 1)
 light_energy = 3.8
 omni_range = 22.0
 shadow_enabled = true
+script = ExtResource("flicker")
 
 [node name="FirePit_NW" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -10, 1.5, -10)
@@ -93,6 +107,7 @@ light_color = Color(1.0, 0.38, 0.05, 1)
 light_energy = 2.2
 omni_range = 10.0
 shadow_enabled = true
+script = ExtResource("flicker")
 
 [node name="FirePit_NE" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 10, 1.5, -10)
@@ -100,6 +115,7 @@ light_color = Color(1.0, 0.42, 0.07, 1)
 light_energy = 2.2
 omni_range = 10.0
 shadow_enabled = true
+script = ExtResource("flicker")
 
 [node name="FirePit_SW" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -10, 1.5, 5)
@@ -107,6 +123,7 @@ light_color = Color(1.0, 0.36, 0.05, 1)
 light_energy = 1.8
 omni_range = 8.0
 shadow_enabled = true
+script = ExtResource("flicker")
 
 [node name="FirePit_SE" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 10, 1.5, 5)
@@ -114,6 +131,7 @@ light_color = Color(1.0, 0.40, 0.06, 1)
 light_energy = 1.8
 omni_range = 8.0
 shadow_enabled = true
+script = ExtResource("flicker")
 
 [node name="EmberDrift" type="CPUParticles3D" parent="."]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 1.0, -3)

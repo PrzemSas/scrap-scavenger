@@ -7,12 +7,12 @@ var _camera: Camera3D
 var _in_forge: bool = false
 var _blend: float = 0.0
 
-const JY_AMB_COL  := Color(0.12, 0.08, 0.04)
-const JY_AMB_E    := 0.4
-const JY_FOG_COL  := Color(0.10, 0.06, 0.02)
-const JY_FOG_D    := 0.010
-const JY_GLOW     := 0.4
-const JY_SUN      := 0.7
+const JY_AMB_COL  := Color(0.32, 0.18, 0.08)
+const JY_AMB_E    := 0.65
+const JY_FOG_COL  := Color(0.30, 0.18, 0.07)
+const JY_FOG_D    := 0.012
+const JY_GLOW     := 0.95
+const JY_SUN      := 0.80
 
 const FG_AMB_COL  := Color(0.32, 0.14, 0.04)
 const FG_AMB_E    := 1.2

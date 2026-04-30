@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://scripts/CameraController.gd" id="1"]
 [ext_resource type="Script" path="res://scripts/GateTransition.gd" id="2"]
@@ -11,15 +11,21 @@
 [ext_resource type="Script" path="res://scripts/WorkerManager.gd" id="9"]
 [ext_resource type="Script" path="res://scripts/ScrapMagnet.gd" id="10"]
 [ext_resource type="Script" path="res://scripts/ZoneMusic.gd" id="zm"]
+[ext_resource type="Shader" path="res://assets/shaders/ground_plates.gdshader" id="GndShader"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_color.jpg" id="JunkColor"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_normal.jpg" id="JunkNormal"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_roughness.jpg" id="JunkRough"]
+[ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_ao.jpg" id="JunkAO"]
+[ext_resource type="PackedScene" path="res://scenes/effects/AmbientDust.tscn" id="AmbDust"]
 
 [sub_resource type="ProceduralSkyMaterial" id="WasteSky"]
-sky_top_color = Color(0.22, 0.14, 0.08, 1)
-sky_horizon_color = Color(0.55, 0.28, 0.08, 1)
-sky_curve = 0.18
-sky_energy_multiplier = 1.2
-ground_bottom_color = Color(0.15, 0.10, 0.06, 1)
-ground_horizon_color = Color(0.35, 0.18, 0.06, 1)
-ground_energy_multiplier = 0.8
+sky_top_color = Color(0.06, 0.04, 0.02, 1)
+sky_horizon_color = Color(0.75, 0.28, 0.04, 1)
+sky_curve = 0.25
+sky_energy_multiplier = 2.0
+ground_bottom_color = Color(0.10, 0.06, 0.03, 1)
+ground_horizon_color = Color(0.52, 0.20, 0.05, 1)
+ground_energy_multiplier = 1.0
 
 [sub_resource type="Sky" id="WasteSkyObj"]
 sky_material = SubResource("WasteSky")
@@ -28,24 +34,44 @@ sky_material = SubResource("WasteSky")
 background_mode = 2
 sky = SubResource("WasteSkyObj")
 ambient_light_source = 2
-ambient_light_color = Color(0.72, 0.52, 0.30, 1)
-ambient_light_energy = 1.4
+ambient_light_color = Color(0.85, 0.52, 0.20, 1)
+ambient_light_energy = 1.8
+tonemap_mode = 2
+tonemap_exposure = 1.1
 glow_enabled = true
-glow_intensity = 0.6
-glow_bloom = 0.08
+glow_normalized = true
+glow_intensity = 1.4
+glow_bloom = 0.22
+glow_blend_mode = 2
 fog_enabled = true
-fog_light_color = Color(0.55, 0.32, 0.12, 1)
-fog_density = 0.008
+fog_light_color = Color(0.68, 0.30, 0.06, 1)
+fog_density = 0.014
+fog_aerial_perspective = 0.4
 
 [sub_resource type="WorldBoundaryShape3D" id="FloorShape"]
 
 [sub_resource type="PlaneMesh" id="GroundMesh"]
 size = Vector2(120, 120)
+subdivide_width = 1
+subdivide_depth = 1
 
-[sub_resource type="StandardMaterial3D" id="GroundMat"]
-albedo_color = Color(0.42, 0.30, 0.18, 1)
-roughness = 0.95
-metallic = 0.02
+[sub_resource type="ShaderMaterial" id="GroundMat"]
+shader = ExtResource("GndShader")
+shader_parameter/albedo_tex = ExtResource("JunkColor")
+shader_parameter/normal_tex = ExtResource("JunkNormal")
+shader_parameter/roughness_tex = ExtResource("JunkRough")
+shader_parameter/ao_tex = ExtResource("JunkAO")
+shader_parameter/uv_scale = Vector2(9.0, 9.0)
+shader_parameter/brightness = 1.5
+shader_parameter/plate_size = 3.2
+shader_parameter/seam_width = 0.055
+shader_parameter/str_rust = 0.85
+shader_parameter/str_moss = 0.50
+shader_parameter/str_puddle = 0.70
+shader_parameter/str_oil = 0.55
+shader_parameter/str_warn = 0.55
+shader_parameter/str_paint = 0.38
+shader_parameter/str_dirt = 0.65
 
 [sub_resource type="SphereShape3D" id="GateShape"]
 radius = 2.5
@@ -61,9 +87,16 @@ environment = SubResource("WasteEnv")
 
 [node name="SunLight" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.85,0,0.53, 0.27,0.87,-0.42, -0.46,0.50,0.74, 0,0,0)
-light_color = Color(1.0, 0.72, 0.40, 1)
-light_energy = 1.8
+light_color = Color(1.0, 0.62, 0.28, 1)
+light_energy = 2.4
 shadow_enabled = true
+shadow_bias = 0.04
+
+[node name="FillLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.85,0,-0.53, 0.15,0.95,0.27, 0.50,-0.30,0.82, 0,0,0)
+light_color = Color(0.32, 0.48, 0.75, 1)
+light_energy = 0.30
+shadow_enabled = false
 
 [node name="Ground" type="StaticBody3D" parent="."]
 
@@ -86,6 +119,9 @@ spawn_pos = Vector3(0, 0, -10)
 
 [node name="ReturnGateShape" type="CollisionShape3D" parent="ReturnGate"]
 shape = SubResource("GateShape")
+
+[node name="AmbientDust" parent="." instance=ExtResource("AmbDust")]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 0.5, 0)
 
 [node name="SpawnManager" type="Node3D" parent="."]
 script = ExtResource("7")

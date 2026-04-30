@@ -1,4 +1,5 @@
-[gd_scene load_steps=45 format=3]
+[gd_scene load_steps=46 format=3]
+[ext_resource type="Script" path="res://scripts/BarrelFire.gd" id="bf"]
 [ext_resource type="Script" path="res://scripts/ScrapyardOutskirts.gd" id="so"]
 [ext_resource type="Script" path="res://scripts/SpawnManager.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="2"]
@@ -132,16 +133,53 @@ light_energy = 0.2
 omni_range = 16.0
 [node name="BarrelFire_A" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1, -18.5, 1.0, -5.5)
-light_color = Color(1.0, 0.55, 0.20, 1)
-light_energy = 0.4
-omni_range = 5.0
-omni_attenuation = 2.0
+light_color = Color(1.0, 0.42, 0.08, 1)
+light_energy = 2.8
+omni_range = 9.0
+shadow_enabled = true
+script = ExtResource("bf")
 [node name="BarrelFire_B" type="OmniLight3D" parent="."]
 transform = Transform3D(1,0,0,0,1,0,0,0,1, -30.2, 1.0, 8.2)
-light_color = Color(1.0, 0.55, 0.20, 1)
-light_energy = 0.4
-omni_range = 5.0
-omni_attenuation = 2.0
+light_color = Color(1.0, 0.38, 0.06, 1)
+light_energy = 2.5
+omni_range = 8.5
+shadow_enabled = true
+script = ExtResource("bf")
+[node name="BarrelFire_C" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1, 22.0, 1.0, 18.0)
+light_color = Color(1.0, 0.44, 0.09, 1)
+light_energy = 2.6
+omni_range = 9.0
+shadow_enabled = true
+script = ExtResource("bf")
+[node name="BarrelFire_D" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1, -14.0, 1.0, 26.0)
+light_color = Color(1.0, 0.40, 0.07, 1)
+light_energy = 2.4
+omni_range = 8.5
+shadow_enabled = false
+script = ExtResource("bf")
+[node name="BarrelFire_E" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1, 36.0, 1.0, -8.0)
+light_color = Color(1.0, 0.46, 0.10, 1)
+light_energy = 2.2
+omni_range = 8.0
+shadow_enabled = false
+script = ExtResource("bf")
+[node name="BarrelFire_F" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1, -28.0, 1.0, -22.0)
+light_color = Color(1.0, 0.38, 0.06, 1)
+light_energy = 2.5
+omni_range = 9.0
+shadow_enabled = false
+script = ExtResource("bf")
+[node name="BarrelFire_G" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1, 8.0, 1.0, -32.0)
+light_color = Color(1.0, 0.42, 0.08, 1)
+light_energy = 2.6
+omni_range = 8.5
+shadow_enabled = false
+script = ExtResource("bf")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("E1")
 [node name="Ground" type="StaticBody3D" parent="."]

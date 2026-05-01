@@ -1,0 +1,253 @@
+[gd_scene load_steps=25 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/kenney/city-kit-industrial/Models/GLB format/chimney-medium.glb" id="ChimneyMed"]
+[ext_resource type="PackedScene" path="res://assets/models/polyhaven/modular_pipes/modular_pipes_2k.glb" id="ModPipes"]
+[ext_resource type="Script" path="res://scripts/ForgeLightFlicker.gd" id="Flicker"]
+
+[sub_resource type="StandardMaterial3D" id="MatBody"]
+albedo_color = Color(0.07, 0.06, 0.055, 1)
+metallic = 0.78
+roughness = 0.68
+
+[sub_resource type="StandardMaterial3D" id="MatRust"]
+albedo_color = Color(0.38, 0.22, 0.10, 1)
+metallic = 0.20
+roughness = 0.96
+
+[sub_resource type="StandardMaterial3D" id="MatGlow"]
+albedo_color = Color(0.30, 0.10, 0.02, 1)
+emission_enabled = true
+emission = Color(1.0, 0.32, 0.04, 1)
+emission_energy_multiplier = 5.0
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="MatStep"]
+albedo_color = Color(0.20, 0.18, 0.16, 1)
+metallic = 0.05
+roughness = 0.97
+
+[sub_resource type="StandardMaterial3D" id="MatPillar"]
+albedo_color = Color(0.13, 0.11, 0.10, 1)
+metallic = 0.55
+roughness = 0.78
+
+[sub_resource type="StandardMaterial3D" id="MatRim"]
+albedo_color = Color(0.10, 0.09, 0.08, 1)
+metallic = 0.85
+roughness = 0.55
+
+[sub_resource type="BoxMesh" id="MeshSlab"]
+size = Vector3(5.6, 0.38, 5.2)
+
+[sub_resource type="BoxMesh" id="MeshBody"]
+size = Vector3(4.5, 3.2, 3.5)
+
+[sub_resource type="BoxMesh" id="MeshTopRim"]
+size = Vector3(4.8, 0.22, 3.8)
+
+[sub_resource type="BoxMesh" id="MeshDoorFrame"]
+size = Vector3(2.6, 2.5, 0.14)
+
+[sub_resource type="BoxMesh" id="MeshDoorGlow"]
+size = Vector3(1.75, 1.85, 0.06)
+
+[sub_resource type="BoxMesh" id="MeshStep1"]
+size = Vector3(3.2, 0.28, 0.85)
+
+[sub_resource type="BoxMesh" id="MeshStep2"]
+size = Vector3(2.7, 0.28, 0.85)
+
+[sub_resource type="BoxMesh" id="MeshStep3"]
+size = Vector3(2.2, 0.28, 0.85)
+
+[sub_resource type="CylinderMesh" id="MeshPillar"]
+top_radius = 0.18
+bottom_radius = 0.22
+height = 5.2
+
+[sub_resource type="CylinderMesh" id="MeshPillarCap"]
+top_radius = 0.30
+bottom_radius = 0.30
+height = 0.22
+
+[sub_resource type="CylinderMesh" id="MeshSmokeStack"]
+top_radius = 0.22
+bottom_radius = 0.30
+height = 1.8
+
+[sub_resource type="BoxMesh" id="MeshSideRib"]
+size = Vector3(0.18, 3.0, 0.18)
+
+[sub_resource type="BoxMesh" id="MeshBackPipe"]
+size = Vector3(0.22, 2.2, 0.22)
+
+[sub_resource type="BoxShape3D" id="ColBody"]
+size = Vector3(4.5, 3.5, 3.8)
+
+[sub_resource type="BoxShape3D" id="ColSlab"]
+size = Vector3(5.6, 0.4, 5.2)
+
+[node name="CentralFurnace" type="Node3D"]
+
+[node name="BottomSlab" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,0.19,0)
+mesh = SubResource("MeshSlab")
+surface_material_override/0 = SubResource("MatStep")
+
+[node name="MainBody" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,2.0,0)
+mesh = SubResource("MeshBody")
+surface_material_override/0 = SubResource("MatBody")
+
+[node name="TopRim" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,3.71,0)
+mesh = SubResource("MeshTopRim")
+surface_material_override/0 = SubResource("MatRim")
+
+[node name="DoorFrame" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,1.55,-1.82)
+mesh = SubResource("MeshDoorFrame")
+surface_material_override/0 = SubResource("MatRust")
+
+[node name="DoorGlow" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,1.45,-1.86)
+mesh = SubResource("MeshDoorGlow")
+surface_material_override/0 = SubResource("MatGlow")
+
+[node name="Steps" type="Node3D" parent="."]
+
+[node name="Step1" type="MeshInstance3D" parent="Steps"]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,0.52,-2.42)
+mesh = SubResource("MeshStep1")
+surface_material_override/0 = SubResource("MatStep")
+
+[node name="Step2" type="MeshInstance3D" parent="Steps"]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,0.80,-2.05)
+mesh = SubResource("MeshStep2")
+surface_material_override/0 = SubResource("MatStep")
+
+[node name="Step3" type="MeshInstance3D" parent="Steps"]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,1.08,-1.68)
+mesh = SubResource("MeshStep3")
+surface_material_override/0 = SubResource("MatStep")
+
+[node name="Pillars" type="Node3D" parent="."]
+
+[node name="PillarFL" type="MeshInstance3D" parent="Pillars"]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -2.65,2.6,-1.6)
+mesh = SubResource("MeshPillar")
+surface_material_override/0 = SubResource("MatPillar")
+
+[node name="PillarFR" type="MeshInstance3D" parent="Pillars"]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 2.65,2.6,-1.6)
+mesh = SubResource("MeshPillar")
+surface_material_override/0 = SubResource("MatPillar")
+
+[node name="PillarCapFL" type="MeshInstance3D" parent="Pillars"]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -2.65,5.35,-1.6)
+mesh = SubResource("MeshPillarCap")
+surface_material_override/0 = SubResource("MatRim")
+
+[node name="PillarCapFR" type="MeshInstance3D" parent="Pillars"]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 2.65,5.35,-1.6)
+mesh = SubResource("MeshPillarCap")
+surface_material_override/0 = SubResource("MatRim")
+
+[node name="RibL1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -2.35,1.5,-0.6)
+mesh = SubResource("MeshSideRib")
+surface_material_override/0 = SubResource("MatRim")
+
+[node name="RibL2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -2.35,1.5, 0.6)
+mesh = SubResource("MeshSideRib")
+surface_material_override/0 = SubResource("MatRim")
+
+[node name="RibR1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 2.35,1.5,-0.6)
+mesh = SubResource("MeshSideRib")
+surface_material_override/0 = SubResource("MatRim")
+
+[node name="RibR2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 2.35,1.5, 0.6)
+mesh = SubResource("MeshSideRib")
+surface_material_override/0 = SubResource("MatRim")
+
+[node name="SmokeStack" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0.8,4.55,0.5)
+mesh = SubResource("MeshSmokeStack")
+surface_material_override/0 = SubResource("MatPillar")
+
+[node name="Chimney" parent="." instance=ExtResource("ChimneyMed")]
+transform = Transform3D(0.5,0,0, 0,0.5,0, 0,0,0.5, 0.8,5.35,0.5)
+
+[node name="BackPipeL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, -1.5,2.4,1.86)
+mesh = SubResource("MeshBackPipe")
+surface_material_override/0 = SubResource("MatPillar")
+
+[node name="BackPipeR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 1.5,2.4,1.86)
+mesh = SubResource("MeshBackPipe")
+surface_material_override/0 = SubResource("MatPillar")
+
+[node name="SidePipes" parent="." instance=ExtResource("ModPipes")]
+transform = Transform3D(0,0,0.8, 0,0.8,0, -0.8,0,0, 2.9,0.5,0.0)
+
+[node name="StaticBody" type="StaticBody3D" parent="."]
+
+[node name="ColMain" type="CollisionShape3D" parent="StaticBody"]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,2.0,0)
+shape = SubResource("ColBody")
+
+[node name="ColBase" type="CollisionShape3D" parent="StaticBody"]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,0.19,0)
+shape = SubResource("ColSlab")
+
+[node name="FireLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,1.4,-1.5)
+light_color = Color(1.0, 0.33, 0.04, 1)
+light_energy = 3.5
+omni_range = 18.0
+shadow_enabled = true
+script = ExtResource("Flicker")
+
+[node name="InteriorGlow" type="OmniLight3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,1.3,0)
+light_color = Color(1.0, 0.25, 0.02, 1)
+light_energy = 1.2
+omni_range = 8.0
+
+[node name="Sparks" type="CPUParticles3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0,1.5,-1.75)
+emitting = true
+amount = 30
+lifetime = 2.0
+one_shot = false
+randomness = 0.7
+direction = Vector3(0.0,1,0)
+spread = 35.0
+gravity = Vector3(0,-4.0,0)
+initial_velocity_min = 1.5
+initial_velocity_max = 3.2
+angular_velocity_min = -200.0
+angular_velocity_max = 200.0
+scale_amount_min = 0.025
+scale_amount_max = 0.07
+color = Color(1.0, 0.6, 0.1, 1.0)
+
+[node name="Smoke" type="CPUParticles3D" parent="."]
+transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0.8,5.8,0.5)
+emitting = true
+amount = 16
+lifetime = 6.0
+one_shot = false
+randomness = 0.6
+direction = Vector3(0.2,1,0)
+spread = 25.0
+gravity = Vector3(0,0.15,0)
+initial_velocity_min = 0.3
+initial_velocity_max = 0.7
+scale_amount_min = 0.18
+scale_amount_max = 0.45
+color = Color(0.22, 0.20, 0.18, 0.5)

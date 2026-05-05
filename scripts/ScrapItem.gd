@@ -3,6 +3,7 @@ extends Area3D
 const SPARKS = preload("res://scenes/effects/CollectSparks.tscn")
 const POPUP  = preload("res://scenes/effects/CoinPopup.tscn")
 const AURA   = preload("res://scenes/effects/RarityAura.tscn")
+const RING   = preload("res://scenes/effects/ClickRing.tscn")
 
 var scrap_data: Dictionary = {}
 var _bob: float = 0.0
@@ -189,4 +190,32 @@ func collect() -> void:
 	pp.position = pos + Vector3(0, 1, 0)
 	pp.setup(val, _RARITY_COLORS[r])
 	get_tree().current_scene.add_child(pp)
+	if r >= 3:
+		_spawn_legendary_fx(pos)
 	queue_free()
+
+func _spawn_legendary_fx(pos: Vector3) -> void:
+	var ring: Node3D = RING.instantiate()
+	ring.position = pos
+	ring.call("setup", Color("#FFD700"))
+	get_tree().current_scene.add_child(ring)
+
+	var burst: CPUParticles3D = SPARKS.instantiate()
+	burst.position = pos + Vector3(0, 0.2, 0)
+	burst.color = Color("#FFD700")
+	burst.amount = 65
+	burst.initial_velocity_max = 13.0
+	burst.scale_amount_max = 0.18
+	get_tree().current_scene.add_child(burst)
+	burst.emitting = true
+	get_tree().create_timer(1.5).timeout.connect(burst.queue_free)
+
+	var flash := OmniLight3D.new()
+	flash.position = pos + Vector3(0, 0.5, 0)
+	flash.light_color = Color(1.0, 0.85, 0.2, 1)
+	flash.light_energy = 5.0
+	flash.omni_range = 8.0
+	get_tree().current_scene.add_child(flash)
+	var tw := flash.create_tween()
+	tw.tween_property(flash, "light_energy", 0.0, 0.55)
+	tw.tween_callback(flash.queue_free)

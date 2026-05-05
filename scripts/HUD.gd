@@ -112,8 +112,17 @@ func _sort_hint()->void:
 	GameManager.notification.emit("Sorting table — drag items to bins")
 func _process(delta:float)->void:
 	if notif_label.visible:
-		_nt-=delta
-		if _nt<=0: notif_label.visible=false
+		_nt -= delta
+		var age := 3.0 - _nt
+		var fade_in := clamp(age / 0.25, 0.0, 1.0)
+		var fade_out := clamp(_nt / 0.50, 0.0, 1.0)
+		notif_label.modulate.a = minf(fade_in, fade_out)
+		var sc := lerpf(1.12, 1.0, clamp(age / 0.18, 0.0, 1.0))
+		notif_label.scale = Vector2(sc, sc)
+		if _nt <= 0.0:
+			notif_label.visible = false
+			notif_label.modulate.a = 1.0
+			notif_label.scale = Vector2.ONE
 func _toggle(panel:Control)->void:
 	var was=panel.visible
 	for p in _panels: p.visible=false

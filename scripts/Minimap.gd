@@ -113,8 +113,7 @@ func _draw() -> void:
 			gp + Vector2(0, 5.5),
 			gp + Vector2(-5.5, 0),
 		])
-		draw_colored_polygon(gpts, [Color(0.18, 1.0, 0.25, 0.9), Color(0.18, 1.0, 0.25, 0.9),
-									Color(0.18, 1.0, 0.25, 0.9), Color(0.18, 1.0, 0.25, 0.9)])
+		draw_colored_polygon(gpts, Color(0.18, 1.0, 0.25, 0.9))
 		draw_polyline(PackedVector2Array([gpts[0], gpts[1], gpts[2], gpts[3], gpts[0]]),
 					  Color(0.5, 1.0, 0.5, 0.8), 1.0)
 
@@ -126,8 +125,8 @@ func _draw() -> void:
 		_player_pos - fwd * 4.0 + right * 4.5,
 		_player_pos - fwd * 4.0 - right * 4.5,
 	])
-	draw_colored_polygon(pts, [Color(0.22, 1.0, 0.08, 1.0),
-							   Color(0.22, 1.0, 0.08, 0.75),
-							   Color(0.22, 1.0, 0.08, 0.75)])
+	draw_polygon(pts, PackedColorArray([Color(0.22, 1.0, 0.08, 1.0),
+										Color(0.22, 1.0, 0.08, 0.75),
+										Color(0.22, 1.0, 0.08, 0.75)]))
 	draw_polyline(PackedVector2Array([pts[0], pts[1], pts[2], pts[0]]),
 				  Color(0.6, 1.0, 0.4, 0.9), 1.2)

@@ -2,15 +2,17 @@
 
 [node name="CollectSparks" type="CPUParticles3D"]
 emitting = false
-amount = 28
-lifetime = 0.7
+amount = 40
+lifetime = 0.9
 one_shot = true
-explosiveness = 0.95
-direction = Vector3(0,1,0)
-spread = 75.0
-gravity = Vector3(0,-5,0)
-initial_velocity_min = 4.0
-initial_velocity_max = 8.0
-scale_amount_min = 0.03
-scale_amount_max = 0.08
-color = Color(1,0.42,0,1)
+explosiveness = 0.92
+direction = Vector3(0, 1, 0)
+spread = 80.0
+gravity = Vector3(0, -6, 0)
+initial_velocity_min = 3.5
+initial_velocity_max = 9.5
+angular_velocity_min = -120.0
+angular_velocity_max = 120.0
+scale_amount_min = 0.02
+scale_amount_max = 0.10
+color = Color(1, 0.52, 0.02, 1)

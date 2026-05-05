@@ -64,6 +64,7 @@ func _ready()->void:
 	inv_label.text="INV %d/%d"%[GameManager.inventory.size(),GameManager.max_slots]
 	_shop()
 	_refresh_hotbar()
+	_style_hud()
 	_interact_hint=Label.new()
 	_interact_hint.anchor_left=0.5; _interact_hint.anchor_top=1.0
 	_interact_hint.anchor_right=0.5; _interact_hint.anchor_bottom=1.0
@@ -401,3 +402,55 @@ func _on_pile_hint(text:String)->void:
 	else:
 		pile_hint.text=text
 		pile_hint.visible=true
+
+func _btn_style(bg:Color, border:Color) -> StyleBoxFlat:
+	var s := StyleBoxFlat.new()
+	s.bg_color = bg
+	s.border_color = border
+	s.set_border_width_all(1)
+	s.corner_radius_top_left = 3
+	s.corner_radius_top_right = 3
+	s.corner_radius_bottom_right = 3
+	s.corner_radius_bottom_left = 3
+	s.content_margin_left = 7.0
+	s.content_margin_right = 7.0
+	s.content_margin_top = 3.0
+	s.content_margin_bottom = 3.0
+	return s
+
+func _style_hud() -> void:
+	# ciemny pasek za TopBarem
+	var bg := ColorRect.new()
+	bg.anchor_left = 0.0; bg.anchor_top = 0.0
+	bg.anchor_right = 1.0; bg.anchor_bottom = 0.0
+	bg.offset_left = 0.0; bg.offset_top = 0.0
+	bg.offset_right = 0.0; bg.offset_bottom = 54.0
+	bg.color = Color(0.04, 0.02, 0.01, 0.82)
+	add_child(bg)
+	move_child(bg, 0)
+
+	var s_norm := _btn_style(Color(0.06, 0.04, 0.02, 0.85), Color(1.0, 0.42, 0.0, 0.55))
+	var s_hover := _btn_style(Color(0.14, 0.07, 0.02, 0.90), Color(1.0, 0.62, 0.1, 0.90))
+	var s_press := _btn_style(Color(0.25, 0.10, 0.01, 0.95), Color(1.0, 0.74, 0.2, 1.00))
+	const LABELS := {
+		"BtnInv": "INV", "BtnSort": "SORT", "BtnForge": "FORGE",
+		"BtnShop": "SHOP", "BtnCraft": "CRAFT", "BtnTokens": "TOKEN",
+		"BtnStats": "STATS", "BtnDaily": "DAILY",
+		"BtnLeaderboard": "RANK", "BtnEncyclopedia": "WIKI",
+	}
+	$TopBar.add_theme_constant_override("separation", 4)
+	for bname in LABELS:
+		var b: Button = $TopBar.get_node_or_null(bname)
+		if not b: continue
+		b.text = LABELS[bname]
+		b.custom_minimum_size = Vector2(62, 28)
+		b.add_theme_font_size_override("font_size", 11)
+		b.add_theme_color_override("font_color", Color(1.0, 0.55, 0.06, 1.0))
+		b.add_theme_color_override("font_hover_color", Color(1.0, 0.82, 0.30, 1.0))
+		b.add_theme_color_override("font_pressed_color", Color(1.0, 1.0, 0.50, 1.0))
+		b.add_theme_color_override("font_disabled_color", Color(0.4, 0.25, 0.06, 0.5))
+		b.add_theme_stylebox_override("normal", s_norm)
+		b.add_theme_stylebox_override("hover", s_hover)
+		b.add_theme_stylebox_override("pressed", s_press)
+		b.add_theme_stylebox_override("focus", s_norm)
+	$TopBar/InvLabel.add_theme_font_size_override("font_size", 11)

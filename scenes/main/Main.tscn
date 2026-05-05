@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3]
+[gd_scene load_steps=47 format=3]
 [ext_resource type="Script" path="res://scripts/BarrelFire.gd" id="bf"]
 [ext_resource type="Script" path="res://scripts/ScrapyardOutskirts.gd" id="so"]
 [ext_resource type="Script" path="res://scripts/SpawnManager.gd" id="1"]
@@ -29,6 +29,7 @@
 [ext_resource type="Script" path="res://scripts/GateTransition.gd" id="25"]
 [ext_resource type="Script" path="res://scripts/ForgePaths.gd" id="forge_paths"]
 [ext_resource type="PackedScene" path="res://scenes/objects/Gate.tscn" id="26"]
+[ext_resource type="PackedScene" path="res://scenes/objects/CentralFurnace.tscn" id="CentralFurnace"]
 [ext_resource type="Shader" path="res://assets/shaders/ground_plates.gdshader" id="sh_ground_plates"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_color.jpg" id="tex_junk_color"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_normal.jpg" id="tex_junk_normal"]
@@ -202,6 +203,9 @@ transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0,0)
 [node name="ZoneManager" type="Node3D" parent="."]
 script = ExtResource("22")
 [node name="EnvironmentProps" parent="." instance=ExtResource("5")]
+[node name="CentralFurnace" parent="." instance=ExtResource("CentralFurnace")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1, 0,0,-22)
+
 [node name="JunkPiles" parent="." instance=ExtResource("6")]
 [node name="WorldBorder" parent="." instance=ExtResource("10")]
 [node name="ScrapyardOutskirts" type="Node3D" parent="."]

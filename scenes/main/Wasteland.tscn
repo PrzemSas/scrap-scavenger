@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_roughness.jpg" id="JunkRough"]
 [ext_resource type="Texture2D" path="res://assets/textures/ground/junkyard_ao.jpg" id="JunkAO"]
 [ext_resource type="PackedScene" path="res://scenes/effects/AmbientDust.tscn" id="AmbDust"]
+[ext_resource type="PackedScene" path="res://scenes/effects/WeatherEffects.tscn" id="WxFX"]
 
 [sub_resource type="ProceduralSkyMaterial" id="WasteSky"]
 sky_top_color = Color(0.06, 0.04, 0.02, 1)
@@ -122,6 +123,8 @@ shape = SubResource("GateShape")
 
 [node name="AmbientDust" parent="." instance=ExtResource("AmbDust")]
 transform = Transform3D(1,0,0, 0,1,0, 0,0,1, 0, 0.5, 0)
+
+[node name="WeatherEffects" parent="." instance=ExtResource("WxFX")]
 
 [node name="SpawnManager" type="Node3D" parent="."]
 script = ExtResource("7")

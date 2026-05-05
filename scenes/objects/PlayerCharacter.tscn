@@ -7,9 +7,9 @@ radius = 0.28
 height = 1.2
 
 [sub_resource type="StandardMaterial3D" id="BodyMat"]
-albedo_color = Color(0.11, 0.13, 0.17, 1)
-metallic = 0.05
-roughness = 0.90
+albedo_color = Color(0.21, 0.23, 0.28, 1)
+metallic = 0.08
+roughness = 0.85
 
 [sub_resource type="SphereMesh" id="HeadMesh"]
 radius = 0.19
@@ -23,9 +23,9 @@ roughness = 0.88
 size = Vector3(0.44, 0.20, 0.43)
 
 [sub_resource type="StandardMaterial3D" id="HelmetMat"]
-albedo_color = Color(0.11, 0.11, 0.13, 1)
-metallic = 0.78
-roughness = 0.36
+albedo_color = Color(0.08, 0.08, 0.10, 1)
+metallic = 0.85
+roughness = 0.28
 
 [sub_resource type="BoxMesh" id="HelmetFrontMesh"]
 size = Vector3(0.42, 0.29, 0.09)
@@ -58,9 +58,9 @@ size = Vector3(0.14, 0.38, 0.14)
 size = Vector3(0.18, 0.13, 0.23)
 
 [sub_resource type="StandardMaterial3D" id="LegMat"]
-albedo_color = Color(0.11, 0.13, 0.17, 1)
-metallic = 0.05
-roughness = 0.90
+albedo_color = Color(0.21, 0.23, 0.28, 1)
+metallic = 0.08
+roughness = 0.85
 
 [sub_resource type="StandardMaterial3D" id="BootMat"]
 albedo_color = Color(0.09, 0.08, 0.07, 1)

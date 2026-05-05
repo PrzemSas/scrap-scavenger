@@ -1,5 +1,7 @@
 extends Node3D
 
+const _EMBER_SHADER := preload("res://assets/shaders/emissive_solid.gdshader")
+
 const PIT_POSITIONS := [
 	Vector3(-10, 0, -10),
 	Vector3( 10, 0, -10),
@@ -74,11 +76,17 @@ func _emit(pos: Vector3, size: Vector3, color: Color, energy: float) -> void:
 	var m := BoxMesh.new()
 	m.size = size
 	mi.mesh = m
-	var mat := StandardMaterial3D.new()
-	mat.emission_enabled           = true
-	mat.emission                   = color
-	mat.emission_energy_multiplier = energy
-	mat.albedo_color               = color
+	var mat := ShaderMaterial.new()
+	mat.shader = _EMBER_SHADER
+	mat.set_shader_parameter("albedo", color)
+	mat.set_shader_parameter("emission_color", color)
+	mat.set_shader_parameter("emission_base", energy)
+	mat.set_shader_parameter("pulse_strength", energy * 0.75)
+	mat.set_shader_parameter("speed_a", 3.5)
+	mat.set_shader_parameter("speed_b", 7.1)
+	mat.set_shader_parameter("speed_c", 1.8)
+	mat.set_shader_parameter("roughness_val", 0.06)
+	mat.set_shader_parameter("phase_offset", randf() * TAU)
 	mi.set_surface_override_material(0, mat)
 	add_child(mi)
 

@@ -114,10 +114,10 @@ func _process(delta:float)->void:
 	if notif_label.visible:
 		_nt -= delta
 		var age := 3.0 - _nt
-		var fade_in := clamp(age / 0.25, 0.0, 1.0)
-		var fade_out := clamp(_nt / 0.50, 0.0, 1.0)
+		var fade_in := clampf(age / 0.25, 0.0, 1.0)
+		var fade_out := clampf(_nt / 0.50, 0.0, 1.0)
 		notif_label.modulate.a = minf(fade_in, fade_out)
-		var sc := lerpf(1.12, 1.0, clamp(age / 0.18, 0.0, 1.0))
+		var sc := lerpf(1.12, 1.0, clampf(age / 0.18, 0.0, 1.0))
 		notif_label.scale = Vector2(sc, sc)
 		if _nt <= 0.0:
 			notif_label.visible = false
@@ -441,17 +441,17 @@ func _style_hud() -> void:
 	var s_norm := _btn_style(Color(0.06, 0.04, 0.02, 0.85), Color(1.0, 0.42, 0.0, 0.55))
 	var s_hover := _btn_style(Color(0.14, 0.07, 0.02, 0.90), Color(1.0, 0.62, 0.1, 0.90))
 	var s_press := _btn_style(Color(0.25, 0.10, 0.01, 0.95), Color(1.0, 0.74, 0.2, 1.00))
-	const LABELS := {
+	var labels: Dictionary = {
 		"BtnInv": "INV", "BtnSort": "SORT", "BtnForge": "FORGE",
 		"BtnShop": "SHOP", "BtnCraft": "CRAFT", "BtnTokens": "TOKEN",
 		"BtnStats": "STATS", "BtnDaily": "DAILY",
 		"BtnLeaderboard": "RANK", "BtnEncyclopedia": "WIKI",
 	}
 	$TopBar.add_theme_constant_override("separation", 4)
-	for bname in LABELS:
+	for bname in labels:
 		var b: Button = $TopBar.get_node_or_null(bname)
 		if not b: continue
-		b.text = LABELS[bname]
+		b.text = labels[bname]
 		b.custom_minimum_size = Vector2(62, 28)
 		b.add_theme_font_size_override("font_size", 11)
 		b.add_theme_color_override("font_color", Color(1.0, 0.55, 0.06, 1.0))

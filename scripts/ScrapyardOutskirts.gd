@@ -1,5 +1,7 @@
 extends Node3D
 
+const _FLICKER = preload("res://scripts/ForgeLightFlicker.gd")
+
 const INNER: float = 50.0
 const OUTER: float = 116.0
 
@@ -162,7 +164,7 @@ func _build_large_structures() -> void:
 			glow_mat.albedo_color = Color(1.0, 0.75, 0.35, 1.0)
 			glow_mat.emission_enabled = true
 			glow_mat.emission = Color(1.0, 0.55, 0.15)
-			glow_mat.emission_energy_multiplier = rng.randf_range(0.2, 0.9)
+			glow_mat.emission_energy_multiplier = rng.randf_range(1.2, 3.5)
 			# Płaski panel "okna" na ścianie budynku
 			var win_w := rng.randf_range(w * 0.3, w * 0.7)
 			var win_h := rng.randf_range(1.2, 3.0)
@@ -281,6 +283,7 @@ func _build_chimneys() -> void:
 		light.omni_range = rng.randf_range(7.0, 14.0)
 		light.shadow_enabled = false
 		light.position = p + Vector3(0, h - 0.8, 0)
+		light.set_script(_FLICKER)
 		add_child(light)
 
 # ── helpers ──────────────────────────────────────────────────────────────────

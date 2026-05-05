@@ -18,8 +18,6 @@ const TRACKS := {
 const PLAYLISTS := {
 	"junkyard": [
 		"res://assets/audio/theme_trashinus.mp3",
-		"res://assets/audio/theme_ambient1.mp3",
-		"res://assets/audio/theme_ambient2.mp3",
 		"res://assets/audio/theme_alligator1.wav",
 		"res://assets/audio/theme_alligator2.wav",
 	],

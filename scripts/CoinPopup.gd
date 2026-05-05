@@ -6,7 +6,7 @@ const DURATION: float = 1.05
 func setup(amount: int, color: Color) -> void:
 	text = "+%d" % amount
 	modulate = color
-	font_size = 48 + clamp(amount / 15, 0, 40)
+	font_size = 48 + int(clampf(amount / 15.0, 0.0, 40.0))
 	outline_size = 7
 	outline_modulate = Color(0.0, 0.0, 0.0, 0.75)
 	scale = Vector3(1.7, 1.7, 1.7)
